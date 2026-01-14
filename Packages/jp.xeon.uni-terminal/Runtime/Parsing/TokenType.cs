@@ -1,6 +1,6 @@
 namespace Company.Terminal.Parsing
 {
-    public enum TokenKind
+    public enum TokenType
     {
         Text,
         Pipe,
