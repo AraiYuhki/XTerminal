@@ -44,7 +44,10 @@ namespace Xeon.UniTerminal.Common
         /// <returns>分割された行のリスト</returns>
         public static List<string> WrapText(string text, int maxCharsPerLine)
         {
-            var lines = new List<string>();
+            var estimatedLineCount = string.IsNullOrEmpty(text) || maxCharsPerLine <= 0
+                ? 1
+                : Mathf.CeilToInt(text.Length / (float)maxCharsPerLine) + 1;
+            var lines = new List<string>(estimatedLineCount);
 
             if (string.IsNullOrEmpty(text) || maxCharsPerLine <= 0)
             {
@@ -52,37 +55,33 @@ namespace Xeon.UniTerminal.Common
                 return lines;
             }
 
-            // 1行に収まる場合はそのまま返す
             if (text.Length <= maxCharsPerLine)
             {
                 lines.Add(text);
                 return lines;
             }
 
-            var remaining = text;
-            while (remaining.Length > 0)
+            var startIndex = 0;
+            var length = text.Length;
+            while (startIndex < length)
             {
-                if (remaining.Length <= maxCharsPerLine)
+                var endExclusive = Mathf.Min(startIndex + maxCharsPerLine, length);
+                if (endExclusive >= length)
                 {
-                    lines.Add(remaining);
+                    lines.Add(text.Substring(startIndex, length - startIndex));
                     break;
                 }
 
-                // 最大文字数以内で最後のスペースを探す
-                var breakIndex = FindBreakIndex(remaining, maxCharsPerLine);
+                var breakIndex = FindLastSpaceIndex(text, startIndex, endExclusive);
+                if (breakIndex > startIndex)
+                {
+                    lines.Add(text.Substring(startIndex, breakIndex - startIndex));
+                    startIndex = SkipLeadingSpaces(text, breakIndex + 1, length);
+                    continue;
+                }
 
-                if (breakIndex > 0)
-                {
-                    lines.Add(remaining.Substring(0, breakIndex));
-                    // スペースで区切った場合はスペースをスキップ
-                    remaining = remaining.Substring(breakIndex).TrimStart(' ');
-                }
-                else
-                {
-                    // スペースが見つからない場合は強制的に切る
-                    lines.Add(remaining.Substring(0, maxCharsPerLine));
-                    remaining = remaining.Substring(maxCharsPerLine);
-                }
+                lines.Add(text.Substring(startIndex, endExclusive - startIndex));
+                startIndex = endExclusive;
             }
 
             return lines;
@@ -91,11 +90,10 @@ namespace Xeon.UniTerminal.Common
         /// <summary>
         /// ワードラップのための分割位置を探す
         /// </summary>
-        private static int FindBreakIndex(string text, int maxChars)
+        private static int FindLastSpaceIndex(string text, int startIndex, int endExclusive)
         {
-            // 最大文字数以内で最後のスペースを探す
             var lastSpace = -1;
-            for (var i = 0; i < maxChars && i < text.Length; i++)
+            for (var i = startIndex; i < endExclusive && i < text.Length; i++)
             {
                 if (text[i] == ' ')
                 {
@@ -103,14 +101,15 @@ namespace Xeon.UniTerminal.Common
                 }
             }
 
-            // スペースが見つかった場合はその位置で分割
-            if (lastSpace > 0)
-            {
-                return lastSpace;
-            }
+            return lastSpace;
+        }
 
-            // スペースが見つからない場合は0を返す（強制分割）
-            return 0;
+        private static int SkipLeadingSpaces(string text, int startIndex, int length)
+        {
+            var index = startIndex;
+            while (index < length && text[index] == ' ')
+                index++;
+            return index;
         }
     }
 }

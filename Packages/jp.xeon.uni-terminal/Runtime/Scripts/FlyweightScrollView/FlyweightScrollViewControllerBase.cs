@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -424,17 +423,22 @@ namespace Xeon.Common.FlyweightScrollView
             if (ItemCount > itemList.Count)
                 return;
 
-            foreach (var (item, index) in itemList.Select((item, index) => (item, index)))
+            var index = 0;
+            foreach (var item in itemList)
             {
                 if (index >= ItemCount)
                 {
                     item.gameObject.SetActive(false);
-                    continue;
                 }
-                var dataIndex = headIndex + index;
-                item.gameObject.SetActive(true);
-                item.SetPosition(CreatePosition(dataIndex));
-                OnChangedItemIndex(dataIndex, item);
+                else
+                {
+                    var dataIndex = headIndex + index;
+                    item.gameObject.SetActive(true);
+                    item.SetPosition(CreatePosition(dataIndex));
+                    OnChangedItemIndex(dataIndex, item);
+                }
+
+                index++;
             }
         }
 
