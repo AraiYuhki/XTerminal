@@ -11,6 +11,8 @@ namespace Xeon.Common
     [RequireComponent(typeof(RectTransform), typeof(RectMask2D))]
     public class FlyweightScrollViewport : MonoBehaviour
     {
+        private const float SizeEpsilon = 0.01f;
+
         /// <summary>
         /// ビューポートのRectTransform
         /// </summary>
@@ -18,6 +20,7 @@ namespace Xeon.Common
         private RectTransform rectTransform;
 
         private bool isDirty = false;
+        private Vector2 lastSize;
 
         /// <summary>
         /// ビューポートのRectTransform
@@ -32,8 +35,30 @@ namespace Xeon.Common
         /// <summary>
         /// Unity組み込みコールバック。RectTransformのサイズ変更時に呼び出されます
         /// </summary>
+        private void Awake()
+        {
+            EnsureRectTransform();
+            lastSize = rectTransform.rect.size;
+        }
+
+        private void OnEnable()
+        {
+            EnsureRectTransform();
+            lastSize = rectTransform.rect.size;
+        }
+
         private void OnRectTransformDimensionsChange()
         {
+            EnsureRectTransform();
+
+            var currentSize = rectTransform.rect.size;
+            if (Mathf.Abs(currentSize.x - lastSize.x) < SizeEpsilon &&
+                Mathf.Abs(currentSize.y - lastSize.y) < SizeEpsilon)
+            {
+                return;
+            }
+
+            lastSize = currentSize;
             isDirty = true;
         }
 
@@ -43,6 +68,12 @@ namespace Xeon.Common
                 return;
             OnRectTransformDimensionsChanged?.Invoke();
             isDirty = false;
+        }
+
+        private void EnsureRectTransform()
+        {
+            if (rectTransform == null)
+                rectTransform = GetComponent<RectTransform>();
         }
     }
 }
