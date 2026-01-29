@@ -31,6 +31,11 @@ namespace Xeon.UniTerminal
         public string HomeDirectory { get; }
 
         /// <summary>
+        /// 変数ストア
+        /// </summary>
+        public VariableStore Variables { get; }
+
+        /// <summary>
         /// 補完処理に必要な情報を初期化します
         /// </summary>
         /// <param name="inputLine">入力行全体</param>
@@ -38,18 +43,21 @@ namespace Xeon.UniTerminal
         /// <param name="tokenIndex">トークンリスト内のインデックス</param>
         /// <param name="workingDirectory">現在の作業ディレクトリ</param>
         /// <param name="homeDirectory">ホームディレクトリ</param>
+        /// <param name="variables">変数ストア</param>
         public CompletionContext(
             string inputLine,
             string currentToken,
             int tokenIndex,
             string workingDirectory,
-            string homeDirectory)
+            string homeDirectory,
+            VariableStore variables = null)
         {
             InputLine = inputLine;
             CurrentToken = currentToken;
             TokenIndex = tokenIndex;
             WorkingDirectory = workingDirectory;
             HomeDirectory = homeDirectory;
+            Variables = variables;
         }
     }
 }

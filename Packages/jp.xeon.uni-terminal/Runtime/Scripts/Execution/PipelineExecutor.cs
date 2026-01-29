@@ -21,6 +21,7 @@ namespace Xeon.UniTerminal.Execution
         private readonly Action clearHistoryCallback;
         private readonly Action<int> deleteHistoryEntryCallback;
         private readonly LogBuffer logBuffer;
+        private readonly VariableStore variableStore;
 
         /// <summary>
         /// パイプライン実行に必要な環境情報を初期化します
@@ -33,6 +34,8 @@ namespace Xeon.UniTerminal.Execution
         /// <param name="commandHistory">コマンド履歴</param>
         /// <param name="clearHistoryCallback">履歴クリアコールバック</param>
         /// <param name="deleteHistoryEntryCallback">履歴削除コールバック</param>
+        /// <param name="logBuffer">Unityログバッファ</param>
+        /// <param name="variableStore">変数ストア</param>
         public PipelineExecutor(
             string workingDirectory,
             string homeDirectory,
@@ -42,7 +45,8 @@ namespace Xeon.UniTerminal.Execution
             IReadOnlyList<string> commandHistory = null,
             Action clearHistoryCallback = null,
             Action<int> deleteHistoryEntryCallback = null,
-            LogBuffer logBuffer = null)
+            LogBuffer logBuffer = null,
+            VariableStore variableStore = null)
         {
             this.workingDirectory = workingDirectory ?? throw new ArgumentNullException(nameof(workingDirectory));
             this.homeDirectory = homeDirectory ?? throw new ArgumentNullException(nameof(homeDirectory));
@@ -53,6 +57,7 @@ namespace Xeon.UniTerminal.Execution
             this.clearHistoryCallback = clearHistoryCallback;
             this.deleteHistoryEntryCallback = deleteHistoryEntryCallback;
             this.logBuffer = logBuffer;
+            this.variableStore = variableStore;
         }
 
         /// <summary>
@@ -241,7 +246,8 @@ namespace Xeon.UniTerminal.Execution
                 commandHistory,
                 clearHistoryCallback,
                 deleteHistoryEntryCallback,
-                logBuffer);
+                logBuffer,
+                variableStore);
         }
 
         private static IAsyncTextReader PrepareNextStdin(ListTextWriter pipeBuffer, IAsyncTextReader currentStdin)

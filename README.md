@@ -10,6 +10,7 @@ Unity向けのLinuxライクなCLI実行フレームワークです。文字列�
 - **非同期実行**: async/awaitによる非同期コマンド実行
 - **UniTaskサポート**: UniTaskを使用した高パフォーマンスな非同期処理（オプション）
 - **タブ補完**: コマンドやパスの補完機能
+- **シェル変数**: `$NAME`、`${NAME}` 形式の変数展開をサポート
 - **FlyweightScrollView**: 大量のログ表示に対応した仮想スクロールビュー
 - **Ctrl+Cキャンセル**: 長時間実行コマンドの中断機能
 
@@ -112,6 +113,34 @@ await terminal.ExecuteAsync("echo World >> output.txt", stdout, stderr);
 await terminal.ExecuteAsync("grep --pattern=pattern < input.txt", stdout, stderr);
 ```
 
+### 変数
+
+```csharp
+// 変数の設定
+await terminal.ExecuteAsync("set MESSAGE=Hello World", stdout, stderr);
+
+// 変数の展開
+await terminal.ExecuteAsync("echo $MESSAGE", stdout, stderr);  // "Hello World"
+
+// ${NAME} 形式も使用可能
+await terminal.ExecuteAsync("echo ${MESSAGE}!", stdout, stderr);  // "Hello World!"
+
+// シングルクォート内では展開されない
+await terminal.ExecuteAsync("echo '$MESSAGE'", stdout, stderr);  // "$MESSAGE"
+
+// ダブルクォート内では展開される
+await terminal.ExecuteAsync("echo \"$MESSAGE\"", stdout, stderr);  // "Hello World"
+
+// エスケープ
+await terminal.ExecuteAsync("echo \\$MESSAGE", stdout, stderr);  // "$MESSAGE"
+
+// 変数一覧の表示
+await terminal.ExecuteAsync("env", stdout, stderr);
+
+// 変数の削除
+await terminal.ExecuteAsync("unset MESSAGE", stdout, stderr);
+```
+
 ## コマンド一覧
 
 ### ファイル操作コマンド
@@ -142,6 +171,14 @@ await terminal.ExecuteAsync("grep --pattern=pattern < input.txt", stdout, stderr
 | `help` | ヘルプを表示 | - |
 | `history` | コマンド履歴を管理 | `-c, --clear`, `-d, --delete`, `-n, --number`, `-r, --reverse` |
 | `clear` | 画面表示をクリア | - |
+
+### 変数管理コマンド
+
+| コマンド | 説明 | 使用例 |
+|---------|------|--------|
+| `set` | 変数を設定 | `set NAME=value` |
+| `unset` | 変数を削除 | `unset NAME` |
+| `env` | 変数一覧を表示 | `env` |
 
 ### Unity固有コマンド
 

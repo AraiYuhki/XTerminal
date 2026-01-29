@@ -25,11 +25,17 @@ namespace Xeon.UniTerminal
         private readonly string homeDirectory;
         private readonly List<string> commandHistory;
         private readonly int maxHistorySize;
+        private readonly VariableStore variableStore;
 
         /// <summary>
         /// Unityログバッファ。
         /// </summary>
         public LogBuffer LogBuffer { get; }
+
+        /// <summary>
+        /// 変数ストア
+        /// </summary>
+        public VariableStore Variables => variableStore;
 
         /// <summary>
         /// コマンドレジストリ。
@@ -87,6 +93,7 @@ namespace Xeon.UniTerminal
             parser = new Parser();
             binder = new Binder(registry);
             LogBuffer = new LogBuffer();
+            variableStore = new VariableStore();
 
             if (registerBuiltInCommands)
             {
@@ -122,6 +129,11 @@ namespace Xeon.UniTerminal
             registry.RegisterCommand<HeadCommand>();
             registry.RegisterCommand<TailCommand>();
             registry.RegisterCommand<LogCommand>();
+
+            // 変数管理コマンド
+            registry.RegisterCommand<SetCommand>();
+            registry.RegisterCommand<UnsetCommand>();
+            registry.RegisterCommand<EnvCommand>();
 
             registry.RegisterCommand<ClearCommand>();
 
@@ -195,7 +207,7 @@ namespace Xeon.UniTerminal
         /// <returns>候補を含む補完結果</returns>
         public CompletionResult GetCompletions(string input)
         {
-            var engine = new CompletionEngine(registry, workingDirectory, homeDirectory);
+            var engine = new CompletionEngine(registry, workingDirectory, homeDirectory, variableStore);
             return engine.GetCompletions(input);
         }
 
@@ -225,8 +237,8 @@ namespace Xeon.UniTerminal
 
             try
             {
-                // パース
-                var parsed = parser.Parse(input);
+                // パース（変数展開を含む）
+                var parsed = parser.Parse(input, variableStore);
                 if (parsed.IsEmpty)
                 {
                     return ExitCode.Success;
@@ -245,7 +257,8 @@ namespace Xeon.UniTerminal
                     commandHistory,
                     ClearHistory,
                     DeleteHistoryEntry,
-                    LogBuffer);
+                    LogBuffer,
+                    variableStore);
                 var result = await executor.ExecuteAsync(bound, stdin, stdout, stderr, ct);
 
                 return result.ExitCode;

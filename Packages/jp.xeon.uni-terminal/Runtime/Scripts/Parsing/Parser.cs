@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Xeon.UniTerminal;
 
 namespace Xeon.UniTerminal.Parsing
 {
@@ -17,7 +18,26 @@ namespace Xeon.UniTerminal.Parsing
         /// <exception cref="ParseException">パースエラー時にスローされます</exception>
         public ParsedInput Parse(string input)
         {
+            return Parse(input, null);
+        }
+
+        /// <summary>
+        /// 入力文字列をParsedInput構造にパースし、変数を展開します
+        /// </summary>
+        /// <param name="input">パースする入力文字列</param>
+        /// <param name="variableStore">変数ストア（nullの場合は展開しない）</param>
+        /// <returns>パースされた入力構造</returns>
+        /// <exception cref="ParseException">パースエラー時にスローされます</exception>
+        public ParsedInput Parse(string input, VariableStore variableStore)
+        {
             var tokens = tokenizer.Tokenize(input);
+
+            if (variableStore != null)
+            {
+                var expander = new VariableExpander(variableStore);
+                tokens = expander.Expand(tokens);
+            }
+
             return ParseTokens(tokens);
         }
 

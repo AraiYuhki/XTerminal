@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Xeon.UniTerminal.Parsing
 {
     /// <summary>
@@ -34,6 +36,64 @@ namespace Xeon.UniTerminal.Parsing
         /// オプション終端マーカー: --
         /// </summary>
         EndOfOptions
+    }
+
+    /// <summary>
+    /// クォート種別を表します
+    /// </summary>
+    public enum QuoteKind
+    {
+        /// <summary>
+        /// クォートなし（変数展開あり）
+        /// </summary>
+        None,
+
+        /// <summary>
+        /// シングルクォート（変数展開なし）
+        /// </summary>
+        Single,
+
+        /// <summary>
+        /// ダブルクォート（変数展開あり）
+        /// </summary>
+        Double
+    }
+
+    /// <summary>
+    /// ワードトークン内のセグメントを表します
+    /// </summary>
+    public readonly struct WordTokenSegment
+    {
+        /// <summary>
+        /// セグメントの値
+        /// </summary>
+        public string Value { get; }
+
+        /// <summary>
+        /// クォート種別
+        /// </summary>
+        public QuoteKind QuoteKind { get; }
+
+        /// <summary>
+        /// 変数展開が可能かどうか
+        /// </summary>
+        public bool CanExpand => QuoteKind != QuoteKind.Single;
+
+        /// <summary>
+        /// セグメントを初期化します
+        /// </summary>
+        /// <param name="value">セグメントの値</param>
+        /// <param name="quoteKind">クォート種別</param>
+        public WordTokenSegment(string value, QuoteKind quoteKind)
+        {
+            Value = value;
+            QuoteKind = quoteKind;
+        }
+
+        /// <summary>
+        /// 表示用文字列を生成します
+        /// </summary>
+        public override string ToString() => $"[{QuoteKind}] \"{Value}\"";
     }
 
     /// <summary>
@@ -99,18 +159,25 @@ namespace Xeon.UniTerminal.Parsing
         public bool WasQuoted { get; }
 
         /// <summary>
+        /// ワードトークンのセグメント情報（変数展開用）
+        /// </summary>
+        public IReadOnlyList<WordTokenSegment> Segments { get; }
+
+        /// <summary>
         /// トークンを初期化します
         /// </summary>
         /// <param name="kind">トークン種別</param>
         /// <param name="value">トークン値</param>
         /// <param name="span">元の入力内での範囲</param>
         /// <param name="wasQuoted">クォートされていたかどうか</param>
-        public Token(TokenKind kind, string value, SourceSpan span, bool wasQuoted = false)
+        /// <param name="segments">セグメント情報</param>
+        public Token(TokenKind kind, string value, SourceSpan span, bool wasQuoted = false, IReadOnlyList<WordTokenSegment> segments = null)
         {
             Kind = kind;
             Value = value;
             Span = span;
             WasQuoted = wasQuoted;
+            Segments = segments;
         }
 
         /// <summary>
