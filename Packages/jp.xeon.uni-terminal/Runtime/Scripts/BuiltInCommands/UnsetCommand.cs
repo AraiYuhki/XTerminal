@@ -9,6 +9,11 @@ namespace Xeon.UniTerminal.BuiltInCommands
     /// 変数を削除します
     /// </summary>
     [Command("unset", "Unset one or more variables")]
+    [CommandDocumentation(
+        Category = "utilities",
+        Synopsis = "unset NAME [NAME ...]",
+        LongDescription = "Removes one or more shell variables. Multiple variable names can be specified separated by spaces."
+    )]
     public class UnsetCommand : ICommand
     {
         /// <summary>

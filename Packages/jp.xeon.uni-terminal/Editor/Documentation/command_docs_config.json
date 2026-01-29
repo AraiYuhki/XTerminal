@@ -99,6 +99,36 @@
             "examplesJa": "# 全ログを表示\nlog\n\n# Errorのみ表示\nlog -e\n\n# 末尾20件を表示\nlog -t 20\n\n# リアルタイム監視\nlog -f\n\n# スタックトレースを表示\nlog -s",
             "examplesEn": "# Show all logs\nlog\n\n# Show errors only\nlog -e\n\n# Show last 20 entries\nlog -t 20\n\n# Real-time monitoring\nlog -f\n\n# Show stack traces\nlog -s",
             "exitCodes": "| 0 | 成功 |"
+        },
+        {
+            "name": "set",
+            "synopsis": "set NAME=VALUE",
+            "descriptionJa": "変数を設定します。",
+            "longDescriptionJa": "指定された名前と値でシェル変数を設定します。変数名は英字またはアンダースコアで始まり、英数字とアンダースコアのみを含む必要があります。設定した変数は $NAME または ${NAME} で参照できます。",
+            "longDescriptionEn": "Sets a shell variable with the specified name and value. Variable names must start with a letter or underscore and contain only alphanumeric characters and underscores. Variables can be referenced using $NAME or ${NAME}.",
+            "examplesJa": "# 変数を設定\nset USER=Player1\n\n# パスを設定\nset DATA_PATH=/path/to/data\n\n# 変数を参照（echoで確認）\nset MESSAGE=Hello\necho $MESSAGE\n\n# 変数を別のコマンドで使用\nset TARGET=Player\nhierarchy -n \"$TARGET*\"",
+            "examplesEn": "# Set a variable\nset USER=Player1\n\n# Set a path\nset DATA_PATH=/path/to/data\n\n# Reference a variable (check with echo)\nset MESSAGE=Hello\necho $MESSAGE\n\n# Use variable in another command\nset TARGET=Player\nhierarchy -n \"$TARGET*\"",
+            "exitCodes": "| 0 | 成功 |\n| 1 | 無効な変数名またはフォーマット |\n| 2 | 変数ストアが利用不可 |"
+        },
+        {
+            "name": "unset",
+            "synopsis": "unset NAME [NAME ...]",
+            "descriptionJa": "1つ以上の変数を削除します。",
+            "longDescriptionJa": "1つ以上のシェル変数を削除します。複数の変数名をスペースで区切って指定できます。",
+            "longDescriptionEn": "Removes one or more shell variables. Multiple variable names can be specified separated by spaces.",
+            "examplesJa": "# 単一の変数を削除\nunset USER\n\n# 複数の変数を同時に削除\nunset VAR1 VAR2 VAR3\n\n# 変数が削除されたことを確認\nset TEMP=value\nenv | grep -p \"TEMP\"\nunset TEMP\nenv | grep -p \"TEMP\"",
+            "examplesEn": "# Remove a single variable\nunset USER\n\n# Remove multiple variables at once\nunset VAR1 VAR2 VAR3\n\n# Verify variable was removed\nset TEMP=value\nenv | grep -p \"TEMP\"\nunset TEMP\nenv | grep -p \"TEMP\"",
+            "exitCodes": "| 0 | 成功 |\n| 1 | 引数なし（使用法エラー） |\n| 2 | 変数ストアが利用不可 |"
+        },
+        {
+            "name": "env",
+            "synopsis": "env",
+            "descriptionJa": "すべての変数を一覧表示します。",
+            "longDescriptionJa": "定義されているすべてのシェル変数を NAME=VALUE 形式で表示します。",
+            "longDescriptionEn": "Displays all defined shell variables in NAME=VALUE format.",
+            "examplesJa": "# すべての変数を表示\nenv\n\n# grepでフィルタ\nenv | grep -p \"PATH\"\n\n# 変数数をカウント\nenv | grep -p \"=\" -c",
+            "examplesEn": "# Show all variables\nenv\n\n# Filter with grep\nenv | grep -p \"PATH\"\n\n# Count variables\nenv | grep -p \"=\" -c",
+            "exitCodes": "| 0 | 成功 |\n| 2 | 変数ストアが利用不可 |"
         }
     ]
 }

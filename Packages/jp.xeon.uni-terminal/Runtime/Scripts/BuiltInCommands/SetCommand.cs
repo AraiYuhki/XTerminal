@@ -10,6 +10,11 @@ namespace Xeon.UniTerminal.BuiltInCommands
     /// 変数を設定します
     /// </summary>
     [Command("set", "Set a variable (NAME=VALUE)")]
+    [CommandDocumentation(
+        Category = "utilities",
+        Synopsis = "set NAME=VALUE",
+        LongDescription = "Sets a shell variable with the specified name and value. Variable names must start with a letter or underscore and contain only alphanumeric characters and underscores."
+    )]
     public class SetCommand : ICommand
     {
         /// <summary>

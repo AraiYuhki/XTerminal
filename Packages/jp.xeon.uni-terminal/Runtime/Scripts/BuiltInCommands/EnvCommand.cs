@@ -9,6 +9,11 @@ namespace Xeon.UniTerminal.BuiltInCommands
     /// 変数一覧を表示します
     /// </summary>
     [Command("env", "List all variables")]
+    [CommandDocumentation(
+        Category = "utilities",
+        Synopsis = "env",
+        LongDescription = "Displays all defined shell variables in NAME=VALUE format."
+    )]
     public class EnvCommand : ICommand
     {
         /// <summary>
