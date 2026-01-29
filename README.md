@@ -1,5 +1,9 @@
 # UniTerminal
 
+<p align="center">
+  <img src="Packages/jp.xeon.uni-terminal/Documentation~/Images/icon.png" alt="UniTerminal Logo" width="256" height="256">
+</p>
+
 Unity向けのLinuxライクなCLI実行フレームワークです。文字列ベースのコマンドを解析・実行し、パイプラインやリダイレクトなどのシェル機能をサポートします。
 
 ## 特徴
