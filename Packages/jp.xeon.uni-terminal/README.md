@@ -149,7 +149,7 @@ UniTerminalには多数の組み込みコマンドが用意されています。
 |----------|----------|
 | ファイル操作 | `pwd`, `cd`, `ls`, `cat`, `find`, `less`, `diff`, `head`, `tail` |
 | テキスト処理 | `echo`, `grep` |
-| ユーティリティ | `help`, `history`, `clear`, `set`, `unset`, `env` |
+| ユーティリティ | `help`, `history`, `clear`, `set`, `unset`, `env`, `pbcopy` |
 | Unity操作 | `hierarchy`, `go`, `transform`, `component`, `property`, `scene`, `log` |
 | アセット管理 | `asset`, `assetdb`, `adr`, `res` |
 

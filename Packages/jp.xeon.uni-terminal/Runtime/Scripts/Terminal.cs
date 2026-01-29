@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 using Xeon.UniTerminal.Binding;
 using Xeon.UniTerminal.BuiltInCommands;
 using Xeon.UniTerminal.Completion;
 using Xeon.UniTerminal.Execution;
 using Xeon.UniTerminal.Parsing;
 using Xeon.UniTerminal.UnityCommands;
-using UnityEngine;
 
 namespace Xeon.UniTerminal
 {
@@ -128,7 +128,7 @@ namespace Xeon.UniTerminal
             registry.RegisterCommand<DiffCommand>();
             registry.RegisterCommand<HeadCommand>();
             registry.RegisterCommand<TailCommand>();
-            registry.RegisterCommand<LogCommand>();
+            registry.RegisterCommand<PbCopyCommand>();
 
             // 変数管理コマンド
             registry.RegisterCommand<SetCommand>();
@@ -144,6 +144,7 @@ namespace Xeon.UniTerminal
             registry.RegisterCommand<ComponentCommand>();
             registry.RegisterCommand<PropertyCommand>();
             registry.RegisterCommand<SceneCommand>();
+            registry.RegisterCommand<LogCommand>();
 
             // アセット管理コマンド
             registry.RegisterCommand<AssetCommand>();

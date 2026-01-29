@@ -116,6 +116,7 @@ await terminal.ExecuteAsync("grep --pattern=pattern < input.txt", stdout, stderr
 |---------|-------------|---------|
 | `help` | Display help | - |
 | `history` | Command history | `-c`, `-d`, `-n`, `-r` |
+| `pbcopy` | Copy to clipboard | - |
 
 ### Unity-Specific Commands
 

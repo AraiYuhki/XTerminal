@@ -14,6 +14,7 @@ Unity向けのLinuxライクなCLI実行フレームワークです。文字列�
 - **非同期実行**: async/awaitによる非同期コマンド実行
 - **UniTaskサポート**: UniTaskを使用した高パフォーマンスな非同期処理（オプション）
 - **タブ補完**: コマンドやパスの補完機能
+- **シェル変数**: `$NAME`、`${NAME}` 形式の変数展開をサポート
 - **FlyweightScrollView**: 大量のログ表示に対応した仮想スクロールビュー
 - **Ctrl+Cキャンセル**: 長時間実行コマンドの中断機能
 
@@ -148,7 +149,7 @@ UniTerminalには多数の組み込みコマンドが用意されています。
 |----------|----------|
 | ファイル操作 | `pwd`, `cd`, `ls`, `cat`, `find`, `less`, `diff`, `head`, `tail` |
 | テキスト処理 | `echo`, `grep` |
-| ユーティリティ | `help`, `history`, `clear`, `set`, `unset`, `env` |
+| ユーティリティ | `help`, `history`, `clear`, `set`, `unset`, `env`, `pbcopy` |
 | Unity操作 | `hierarchy`, `go`, `transform`, `component`, `property`, `scene`, `log` |
 | アセット管理 | `asset`, `assetdb`, `adr`, `res` |
 
@@ -284,7 +285,7 @@ public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationTok
 
 MIT OR Apache-2.0（デュアルライセンス）
 
-詳細は [LICENSE.md](Packages/jp.xeon.uni-terminal/LICENSE.md) を参照してください。
+詳細は [LICENSE.md](LICENSE.md) を参照してください。
 
 ## 作者
 
