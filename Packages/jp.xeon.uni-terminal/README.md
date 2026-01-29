@@ -1,5 +1,7 @@
 # UniTerminal
 
+![UniTerminal logo](Documentation~/logo.svg)
+
 Unity向けのLinuxライクなCLI実行フレームワークです。文字列ベースのコマンドを解析・実行し、パイプラインやリダイレクトなどのシェル機能をサポートします。
 
 ## 特徴
