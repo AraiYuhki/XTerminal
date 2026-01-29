@@ -56,4 +56,18 @@ echo "Hello World from UniTerminal" | count --words
 
 # Count lines
 hierarchy -r | count
+
+# Using variables
+set NAME=Unity
+greet --name=$NAME
+
+# Variable expansion in strings
+set GREETING=Hello
+echo "$GREETING, World!"
+
+# List all variables
+env
+
+# Remove a variable
+unset NAME
 ```

@@ -65,6 +65,26 @@ When making implementation decisions, always prioritize in the following order:
 * Optimized but unreadable code quickly becomes a maintenance risk.
 * Extensibility is important, but not at the cost of clarity or runtime performance.
 
+### SOLID Principles
+
+* **You must follow SOLID principles.**
+
+  * **S** – Single Responsibility Principle
+  * **O** – Open/Closed Principle
+  * **L** – Liskov Substitution Principle
+  * **I** – Interface Segregation Principle
+  * **D** – Dependency Inversion Principle
+
+* **Exception**: Deviations from SOLID principles are allowed when they would significantly degrade readability or performance.
+
+  * In such cases, **clearly document in comments why the deviation is necessary**.
+
+**Reason**
+
+* SOLID principles promote designs that are resilient to change, testable, and reusable.
+* However, blindly applying these principles can lead to over-abstraction and unnecessary interface proliferation, increasing complexity.
+* The key is to balance respecting the intent of the principles while prioritizing readability and performance.
+
 ### Control Statement Style
 
 * Even if an `if`, `for`, or `foreach` can be written on a single line, **always use two lines**.

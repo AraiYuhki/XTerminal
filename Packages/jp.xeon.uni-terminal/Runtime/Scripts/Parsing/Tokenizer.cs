@@ -111,18 +111,29 @@ namespace Xeon.UniTerminal.Parsing
         private Token ReadWord(TokenizeContext context)
         {
             var builder = new StringBuilder();
+            var segments = new List<WordTokenSegment>();
+            var segmentBuilder = new StringBuilder();
             int start = context.Position;
             bool wasQuoted = false;
+            var currentQuoteKind = QuoteKind.None;
 
             while (context.HasMore && !IsWordTerminator(context.Current))
             {
-                ProcessWordCharacter(context, builder, ref wasQuoted);
+                ProcessWordCharacter(context, builder, segments, segmentBuilder, ref wasQuoted, ref currentQuoteKind);
             }
 
-            return CreateWordToken(builder.ToString(), start, context.Position, wasQuoted);
+            FlushSegment(segments, segmentBuilder, currentQuoteKind);
+
+            return CreateWordToken(builder.ToString(), start, context.Position, wasQuoted, segments);
         }
 
-        private void ProcessWordCharacter(TokenizeContext context, StringBuilder builder, ref bool wasQuoted)
+        private void ProcessWordCharacter(
+            TokenizeContext context,
+            StringBuilder builder,
+            List<WordTokenSegment> segments,
+            StringBuilder segmentBuilder,
+            ref bool wasQuoted,
+            ref QuoteKind currentQuoteKind)
         {
             char c = context.Current;
 
@@ -131,28 +142,52 @@ namespace Xeon.UniTerminal.Parsing
 
             if (c == '\\')
             {
-                ProcessEscape(context, builder);
+                ProcessEscape(context, builder, segmentBuilder);
                 return;
             }
 
             if (c == '"')
             {
+                FlushSegment(segments, segmentBuilder, currentQuoteKind);
                 wasQuoted = true;
+                currentQuoteKind = QuoteKind.Double;
                 context.Advance();
-                ReadDoubleQuotedContent(context, builder);
+                ReadDoubleQuotedContent(context, builder, segmentBuilder);
+                FlushSegment(segments, segmentBuilder, currentQuoteKind);
+                currentQuoteKind = QuoteKind.None;
                 return;
             }
 
             if (c == '\'')
             {
+                FlushSegment(segments, segmentBuilder, currentQuoteKind);
                 wasQuoted = true;
+                currentQuoteKind = QuoteKind.Single;
                 context.Advance();
-                ReadSingleQuotedContent(context, builder);
+                ReadSingleQuotedContent(context, builder, segmentBuilder);
+                FlushSegment(segments, segmentBuilder, currentQuoteKind);
+                currentQuoteKind = QuoteKind.None;
                 return;
             }
 
             builder.Append(c);
+            segmentBuilder.Append(c);
             context.Advance();
+        }
+
+        /// <summary>
+        /// セグメントビルダーの内容をセグメントリストに追加します
+        /// </summary>
+        /// <param name="segments">セグメントリスト</param>
+        /// <param name="segmentBuilder">セグメントビルダー</param>
+        /// <param name="quoteKind">クォート種別</param>
+        private static void FlushSegment(List<WordTokenSegment> segments, StringBuilder segmentBuilder, QuoteKind quoteKind)
+        {
+            if (segmentBuilder.Length > 0)
+            {
+                segments.Add(new WordTokenSegment(segmentBuilder.ToString(), quoteKind));
+                segmentBuilder.Clear();
+            }
         }
 
         private static bool IsWordTerminator(char c)
@@ -160,27 +195,42 @@ namespace Xeon.UniTerminal.Parsing
             return c == ' ' || c == '|' || c == '<' || c == '>';
         }
 
-        private static Token CreateWordToken(string value, int start, int end, bool wasQuoted)
+        private static Token CreateWordToken(string value, int start, int end, bool wasQuoted, List<WordTokenSegment> segments)
         {
             var span = new SourceSpan(start, end - start);
 
             if (value == "--" && !wasQuoted)
                 return new Token(TokenKind.EndOfOptions, "--", span);
 
-            return new Token(TokenKind.Word, value, span, wasQuoted);
+            return new Token(TokenKind.Word, value, span, wasQuoted, segments);
         }
 
         #endregion
 
         #region Escape Processing
 
-        private static void ProcessEscape(TokenizeContext context, StringBuilder builder)
+        private static void ProcessEscape(TokenizeContext context, StringBuilder builder, StringBuilder segmentBuilder)
         {
             if (!context.HasNext)
                 throw new ParseException($"Escape character at end of input at position {context.Position}");
 
             context.Advance();
-            builder.Append(context.Current);
+            char escapedChar = context.Current;
+
+            // \$ はエスケープされた $ として記録（展開しない）
+            if (escapedChar == '$')
+            {
+                builder.Append(escapedChar);
+                // セグメントには \$ をそのまま追加（展開時にリテラル$として扱う）
+                segmentBuilder.Append('\\');
+                segmentBuilder.Append(escapedChar);
+            }
+            else
+            {
+                builder.Append(escapedChar);
+                segmentBuilder.Append(escapedChar);
+            }
+
             context.Advance();
         }
 
@@ -188,7 +238,7 @@ namespace Xeon.UniTerminal.Parsing
 
         #region Quote Processing
 
-        private void ReadDoubleQuotedContent(TokenizeContext context, StringBuilder builder)
+        private void ReadDoubleQuotedContent(TokenizeContext context, StringBuilder builder, StringBuilder segmentBuilder)
         {
             int quoteStart = context.Position - 1;
 
@@ -204,18 +254,19 @@ namespace Xeon.UniTerminal.Parsing
 
                 if (c == '\\')
                 {
-                    ProcessDoubleQuoteEscape(context, builder);
+                    ProcessDoubleQuoteEscape(context, builder, segmentBuilder);
                     continue;
                 }
 
                 builder.Append(c);
+                segmentBuilder.Append(c);
                 context.Advance();
             }
 
             throw new ParseException($"Unclosed double quote starting at position {quoteStart}");
         }
 
-        private static void ProcessDoubleQuoteEscape(TokenizeContext context, StringBuilder builder)
+        private static void ProcessDoubleQuoteEscape(TokenizeContext context, StringBuilder builder, StringBuilder segmentBuilder)
         {
             if (context.HasNext)
             {
@@ -224,15 +275,27 @@ namespace Xeon.UniTerminal.Parsing
                 {
                     context.Advance(2);
                     builder.Append(next);
+                    segmentBuilder.Append(next);
+                    return;
+                }
+
+                // \$ はエスケープされた $ として記録
+                if (next == '$')
+                {
+                    context.Advance(2);
+                    builder.Append(next);
+                    segmentBuilder.Append('\\');
+                    segmentBuilder.Append(next);
                     return;
                 }
             }
 
             builder.Append(context.Current);
+            segmentBuilder.Append(context.Current);
             context.Advance();
         }
 
-        private void ReadSingleQuotedContent(TokenizeContext context, StringBuilder builder)
+        private void ReadSingleQuotedContent(TokenizeContext context, StringBuilder builder, StringBuilder segmentBuilder)
         {
             int quoteStart = context.Position - 1;
 
@@ -247,6 +310,7 @@ namespace Xeon.UniTerminal.Parsing
                 }
 
                 builder.Append(c);
+                segmentBuilder.Append(c);
                 context.Advance();
             }
 

@@ -12,6 +12,7 @@ namespace Xeon.UniTerminal.Completion
         private readonly CommandRegistry registry;
         private readonly string workingDirectory;
         private readonly string homeDirectory;
+        private readonly VariableStore variableStore;
 
         /// <summary>
         /// 補完エンジンを初期化します
@@ -19,11 +20,17 @@ namespace Xeon.UniTerminal.Completion
         /// <param name="registry">コマンドレジストリ</param>
         /// <param name="workingDirectory">現在の作業ディレクトリ</param>
         /// <param name="homeDirectory">ホームディレクトリ</param>
-        public CompletionEngine(CommandRegistry registry, string workingDirectory, string homeDirectory)
+        /// <param name="variableStore">変数ストア</param>
+        public CompletionEngine(
+            CommandRegistry registry,
+            string workingDirectory,
+            string homeDirectory,
+            VariableStore variableStore = null)
         {
             this.registry = registry ?? throw new ArgumentNullException(nameof(registry));
             this.workingDirectory = workingDirectory ?? throw new ArgumentNullException(nameof(workingDirectory));
             this.homeDirectory = homeDirectory ?? throw new ArgumentNullException(nameof(homeDirectory));
+            this.variableStore = variableStore;
         }
 
         /// <summary>
@@ -41,6 +48,11 @@ namespace Xeon.UniTerminal.Completion
 
             // 末尾の現在のトークンを検索
             var (currentToken, tokenStart) = ExtractCurrentToken(input);
+
+            // 変数補完のチェック（$で始まるトークン）
+            if (currentToken.StartsWith("$"))
+                return GetVariableCompletions(currentToken, tokenStart);
+
             var context = AnalyzeContext(input, tokenStart);
 
             switch (context.Target)
@@ -310,6 +322,59 @@ namespace Xeon.UniTerminal.Completion
             return new CompletionResult(candidates, tokenStart, prefix.Length);
         }
 
+        /// <summary>
+        /// 変数補完候補を取得します
+        /// </summary>
+        /// <param name="prefix">補完対象のプレフィックス</param>
+        /// <param name="tokenStart">トークン開始位置</param>
+        /// <returns>補完結果</returns>
+        private CompletionResult GetVariableCompletions(string prefix, int tokenStart)
+        {
+            var candidates = new List<CompletionCandidate>();
+
+            if (variableStore == null)
+                return new CompletionResult(candidates, tokenStart, prefix.Length);
+
+            // $NAMEまたは${NAME}形式をサポート
+            bool hasBrace = prefix.StartsWith("${");
+            string varPrefix = hasBrace ? prefix.Substring(2) : prefix.Substring(1);
+
+            foreach (var kv in variableStore.Enumerate())
+            {
+                if (!kv.Key.StartsWith(varPrefix, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                string completionText = hasBrace ? "${" + kv.Key + "}" : "$" + kv.Key;
+                string displayText = $"${kv.Key} = {TruncateValue(kv.Value, 30)}";
+
+                candidates.Add(new CompletionCandidate(
+                    completionText,
+                    displayText,
+                    CompletionTarget.Argument));
+            }
+
+            candidates.Sort((a, b) => string.Compare(a.Text, b.Text, StringComparison.OrdinalIgnoreCase));
+
+            return new CompletionResult(candidates, tokenStart, prefix.Length);
+        }
+
+        /// <summary>
+        /// 値を指定した最大長に切り詰めます
+        /// </summary>
+        /// <param name="value">切り詰める値</param>
+        /// <param name="maxLength">最大長</param>
+        /// <returns>切り詰められた値</returns>
+        private static string TruncateValue(string value, int maxLength)
+        {
+            if (string.IsNullOrEmpty(value))
+                return "(empty)";
+
+            if (value.Length <= maxLength)
+                return value;
+
+            return value.Substring(0, maxLength - 3) + "...";
+        }
+
         private string GetCompletionPath(string prefix, string basePath, string name, bool isDirectory)
         {
             string result;
@@ -363,7 +428,8 @@ namespace Xeon.UniTerminal.Completion
                 prefix,
                 analysis.TokenIndex,
                 workingDirectory,
-                homeDirectory);
+                homeDirectory,
+                variableStore);
 
             var candidates = new List<CompletionCandidate>();
             try

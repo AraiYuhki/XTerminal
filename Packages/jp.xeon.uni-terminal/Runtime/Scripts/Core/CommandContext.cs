@@ -75,6 +75,11 @@ namespace Xeon.UniTerminal
         public LogBuffer LogBuffer { get; }
 
         /// <summary>
+        /// 変数ストア
+        /// </summary>
+        public VariableStore Variables { get; }
+
+        /// <summary>
         /// コマンド実行に必要なコンテキスト情報を初期化します
         /// </summary>
         /// <param name="stdin">標準入力リーダー</param>
@@ -89,6 +94,8 @@ namespace Xeon.UniTerminal
         /// <param name="commandHistory">コマンド履歴</param>
         /// <param name="clearHistory">履歴クリアコールバック</param>
         /// <param name="deleteHistoryEntry">履歴削除コールバック</param>
+        /// <param name="logBuffer">Unityログバッファ</param>
+        /// <param name="variables">変数ストア</param>
         public CommandContext(
             IAsyncTextReader stdin,
             IAsyncTextWriter stdout,
@@ -102,7 +109,8 @@ namespace Xeon.UniTerminal
             IReadOnlyList<string> commandHistory = null,
             Action clearHistory = null,
             Action<int> deleteHistoryEntry = null,
-            LogBuffer logBuffer = null)
+            LogBuffer logBuffer = null,
+            VariableStore variables = null)
         {
             Stdin = stdin;
             Stdout = stdout;
@@ -117,6 +125,7 @@ namespace Xeon.UniTerminal
             ClearHistory = clearHistory;
             DeleteHistoryEntry = deleteHistoryEntry;
             LogBuffer = logBuffer;
+            Variables = variables;
         }
     }
 }
