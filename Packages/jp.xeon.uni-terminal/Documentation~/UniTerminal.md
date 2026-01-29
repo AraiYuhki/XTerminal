@@ -1,5 +1,9 @@
 # UniTerminal Documentation
 
+<p align="center">
+  <img src="Images/key-image.jpg" alt="UniTerminal Key Image" width="800">
+</p>
+
 UniTerminal is a string-based CLI execution framework for Unity with Linux-like behavior. It allows you to execute commands with support for pipelines, redirects, and extensible custom commands.
 
 ## Table of Contents
