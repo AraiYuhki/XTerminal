@@ -160,6 +160,41 @@ help ls
 help hierarchy
 ```
 
+### Unity操作コマンドの例
+
+#### transform - Transform操作
+
+```bash
+# Transform情報を表示
+transform /Player
+
+# 位置を設定
+transform /Player -p 1,2,3
+
+# 位置を加算（移動）
+transform add /Player -p 1,0,0
+
+# 回転を減算
+transform sub /Player -r 0,90,0
+```
+
+#### property - プロパティ操作
+
+```bash
+# プロパティ一覧
+property list /Player Rigidbody
+
+# 値を取得
+property get /Player Rigidbody mass
+
+# 値を設定
+property set /Player Rigidbody mass 10
+
+# 演算操作（数値型: add, sub, mul, div / Vector型: add, sub）
+property add /Player Rigidbody mass 5
+property mul /Player Transform localScale 2
+```
+
 ## カスタムコマンドの作成
 
 ### 基本的なコマンド

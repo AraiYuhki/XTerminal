@@ -13,7 +13,7 @@ namespace Xeon.UniTerminal.UnityCommands
     /// <summary>
     /// コンポーネントのプロパティを取得・設定するコマンド
     /// </summary>
-    [Command("property", "Get or set component properties (list, get, set)")]
+    [Command("property", "Get or set component properties (list, get, set, add, sub, mul, div)")]
     public class PropertyCommand : ICommand
     {
         #region Options
@@ -47,6 +47,10 @@ namespace Xeon.UniTerminal.UnityCommands
                 "list" => await ListAsync(context, args, ct),
                 "get" => await GetAsync(context, args, ct),
                 "set" => await SetAsync(context, args, ct),
+                "add" => await AddAsync(context, args, ct),
+                "sub" => await SubAsync(context, args, ct),
+                "mul" => await MulAsync(context, args, ct),
+                "div" => await DivAsync(context, args, ct),
                 _ => await UnknownSubCommandAsync(context, subCommand, ct)
             };
         }
@@ -179,6 +183,238 @@ namespace Xeon.UniTerminal.UnityCommands
 
             await context.Stderr.WriteLineAsync($"property: '{baseName}': Property not found on {type.Name}", ct);
             return ExitCode.RuntimeError;
+        }
+
+        private async Task<ExitCode> AddAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            return await ApplyArithmeticAsync(context, args, ArithmeticOperation.Add, ct);
+        }
+
+        private async Task<ExitCode> SubAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            return await ApplyArithmeticAsync(context, args, ArithmeticOperation.Subtract, ct);
+        }
+
+        private async Task<ExitCode> MulAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            return await ApplyArithmeticAsync(context, args, ArithmeticOperation.Multiply, ct);
+        }
+
+        private async Task<ExitCode> DivAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            return await ApplyArithmeticAsync(context, args, ArithmeticOperation.Divide, ct);
+        }
+
+        private enum ArithmeticOperation { Add, Subtract, Multiply, Divide }
+
+        private async Task<ExitCode> ApplyArithmeticAsync(
+            CommandContext context, List<string> args, ArithmeticOperation operation, CancellationToken ct)
+        {
+            var opName = operation.ToString().ToLower();
+
+            if (args.Count < 4)
+            {
+                await context.Stderr.WriteLineAsync($"property {opName}: usage: property {opName} <path> <component> <property> <value>", ct);
+                return ExitCode.UsageError;
+            }
+
+            var result = ResolveComponent(args[0], args[1]);
+            if (result.error != null)
+            {
+                await context.Stderr.WriteLineAsync(result.error, ct);
+                return ExitCode.RuntimeError;
+            }
+
+            var propName = args[2];
+            var operandStr = string.Join(" ", args.Skip(3));
+            var type = result.comp.GetType();
+            var (baseName, arrayIndex) = ParseArrayIndex(propName);
+
+#if UNITY_EDITOR
+            UnityEditor.Undo.RecordObject(result.comp, $"{operation} {propName}");
+#endif
+
+            // フィールドを検索
+            var field = type.GetField(baseName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (field != null)
+                return await ApplyArithmeticToFieldAsync(context, result.comp, type, field, baseName, arrayIndex, operandStr, propName, operation, ct);
+
+            // プロパティを検索
+            var prop = type.GetProperty(baseName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (prop != null)
+                return await ApplyArithmeticToPropertyAsync(context, result.comp, type, prop, baseName, arrayIndex, operandStr, propName, operation, ct);
+
+            await context.Stderr.WriteLineAsync($"property: '{baseName}': Property not found on {type.Name}", ct);
+            return ExitCode.RuntimeError;
+        }
+
+        private async Task<ExitCode> ApplyArithmeticToFieldAsync(
+            CommandContext context, Component comp, Type compType, FieldInfo field,
+            string baseName, int? arrayIndex, string operandStr, string propName,
+            ArithmeticOperation operation, CancellationToken ct)
+        {
+            if (field.IsInitOnly)
+            {
+                await context.Stderr.WriteLineAsync($"property: '{baseName}' is read-only", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            var targetType = field.FieldType;
+            var currentValue = field.GetValue(comp);
+
+            if (arrayIndex.HasValue)
+                return await ApplyArithmeticToArrayAsync(context, comp, compType, currentValue, targetType, baseName, arrayIndex.Value, operandStr, operation, ct);
+
+            return await ApplyArithmeticValueAsync(context, comp, compType, currentValue, targetType, propName, operandStr, operation,
+                newValue => field.SetValue(comp, newValue), ct);
+        }
+
+        private async Task<ExitCode> ApplyArithmeticToPropertyAsync(
+            CommandContext context, Component comp, Type compType, PropertyInfo prop,
+            string baseName, int? arrayIndex, string operandStr, string propName,
+            ArithmeticOperation operation, CancellationToken ct)
+        {
+            if (!prop.CanRead)
+            {
+                await context.Stderr.WriteLineAsync($"property: '{baseName}' is not readable", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            if (!prop.CanWrite && !arrayIndex.HasValue)
+            {
+                await context.Stderr.WriteLineAsync($"property: '{baseName}' is read-only", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            var targetType = prop.PropertyType;
+            var currentValue = prop.GetValue(comp);
+
+            if (arrayIndex.HasValue)
+                return await ApplyArithmeticToArrayAsync(context, comp, compType, currentValue, targetType, baseName, arrayIndex.Value, operandStr, operation, ct);
+
+            return await ApplyArithmeticValueAsync(context, comp, compType, currentValue, targetType, propName, operandStr, operation,
+                newValue => prop.SetValue(comp, newValue), ct);
+        }
+
+        private async Task<ExitCode> ApplyArithmeticValueAsync(
+            CommandContext context, Component comp, Type compType, object currentValue, Type targetType,
+            string propName, string operandStr, ArithmeticOperation operation,
+            Action<object> setter, CancellationToken ct)
+        {
+            var opName = GetOperationSymbol(operation);
+
+            if (!ValueConverter.IsArithmeticType(targetType) && !ValueConverter.IsVectorType(targetType))
+            {
+                await context.Stderr.WriteLineAsync($"property: '{propName}' ({targetType.Name}) does not support arithmetic operations", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            if ((operation == ArithmeticOperation.Multiply || operation == ArithmeticOperation.Divide) && ValueConverter.IsVectorType(targetType))
+            {
+                await context.Stderr.WriteLineAsync($"property: {targetType.Name} does not support {operation.ToString().ToLower()}", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            try
+            {
+                var operand = ValueConverter.Convert(operandStr, targetType);
+                var newValue = ExecuteArithmeticOperation(currentValue, operand, targetType, operation);
+                setter(newValue);
+
+                await context.Stdout.WriteLineAsync(
+                    $"{compType.Name}.{propName}: {ValueConverter.Format(currentValue)} {opName} {ValueConverter.Format(operand)} = {ValueConverter.Format(newValue)}", ct);
+                return ExitCode.Success;
+            }
+            catch (DivideByZeroException)
+            {
+                await context.Stderr.WriteLineAsync("property: division by zero", ct);
+                return ExitCode.RuntimeError;
+            }
+            catch (Exception ex)
+            {
+                await context.Stderr.WriteLineAsync($"property: Cannot apply arithmetic: {ex.Message}", ct);
+                return ExitCode.UsageError;
+            }
+        }
+
+        private async Task<ExitCode> ApplyArithmeticToArrayAsync(
+            CommandContext context, Component comp, Type compType, object arrayObj, Type arrayType,
+            string memberName, int index, string operandStr, ArithmeticOperation operation, CancellationToken ct)
+        {
+            if (arrayObj == null)
+            {
+                await context.Stderr.WriteLineAsync($"property: '{memberName}' is null", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            if (arrayObj is Array array)
+                return await ApplyArithmeticToArrayElementAsync(context, compType, array, arrayType, memberName, index, operandStr, operation, ct);
+
+            if (arrayObj is IList list)
+                return await ApplyArithmeticToListElementAsync(context, compType, list, arrayType, memberName, index, operandStr, operation, ct);
+
+            await context.Stderr.WriteLineAsync($"property: '{memberName}' is not an array or list", ct);
+            return ExitCode.RuntimeError;
+        }
+
+        private async Task<ExitCode> ApplyArithmeticToArrayElementAsync(
+            CommandContext context, Type compType, Array array, Type arrayType,
+            string memberName, int index, string operandStr, ArithmeticOperation operation, CancellationToken ct)
+        {
+            if (index < 0 || index >= array.Length)
+            {
+                await context.Stderr.WriteLineAsync($"property: Index {index} out of range for '{memberName}' (length: {array.Length})", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            var elementType = arrayType.GetElementType() ?? typeof(object);
+            var currentValue = array.GetValue(index);
+
+            return await ApplyArithmeticValueAsync(context, null, compType, currentValue, elementType,
+                $"{memberName}[{index}]", operandStr, operation,
+                newValue => array.SetValue(newValue, index), ct);
+        }
+
+        private async Task<ExitCode> ApplyArithmeticToListElementAsync(
+            CommandContext context, Type compType, IList list, Type listType,
+            string memberName, int index, string operandStr, ArithmeticOperation operation, CancellationToken ct)
+        {
+            if (index < 0 || index >= list.Count)
+            {
+                await context.Stderr.WriteLineAsync($"property: Index {index} out of range for '{memberName}' (count: {list.Count})", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            var elementType = listType.IsGenericType ? listType.GetGenericArguments()[0] : typeof(object);
+            var currentValue = list[index];
+
+            return await ApplyArithmeticValueAsync(context, null, compType, currentValue, elementType,
+                $"{memberName}[{index}]", operandStr, operation,
+                newValue => list[index] = newValue, ct);
+        }
+
+        private static object ExecuteArithmeticOperation(object current, object operand, Type targetType, ArithmeticOperation operation)
+        {
+            return operation switch
+            {
+                ArithmeticOperation.Add => ValueConverter.Add(current, operand, targetType),
+                ArithmeticOperation.Subtract => ValueConverter.Subtract(current, operand, targetType),
+                ArithmeticOperation.Multiply => ValueConverter.Multiply(current, operand, targetType),
+                ArithmeticOperation.Divide => ValueConverter.Divide(current, operand, targetType),
+                _ => throw new NotSupportedException($"Unknown operation: {operation}")
+            };
+        }
+
+        private static string GetOperationSymbol(ArithmeticOperation operation)
+        {
+            return operation switch
+            {
+                ArithmeticOperation.Add => "+",
+                ArithmeticOperation.Subtract => "-",
+                ArithmeticOperation.Multiply => "*",
+                ArithmeticOperation.Divide => "/",
+                _ => "?"
+            };
         }
 
         #endregion
@@ -536,14 +772,14 @@ namespace Xeon.UniTerminal.UnityCommands
         {
             await context.Stderr.WriteLineAsync("property: missing subcommand", ct);
             await context.Stderr.WriteLineAsync("Usage: property <subcommand> <path> <component> [property] [value]", ct);
-            await context.Stderr.WriteLineAsync("Subcommands: list, get, set", ct);
+            await context.Stderr.WriteLineAsync("Subcommands: list, get, set, add, sub, mul, div", ct);
             return ExitCode.UsageError;
         }
 
         private async Task<ExitCode> UnknownSubCommandAsync(CommandContext context, string subCommand, CancellationToken ct)
         {
             await context.Stderr.WriteLineAsync($"property: unknown subcommand '{subCommand}'", ct);
-            await context.Stderr.WriteLineAsync("Subcommands: list, get, set", ct);
+            await context.Stderr.WriteLineAsync("Subcommands: list, get, set, add, sub, mul, div", ct);
             return ExitCode.UsageError;
         }
 
@@ -553,7 +789,7 @@ namespace Xeon.UniTerminal.UnityCommands
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
-            var subCommands = new[] { "list", "get", "set" };
+            var subCommands = new[] { "list", "get", "set", "add", "sub", "mul", "div" };
             return subCommands.Where(cmd => cmd.StartsWith(token, StringComparison.OrdinalIgnoreCase));
         }
 

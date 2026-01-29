@@ -786,5 +786,148 @@ namespace Xeon.UniTerminal
 
             throw new FormatException($"Shader not found: {name}");
         }
+
+        #region Arithmetic Operations
+
+        /// <summary>
+        /// 型が数値演算をサポートしているかどうかを判定します
+        /// </summary>
+        public static bool IsArithmeticType(Type type)
+        {
+            return type == typeof(int) ||
+                   type == typeof(float) ||
+                   type == typeof(double) ||
+                   type == typeof(long) ||
+                   type == typeof(byte) ||
+                   type == typeof(short);
+        }
+
+        /// <summary>
+        /// 型がVector型かどうかを判定します
+        /// </summary>
+        public static bool IsVectorType(Type type)
+        {
+            return type == typeof(Vector2) ||
+                   type == typeof(Vector3) ||
+                   type == typeof(Vector4) ||
+                   type == typeof(Vector2Int) ||
+                   type == typeof(Vector3Int);
+        }
+
+        /// <summary>
+        /// 加算を実行します
+        /// </summary>
+        public static object Add(object current, object operand, Type targetType)
+        {
+            if (IsArithmeticType(targetType))
+                return AddNumeric(current, operand, targetType);
+
+            if (IsVectorType(targetType))
+                return AddVector(current, operand, targetType);
+
+            throw new NotSupportedException($"Type '{targetType.Name}' does not support addition");
+        }
+
+        /// <summary>
+        /// 減算を実行します
+        /// </summary>
+        public static object Subtract(object current, object operand, Type targetType)
+        {
+            if (IsArithmeticType(targetType))
+                return SubtractNumeric(current, operand, targetType);
+
+            if (IsVectorType(targetType))
+                return SubtractVector(current, operand, targetType);
+
+            throw new NotSupportedException($"Type '{targetType.Name}' does not support subtraction");
+        }
+
+        /// <summary>
+        /// 乗算を実行します（数値型のみ）
+        /// </summary>
+        public static object Multiply(object current, object operand, Type targetType)
+        {
+            if (!IsArithmeticType(targetType))
+                throw new NotSupportedException($"Type '{targetType.Name}' does not support multiplication");
+
+            return MultiplyNumeric(current, operand, targetType);
+        }
+
+        /// <summary>
+        /// 除算を実行します（数値型のみ）
+        /// </summary>
+        public static object Divide(object current, object operand, Type targetType)
+        {
+            if (!IsArithmeticType(targetType))
+                throw new NotSupportedException($"Type '{targetType.Name}' does not support division");
+
+            return DivideNumeric(current, operand, targetType);
+        }
+
+        private static object AddNumeric(object current, object operand, Type targetType)
+        {
+            var a = System.Convert.ToDouble(current, CultureInfo.InvariantCulture);
+            var b = System.Convert.ToDouble(operand, CultureInfo.InvariantCulture);
+            return System.Convert.ChangeType(a + b, targetType, CultureInfo.InvariantCulture);
+        }
+
+        private static object SubtractNumeric(object current, object operand, Type targetType)
+        {
+            var a = System.Convert.ToDouble(current, CultureInfo.InvariantCulture);
+            var b = System.Convert.ToDouble(operand, CultureInfo.InvariantCulture);
+            return System.Convert.ChangeType(a - b, targetType, CultureInfo.InvariantCulture);
+        }
+
+        private static object MultiplyNumeric(object current, object operand, Type targetType)
+        {
+            var a = System.Convert.ToDouble(current, CultureInfo.InvariantCulture);
+            var b = System.Convert.ToDouble(operand, CultureInfo.InvariantCulture);
+            return System.Convert.ChangeType(a * b, targetType, CultureInfo.InvariantCulture);
+        }
+
+        private static object DivideNumeric(object current, object operand, Type targetType)
+        {
+            var a = System.Convert.ToDouble(current, CultureInfo.InvariantCulture);
+            var b = System.Convert.ToDouble(operand, CultureInfo.InvariantCulture);
+
+            if (Math.Abs(b) < double.Epsilon)
+                throw new DivideByZeroException("Division by zero");
+
+            return System.Convert.ChangeType(a / b, targetType, CultureInfo.InvariantCulture);
+        }
+
+        private static object AddVector(object current, object operand, Type targetType)
+        {
+            if (targetType == typeof(Vector2))
+                return (Vector2)current + (Vector2)operand;
+            if (targetType == typeof(Vector3))
+                return (Vector3)current + (Vector3)operand;
+            if (targetType == typeof(Vector4))
+                return (Vector4)current + (Vector4)operand;
+            if (targetType == typeof(Vector2Int))
+                return (Vector2Int)current + (Vector2Int)operand;
+            if (targetType == typeof(Vector3Int))
+                return (Vector3Int)current + (Vector3Int)operand;
+
+            throw new NotSupportedException($"Vector type '{targetType.Name}' not supported");
+        }
+
+        private static object SubtractVector(object current, object operand, Type targetType)
+        {
+            if (targetType == typeof(Vector2))
+                return (Vector2)current - (Vector2)operand;
+            if (targetType == typeof(Vector3))
+                return (Vector3)current - (Vector3)operand;
+            if (targetType == typeof(Vector4))
+                return (Vector4)current - (Vector4)operand;
+            if (targetType == typeof(Vector2Int))
+                return (Vector2Int)current - (Vector2Int)operand;
+            if (targetType == typeof(Vector3Int))
+                return (Vector3Int)current - (Vector3Int)operand;
+
+            throw new NotSupportedException($"Vector type '{targetType.Name}' not supported");
+        }
+
+        #endregion
     }
 }

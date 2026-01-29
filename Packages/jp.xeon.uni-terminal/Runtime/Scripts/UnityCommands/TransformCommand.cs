@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,24 +10,24 @@ namespace Xeon.UniTerminal.UnityCommands
     /// <summary>
     /// GameObjectのTransformを操作するコマンド
     /// </summary>
-    [Command("transform", "Manipulate GameObject Transform")]
+    [Command("transform", "Manipulate GameObject Transform (set, add, sub)")]
     public class TransformCommand : ICommand
     {
         #region Options
 
-        [Option("position", "p", Description = "Set world position (x,y,z)")]
+        [Option("position", "p", Description = "World position (x,y,z)")]
         public string Position;
 
-        [Option("local-position", "P", Description = "Set local position (x,y,z)")]
+        [Option("local-position", "P", Description = "Local position (x,y,z)")]
         public string LocalPosition;
 
-        [Option("rotation", "r", Description = "Set world rotation in euler angles (x,y,z)")]
+        [Option("rotation", "r", Description = "World rotation in euler angles (x,y,z)")]
         public string Rotation;
 
-        [Option("local-rotation", "R", Description = "Set local rotation in euler angles (x,y,z)")]
+        [Option("local-rotation", "R", Description = "Local rotation in euler angles (x,y,z)")]
         public string LocalRotation;
 
-        [Option("scale", "s", Description = "Set local scale (x,y,z)")]
+        [Option("scale", "s", Description = "Local scale (x,y,z)")]
         public string Scale;
 
         [Option("parent", "", Description = "Set parent object (use '/' or 'null' to unparent)")]
@@ -47,11 +48,69 @@ namespace Xeon.UniTerminal.UnityCommands
             if (context.PositionalArguments.Count == 0)
             {
                 await context.Stderr.WriteLineAsync("transform: missing path argument", ct);
-                await context.Stderr.WriteLineAsync("Usage: transform <path> [options]", ct);
+                await context.Stderr.WriteLineAsync("Usage: transform [set|add|sub] <path> [options]", ct);
                 return ExitCode.UsageError;
             }
 
-            var path = context.PositionalArguments[0];
+            var firstArg = context.PositionalArguments[0].ToLower();
+
+            // サブコマンドを判定
+            if (IsSubCommand(firstArg))
+            {
+                var args = context.PositionalArguments.Skip(1).ToList();
+                return firstArg switch
+                {
+                    "set" => await SetAsync(context, args, ct),
+                    "add" => await AddAsync(context, args, ct),
+                    "sub" => await SubAsync(context, args, ct),
+                    _ => await UnknownSubCommandAsync(context, firstArg, ct)
+                };
+            }
+
+            // 後方互換性: サブコマンドなしの場合はset/表示として扱う
+            return await SetOrDisplayAsync(context, context.PositionalArguments.ToList(), ct);
+        }
+
+        public IEnumerable<string> GetCompletions(CompletionContext context)
+        {
+            var token = context.CurrentToken ?? "";
+
+            if (context.TokenIndex == 1)
+            {
+                // サブコマンドまたはパスの補完
+                var subCommands = new[] { "set", "add", "sub" };
+                var matchingSubCommands = subCommands.Where(cmd => cmd.StartsWith(token, StringComparison.OrdinalIgnoreCase));
+
+                if (!token.StartsWith("-"))
+                    return matchingSubCommands.Concat(GameObjectPath.GetCompletions(token));
+
+                return matchingSubCommands;
+            }
+
+            if (context.TokenIndex == 2 && !token.StartsWith("-"))
+                return GameObjectPath.GetCompletions(token);
+
+            return Array.Empty<string>();
+        }
+
+        #endregion
+
+        #region Subcommands
+
+        private static bool IsSubCommand(string arg)
+        {
+            return arg == "set" || arg == "add" || arg == "sub";
+        }
+
+        private async Task<ExitCode> SetOrDisplayAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            if (args.Count == 0)
+            {
+                await context.Stderr.WriteLineAsync("transform: missing path argument", ct);
+                return ExitCode.UsageError;
+            }
+
+            var path = args[0];
             var go = GameObjectPath.Resolve(path);
 
             if (go == null)
@@ -65,50 +124,115 @@ namespace Xeon.UniTerminal.UnityCommands
 
             await context.Stdout.WriteLineAsync($"Transform: {go.name}", ct);
 
-            // 各オプションを順次適用
-            var result = await ApplyPositionOptions(context, transform, ct);
-            if (result.exitCode != ExitCode.Success) return result.exitCode;
-            modified |= result.modified;
+            var result = await ApplyTransformOptions(context, transform, TransformOperation.Set, ct);
+            if (result.exitCode != ExitCode.Success)
+                return result.exitCode;
+            modified = result.modified;
 
-            result = await ApplyRotationOptions(context, transform, ct);
-            if (result.exitCode != ExitCode.Success) return result.exitCode;
-            modified |= result.modified;
+            // 親の変更はsetのみ
+            var parentResult = await ApplyParentOption(context, transform, ct);
+            if (parentResult.exitCode != ExitCode.Success)
+                return parentResult.exitCode;
+            modified |= parentResult.modified;
 
-            result = await ApplyScaleOption(context, transform, ct);
-            if (result.exitCode != ExitCode.Success) return result.exitCode;
-            modified |= result.modified;
-
-            result = await ApplyParentOption(context, transform, ct);
-            if (result.exitCode != ExitCode.Success) return result.exitCode;
-            modified |= result.modified;
-
-            // 変更なしの場合は情報を表示
             if (!modified)
                 await DisplayTransformInfoAsync(context, go, ct);
 
             return ExitCode.Success;
         }
 
-        public IEnumerable<string> GetCompletions(CompletionContext context)
+        private async Task<ExitCode> SetAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
-            var token = context.CurrentToken ?? "";
+            return await SetOrDisplayAsync(context, args, ct);
+        }
 
-            if (!token.StartsWith("-"))
-                return GameObjectPath.GetCompletions(token);
+        private async Task<ExitCode> AddAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            return await ApplyArithmeticAsync(context, args, TransformOperation.Add, ct);
+        }
 
-            return Array.Empty<string>();
+        private async Task<ExitCode> SubAsync(CommandContext context, List<string> args, CancellationToken ct)
+        {
+            return await ApplyArithmeticAsync(context, args, TransformOperation.Subtract, ct);
+        }
+
+        private async Task<ExitCode> ApplyArithmeticAsync(CommandContext context, List<string> args, TransformOperation operation, CancellationToken ct)
+        {
+            var opName = operation == TransformOperation.Add ? "add" : "sub";
+
+            if (args.Count == 0)
+            {
+                await context.Stderr.WriteLineAsync($"transform {opName}: missing path argument", ct);
+                return ExitCode.UsageError;
+            }
+
+            var path = args[0];
+            var go = GameObjectPath.Resolve(path);
+
+            if (go == null)
+            {
+                await context.Stderr.WriteLineAsync($"transform: '{path}': GameObject not found", ct);
+                return ExitCode.RuntimeError;
+            }
+
+            var transform = go.transform;
+            await context.Stdout.WriteLineAsync($"Transform: {go.name}", ct);
+
+            var result = await ApplyTransformOptions(context, transform, operation, ct);
+            if (result.exitCode != ExitCode.Success)
+                return result.exitCode;
+
+            if (!result.modified)
+            {
+                await context.Stderr.WriteLineAsync($"transform {opName}: no options specified", ct);
+                return ExitCode.UsageError;
+            }
+
+            return ExitCode.Success;
+        }
+
+        private async Task<ExitCode> UnknownSubCommandAsync(CommandContext context, string subCommand, CancellationToken ct)
+        {
+            await context.Stderr.WriteLineAsync($"transform: unknown subcommand '{subCommand}'", ct);
+            await context.Stderr.WriteLineAsync("Subcommands: set, add, sub", ct);
+            return ExitCode.UsageError;
         }
 
         #endregion
 
-        #region Apply Options
+        #region Transform Operations
 
-        private async Task<(ExitCode exitCode, bool modified)> ApplyPositionOptions(
-            CommandContext context, Transform transform, CancellationToken ct)
+        private enum TransformOperation { Set, Add, Subtract }
+
+        private async Task<(ExitCode exitCode, bool modified)> ApplyTransformOptions(
+            CommandContext context, Transform transform, TransformOperation operation, CancellationToken ct)
         {
             bool modified = false;
 
-            // ワールド位置設定
+            var posResult = await ApplyPositionOptions(context, transform, operation, ct);
+            if (posResult.exitCode != ExitCode.Success)
+                return (posResult.exitCode, false);
+            modified |= posResult.modified;
+
+            var rotResult = await ApplyRotationOptions(context, transform, operation, ct);
+            if (rotResult.exitCode != ExitCode.Success)
+                return (rotResult.exitCode, false);
+            modified |= rotResult.modified;
+
+            var scaleResult = await ApplyScaleOption(context, transform, operation, ct);
+            if (scaleResult.exitCode != ExitCode.Success)
+                return (scaleResult.exitCode, false);
+            modified |= scaleResult.modified;
+
+            return (ExitCode.Success, modified);
+        }
+
+        private async Task<(ExitCode exitCode, bool modified)> ApplyPositionOptions(
+            CommandContext context, Transform transform, TransformOperation operation, CancellationToken ct)
+        {
+            bool modified = false;
+
+            // ワールド位置
             if (!string.IsNullOrEmpty(Position))
             {
                 if (!TryParseVector3(Position, out var pos))
@@ -118,12 +242,12 @@ namespace Xeon.UniTerminal.UnityCommands
                 }
 
                 var oldPos = transform.position;
-                transform.position = pos;
-                await context.Stdout.WriteLineAsync($"  Position: {FormatVector3(oldPos)} -> {FormatVector3(transform.position)}", ct);
+                transform.position = ApplyVector3Operation(oldPos, pos, operation);
+                await WriteTransformChange(context, "Position", oldPos, transform.position, pos, operation, ct);
                 modified = true;
             }
 
-            // ローカル位置設定
+            // ローカル位置
             if (!string.IsNullOrEmpty(LocalPosition))
             {
                 if (!TryParseVector3(LocalPosition, out var pos))
@@ -133,8 +257,8 @@ namespace Xeon.UniTerminal.UnityCommands
                 }
 
                 var oldPos = transform.localPosition;
-                transform.localPosition = pos;
-                await context.Stdout.WriteLineAsync($"  Local Position: {FormatVector3(oldPos)} -> {FormatVector3(transform.localPosition)}", ct);
+                transform.localPosition = ApplyVector3Operation(oldPos, pos, operation);
+                await WriteTransformChange(context, "Local Position", oldPos, transform.localPosition, pos, operation, ct);
                 modified = true;
             }
 
@@ -142,11 +266,11 @@ namespace Xeon.UniTerminal.UnityCommands
         }
 
         private async Task<(ExitCode exitCode, bool modified)> ApplyRotationOptions(
-            CommandContext context, Transform transform, CancellationToken ct)
+            CommandContext context, Transform transform, TransformOperation operation, CancellationToken ct)
         {
             bool modified = false;
 
-            // ワールド回転設定
+            // ワールド回転
             if (!string.IsNullOrEmpty(Rotation))
             {
                 if (!TryParseVector3(Rotation, out var rot))
@@ -156,12 +280,12 @@ namespace Xeon.UniTerminal.UnityCommands
                 }
 
                 var oldRot = transform.eulerAngles;
-                transform.eulerAngles = rot;
-                await context.Stdout.WriteLineAsync($"  Rotation: {FormatVector3(oldRot)} -> {FormatVector3(transform.eulerAngles)}", ct);
+                transform.eulerAngles = ApplyVector3Operation(oldRot, rot, operation);
+                await WriteTransformChange(context, "Rotation", oldRot, transform.eulerAngles, rot, operation, ct);
                 modified = true;
             }
 
-            // ローカル回転設定
+            // ローカル回転
             if (!string.IsNullOrEmpty(LocalRotation))
             {
                 if (!TryParseVector3(LocalRotation, out var rot))
@@ -171,8 +295,8 @@ namespace Xeon.UniTerminal.UnityCommands
                 }
 
                 var oldRot = transform.localEulerAngles;
-                transform.localEulerAngles = rot;
-                await context.Stdout.WriteLineAsync($"  Local Rotation: {FormatVector3(oldRot)} -> {FormatVector3(transform.localEulerAngles)}", ct);
+                transform.localEulerAngles = ApplyVector3Operation(oldRot, rot, operation);
+                await WriteTransformChange(context, "Local Rotation", oldRot, transform.localEulerAngles, rot, operation, ct);
                 modified = true;
             }
 
@@ -180,7 +304,7 @@ namespace Xeon.UniTerminal.UnityCommands
         }
 
         private async Task<(ExitCode exitCode, bool modified)> ApplyScaleOption(
-            CommandContext context, Transform transform, CancellationToken ct)
+            CommandContext context, Transform transform, TransformOperation operation, CancellationToken ct)
         {
             if (string.IsNullOrEmpty(Scale))
                 return (ExitCode.Success, false);
@@ -192,9 +316,35 @@ namespace Xeon.UniTerminal.UnityCommands
             }
 
             var oldScale = transform.localScale;
-            transform.localScale = scale;
-            await context.Stdout.WriteLineAsync($"  Scale: {FormatVector3(oldScale)} -> {FormatVector3(transform.localScale)}", ct);
+            transform.localScale = ApplyVector3Operation(oldScale, scale, operation);
+            await WriteTransformChange(context, "Scale", oldScale, transform.localScale, scale, operation, ct);
             return (ExitCode.Success, true);
+        }
+
+        private static Vector3 ApplyVector3Operation(Vector3 current, Vector3 operand, TransformOperation operation)
+        {
+            return operation switch
+            {
+                TransformOperation.Set => operand,
+                TransformOperation.Add => current + operand,
+                TransformOperation.Subtract => current - operand,
+                _ => current
+            };
+        }
+
+        private async Task WriteTransformChange(
+            CommandContext context, string propName, Vector3 oldValue, Vector3 newValue, Vector3 operand,
+            TransformOperation operation, CancellationToken ct)
+        {
+            if (operation == TransformOperation.Set)
+            {
+                await context.Stdout.WriteLineAsync($"  {propName}: {FormatVector3(oldValue)} -> {FormatVector3(newValue)}", ct);
+            }
+            else
+            {
+                var symbol = operation == TransformOperation.Add ? "+" : "-";
+                await context.Stdout.WriteLineAsync($"  {propName}: {FormatVector3(oldValue)} {symbol} {FormatVector3(operand)} = {FormatVector3(newValue)}", ct);
+            }
         }
 
         private async Task<(ExitCode exitCode, bool modified)> ApplyParentOption(

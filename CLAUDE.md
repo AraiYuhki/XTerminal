@@ -32,6 +32,46 @@ When generating code, you **must follow these rules and respect their intent**, 
 * Deeply nested code complicates debugging, breakpoints, and stack tracing.
 * Encourages code that communicates **intent**, not just execution flow.
 
+### Prohibition of `#region`
+
+* **Do not use `#region / #endregion`.**
+
+**Reason**
+
+* `#region` **hides** the physical structure and separation of responsibilities in code, reducing readability.
+* The ability to "collapse" often **masks design problems** where a single class or file has grown too large.
+* Unity / C# IDEs provide adequate **proper design improvement tools** such as method extraction, file splitting, and class splitting.
+* During code review, there is a high risk that content inside `#region` blocks will be overlooked.
+* The role of "headings" can be replaced by **proper class separation, method naming, and comments**.
+
+**Alternatives**
+
+* Split logical groupings into **meaningful methods**.
+* If responsibilities differ, **split into separate classes**.
+* If a file becomes too large, **split into multiple files**.
+* If supplementary explanation is needed, use **regular comments** instead of `#region`.
+
+**Example (Prohibited)**
+
+```csharp
+#region Movement
+void Move()
+{
+    ...
+}
+#endregion
+```
+
+**Example (Recommended)**
+
+```csharp
+// Character movement processing
+void MoveCharacter()
+{
+    ...
+}
+```
+
 ### switch Statement Restrictions
 
 * Inside a `switch` `case`, **do not use**:

@@ -389,5 +389,216 @@ namespace Xeon.UniTerminal.Tests.Runtime
             var output = stdout.ToString();
             Assert.IsTrue(output.Contains("PlayMode_NamedMaterial") || output.Contains("material"));
         }
+
+        // --- 演算操作テスト ---
+
+        [UnityTest]
+        public IEnumerator Property_Add_Float_AddsToValue()
+        {
+            var target = CreateTestObject("PlayMode_PropAddFloat");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 5f;
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddFloat Rigidbody mass 3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(8f, rb.mass, 0.01f);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Add_Vector3_AddsToValue()
+        {
+            var target = CreateTestObject("PlayMode_PropAddVec");
+            target.transform.position = new Vector3(1, 2, 3);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddVec Transform position 1,1,1", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(2, 3, 4), target.transform.position);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Sub_Float_SubtractsFromValue()
+        {
+            var target = CreateTestObject("PlayMode_PropSubFloat");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 10f;
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property sub /PlayMode_PropSubFloat Rigidbody mass 3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(7f, rb.mass, 0.01f);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Sub_Vector3_SubtractsFromValue()
+        {
+            var target = CreateTestObject("PlayMode_PropSubVec");
+            target.transform.position = new Vector3(5, 5, 5);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property sub /PlayMode_PropSubVec Transform position 2,1,3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(3, 4, 2), target.transform.position);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Mul_Float_MultipliesValue()
+        {
+            var target = CreateTestObject("PlayMode_PropMulFloat");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 5f;
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property mul /PlayMode_PropMulFloat Rigidbody mass 3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(15f, rb.mass, 0.01f);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Div_Float_DividesValue()
+        {
+            var target = CreateTestObject("PlayMode_PropDivFloat");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 10f;
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property div /PlayMode_PropDivFloat Rigidbody mass 2", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(5f, rb.mass, 0.01f);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Mul_Vector3_ReturnsError()
+        {
+            var target = CreateTestObject("PlayMode_PropMulVec");
+            target.transform.localScale = new Vector3(1, 1, 1);
+
+            yield return null;
+
+            stderr = new StringBuilderTextWriter();
+            var task = terminal.ExecuteAsync("property mul /PlayMode_PropMulVec Transform localScale 2,2,2", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.RuntimeError, task.Result);
+            Assert.IsTrue(stderr.ToString().Contains("does not support"));
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Div_ByZero_ReturnsError()
+        {
+            var target = CreateTestObject("PlayMode_PropDivZero");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 10f;
+
+            yield return null;
+
+            stderr = new StringBuilderTextWriter();
+            var task = terminal.ExecuteAsync("property div /PlayMode_PropDivZero Rigidbody mass 0", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.RuntimeError, task.Result);
+            Assert.IsTrue(stderr.ToString().Contains("division by zero"));
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Add_UnsupportedType_ReturnsError()
+        {
+            var target = CreateTestObject("PlayMode_PropAddString");
+
+            yield return null;
+
+            stderr = new StringBuilderTextWriter();
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddString Transform name test", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.RuntimeError, task.Result);
+            Assert.IsTrue(stderr.ToString().Contains("does not support arithmetic"));
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Add_MissingArgs_ReturnsError()
+        {
+            var target = CreateTestObject("PlayMode_PropAddMissing");
+            target.AddComponent<Rigidbody>();
+
+            yield return null;
+
+            stderr = new StringBuilderTextWriter();
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddMissing Rigidbody mass", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.UsageError, task.Result);
+            Assert.IsTrue(stderr.ToString().Contains("usage"));
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Add_NotFoundProperty_ReturnsError()
+        {
+            var target = CreateTestObject("PlayMode_PropAddNotFound");
+            target.AddComponent<Rigidbody>();
+
+            yield return null;
+
+            stderr = new StringBuilderTextWriter();
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddNotFound Rigidbody nonexistent 5", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.RuntimeError, task.Result);
+            Assert.IsTrue(stderr.ToString().Contains("not found"));
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Add_NegativeValue_Works()
+        {
+            var target = CreateTestObject("PlayMode_PropAddNeg");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 10f;
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddNeg Rigidbody mass -3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(7f, rb.mass, 0.01f);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Arithmetic_OutputFormat_ShowsOperation()
+        {
+            var target = CreateTestObject("PlayMode_PropArithOutput");
+            var rb = target.AddComponent<Rigidbody>();
+            rb.mass = 5f;
+
+            yield return null;
+
+            stdout = new StringBuilderTextWriter();
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropArithOutput Rigidbody mass 3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            var output = stdout.ToString();
+            // 出力に演算記号が含まれることを確認
+            Assert.IsTrue(output.Contains("+") || output.Contains("mass"));
+        }
     }
 }

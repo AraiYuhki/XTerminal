@@ -239,5 +239,216 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.UsageError, exitCode);
             Assert.IsTrue(stderr.ToString().Contains("invalid"));
         }
+
+        // --- サブコマンド方式テスト ---
+
+        // TF-100 setサブコマンド
+        [Test]
+        public async Task Transform_Set_SubCommand_SetsPosition()
+        {
+            var obj = CreateTestObject("TfTest_SetSub");
+
+            var exitCode = await terminal.ExecuteAsync("transform set /TfTest_SetSub -p 1,2,3", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(1, 2, 3), obj.transform.position);
+        }
+
+        // TF-101 後方互換性（サブコマンドなし）
+        [Test]
+        public async Task Transform_BackwardCompatibility_SetsPosition()
+        {
+            var obj = CreateTestObject("TfTest_BackCompat");
+
+            var exitCode = await terminal.ExecuteAsync("transform /TfTest_BackCompat -p 5,5,5", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(5, 5, 5), obj.transform.position);
+        }
+
+        // --- addサブコマンドテスト ---
+
+        // TF-110 位置の加算
+        [Test]
+        public async Task Transform_Add_Position()
+        {
+            var obj = CreateTestObject("TfTest_AddPos");
+            obj.transform.position = new Vector3(1, 2, 3);
+
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddPos -p 1,1,1", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(2, 3, 4), obj.transform.position);
+        }
+
+        // TF-111 ローカル位置の加算
+        [Test]
+        public async Task Transform_Add_LocalPosition()
+        {
+            var parent = CreateTestObject("TfTest_AddLocalParent");
+            parent.transform.position = new Vector3(10, 0, 0);
+            var child = CreateTestObject("TfTest_AddLocalChild", parent.transform);
+            child.transform.localPosition = new Vector3(1, 1, 1);
+
+            stdout = new StringBuilderTextWriter();
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddLocalParent/TfTest_AddLocalChild -P 2,2,2", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(3, 3, 3), child.transform.localPosition);
+        }
+
+        // TF-112 回転の加算
+        [Test]
+        public async Task Transform_Add_Rotation()
+        {
+            var obj = CreateTestObject("TfTest_AddRot");
+            obj.transform.eulerAngles = new Vector3(0, 45, 0);
+
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddRot -r 0,45,0", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(90f, obj.transform.eulerAngles.y, 0.1f);
+        }
+
+        // TF-113 ローカル回転の加算
+        [Test]
+        public async Task Transform_Add_LocalRotation()
+        {
+            var obj = CreateTestObject("TfTest_AddLocalRot");
+            obj.transform.localEulerAngles = new Vector3(0, 0, 0);
+
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddLocalRot -R 30,0,0", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(30f, obj.transform.localEulerAngles.x, 0.1f);
+        }
+
+        // TF-114 スケールの加算
+        [Test]
+        public async Task Transform_Add_Scale()
+        {
+            var obj = CreateTestObject("TfTest_AddScale");
+            obj.transform.localScale = new Vector3(1, 1, 1);
+
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddScale -s 0.5,0.5,0.5", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(1.5f, 1.5f, 1.5f), obj.transform.localScale);
+        }
+
+        // TF-115 addでオプションなしエラー
+        [Test]
+        public async Task Transform_Add_NoOptions_ReturnsError()
+        {
+            var obj = CreateTestObject("TfTest_AddNoOpt");
+
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddNoOpt", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.UsageError, exitCode);
+            Assert.IsTrue(stderr.ToString().Contains("no options"));
+        }
+
+        // --- subサブコマンドテスト ---
+
+        // TF-120 位置の減算
+        [Test]
+        public async Task Transform_Sub_Position()
+        {
+            var obj = CreateTestObject("TfTest_SubPos");
+            obj.transform.position = new Vector3(5, 5, 5);
+
+            var exitCode = await terminal.ExecuteAsync("transform sub /TfTest_SubPos -p 2,1,3", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(3, 4, 2), obj.transform.position);
+        }
+
+        // TF-121 ローカル位置の減算
+        [Test]
+        public async Task Transform_Sub_LocalPosition()
+        {
+            var obj = CreateTestObject("TfTest_SubLocalPos");
+            obj.transform.localPosition = new Vector3(10, 10, 10);
+
+            var exitCode = await terminal.ExecuteAsync("transform sub /TfTest_SubLocalPos -P 3,3,3", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(7, 7, 7), obj.transform.localPosition);
+        }
+
+        // TF-122 回転の減算
+        [Test]
+        public async Task Transform_Sub_Rotation()
+        {
+            var obj = CreateTestObject("TfTest_SubRot");
+            obj.transform.eulerAngles = new Vector3(0, 90, 0);
+
+            var exitCode = await terminal.ExecuteAsync("transform sub /TfTest_SubRot -r 0,45,0", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(45f, obj.transform.eulerAngles.y, 0.1f);
+        }
+
+        // TF-123 スケールの減算
+        [Test]
+        public async Task Transform_Sub_Scale()
+        {
+            var obj = CreateTestObject("TfTest_SubScale");
+            obj.transform.localScale = new Vector3(2, 2, 2);
+
+            var exitCode = await terminal.ExecuteAsync("transform sub /TfTest_SubScale -s 0.5,0.5,0.5", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(1.5f, 1.5f, 1.5f), obj.transform.localScale);
+        }
+
+        // TF-124 subでパスなしエラー
+        [Test]
+        public async Task Transform_Sub_NoPath_ReturnsError()
+        {
+            var exitCode = await terminal.ExecuteAsync("transform sub", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.UsageError, exitCode);
+            Assert.IsTrue(stderr.ToString().Contains("missing path"));
+        }
+
+        // --- 複合テスト ---
+
+        // TF-130 add複数オプション
+        [Test]
+        public async Task Transform_Add_MultipleOptions()
+        {
+            var obj = CreateTestObject("TfTest_AddMulti");
+            obj.transform.position = new Vector3(1, 1, 1);
+            obj.transform.localScale = new Vector3(1, 1, 1);
+
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_AddMulti -p 1,1,1 -s 1,1,1", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(2, 2, 2), obj.transform.position);
+            Assert.AreEqual(new Vector3(2, 2, 2), obj.transform.localScale);
+        }
+
+        // TF-131 不明な文字列はパスとして扱われる（後方互換性）
+        [Test]
+        public async Task Transform_UnknownString_TreatedAsPath()
+        {
+            // 後方互換性のため、不明な文字列はサブコマンドではなくパスとして扱われる
+            // "mul"というオブジェクトが存在しないため、not foundエラーになる
+            var exitCode = await terminal.ExecuteAsync("transform mul -s 2", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.RuntimeError, exitCode);
+            Assert.IsTrue(stderr.ToString().Contains("not found"));
+        }
+
+        // TF-132 存在しないオブジェクトへのadd
+        [Test]
+        public async Task Transform_Add_NotFound_ReturnsError()
+        {
+            var exitCode = await terminal.ExecuteAsync("transform add /TfTest_NonExistent -p 1,1,1", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.RuntimeError, exitCode);
+            Assert.IsTrue(stderr.ToString().Contains("not found"));
+        }
     }
 }

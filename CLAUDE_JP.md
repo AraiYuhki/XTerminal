@@ -11,43 +11,81 @@
 
 ### 命名規則
 
-* プライベートメソッドに `_` プレフィックスを使用**しない**。
+- プライベートメソッドに `_` プレフィックスを使用**しない**。
 
 **理由**
 
-* C#ではアクセス修飾子（`private`、`public` など）で可視性を明確に表現できる。
-* Unityプロジェクトでは、`_` プレフィックス付きの名前は一時変数、内部ハック、自動生成コードと混同されやすい。
-* リファクタリング時のノイズを避け、IDEの自動補完の可読性を向上させる。
+- C#ではアクセス修飾子（`private`、`public` など）で可視性を明確に表現できる。
+- Unityプロジェクトでは、`_` プレフィックス付きの名前は一時変数、内部ハック、自動生成コードと混同されやすい。
+- リファクタリング時のノイズを避け、IDEの自動補完の可読性を向上させる。
 
 ### ネストの制限
 
-* `namespace` を除き、ネストは**最大3レベル**まで。
-* 単一のネストブロック（`{}`）は**100行を超えない**。
-
-  * 超える場合は、**意味のあるメソッドにロジックを分割する**。
+- `namespace` を除き、ネストは**最大3レベル**まで。
+- 単一のネストブロック（`{}`）は**100行を超えない**。
+  - 超える場合は、**意味のあるメソッドにロジックを分割する**。
 
 **理由**
 
-* MonoBehaviourクラスには多くのライフサイクルメソッドが含まれており、深いネストは動作の把握を困難にする。
-* 深くネストされたコードは、デバッグ、ブレークポイント、スタックトレースを複雑にする。
-* 実行フローだけでなく、**意図を伝える**コードを促進する。
+- MonoBehaviourクラスには多くのライフサイクルメソッドが含まれており、深いネストは動作の把握を困難にする。
+- 深くネストされたコードは、デバッグ、ブレークポイント、スタックトレースを複雑にする。
+- 実行フローだけでなく、**意図を伝える**コードを促進する。
+
+### `#region` の使用禁止
+
+- **`#region / #endregion` を使用しないこと。**
+
+**理由**
+
+- `#region` はコードの物理的な構造や責務の分離を**隠蔽**し、可読性を低下させる。
+- 「折りたためること」によって、**1クラス・1ファイルが肥大化している設計上の問題を覆い隠す**ことが多い。
+- Unity / C# の IDE では、メソッド抽出・ファイル分割・クラス分割といった**正しい設計改善手段**が十分に提供されている。
+- コードレビュー時に、`#region` 内部が読まれずに見落とされるリスクが高い。
+- 「見出し」としての役割は、**適切なクラス分割・メソッド命名・コメント**で代替できる。
+
+**代替手段**
+
+- ロジックのまとまりは **意味のあるメソッド** に分割する。
+- 責務が異なる場合は **クラスを分割** する。
+- ファイルが肥大化した場合は **ファイル分割** を行う。
+- 補足説明が必要な場合は、`#region` ではなく **通常のコメント** を使用する。
+
+**例（禁止）**
+
+```csharp
+#region Movement
+void Move()
+{
+    ...
+}
+#endregion
+```
+
+**例（推奨）**
+
+```csharp
+// キャラクターの移動処理
+void MoveCharacter()
+{
+    ...
+}
+```
 
 ### switch文の制限
 
-* `switch` の `case` 内では、以下を**使用しない**：
+- `switch` の `case` 内では、以下を**使用しない**：
+  - `if`
+  - `for`
+  - `foreach`
+  - `switch`
 
-  * `if`
-  * `for`
-  * `foreach`
-  * `switch`
-
-* 各 `case` は `break` を除いて**最大5行**まで。
+- 各 `case` は `break` を除いて**最大5行**まで。
 
 **理由**
 
-* `switch` 文は**明示的な状態または値の分岐**のみを表現すべき。
-* `case` ブロック内にロジックを埋め込むと、制御フローと状態遷移が隠れる。
-* 複雑な動作は**専用のメソッドに委譲**し、各 `case` をシンプルで読みやすく保つ。
+- `switch` 文は**明示的な状態または値の分岐**のみを表現すべき。
+- `case` ブロック内にロジックを埋め込むと、制御フローと状態遷移が隠れる。
+- 複雑な動作は**専用のメソッドに委譲**し、各 `case` をシンプルで読みやすく保つ。
 
 ### 設計の優先順位
 
@@ -60,37 +98,35 @@
 
 **理由**
 
-* Unityプロジェクトでは、頻繁なイテレーション、チューニング、デバッグが必要になることが多い。
-* GCアロケーション、フレームタイミング、プラットフォームの制約により、Unityではパフォーマンスが早期に重要になる。
-* 最適化されているが読めないコードは、すぐにメンテナンスリスクになる。
-* 拡張性は重要だが、明確さやランタイムパフォーマンスを犠牲にしてはならない。
+- Unityプロジェクトでは、頻繁なイテレーション、チューニング、デバッグが必要になることが多い。
+- GCアロケーション、フレームタイミング、プラットフォームの制約により、Unityではパフォーマンスが早期に重要になる。
+- 最適化されているが読めないコードは、すぐにメンテナンスリスクになる。
+- 拡張性は重要だが、明確さやランタイムパフォーマンスを犠牲にしてはならない。
 
 ### SOLID原則
 
-* **SOLID原則を必ず守ること。**
+- **SOLID原則を必ず守ること。**
+  - **S** – Single Responsibility Principle（単一責任の原則）
+  - **O** – Open/Closed Principle（開放閉鎖の原則）
+  - **L** – Liskov Substitution Principle（リスコフの置換原則）
+  - **I** – Interface Segregation Principle（インターフェース分離の原則）
+  - **D** – Dependency Inversion Principle（依存性逆転の原則）
 
-  * **S** – Single Responsibility Principle（単一責任の原則）
-  * **O** – Open/Closed Principle（開放閉鎖の原則）
-  * **L** – Liskov Substitution Principle（リスコフの置換原則）
-  * **I** – Interface Segregation Principle（インターフェース分離の原則）
-  * **D** – Dependency Inversion Principle（依存性逆転の原則）
-
-* **例外**: 著しく可読性またはパフォーマンスが低下する場合は、SOLID原則から逸脱してもよい。
-
-  * その場合、**なぜ逸脱が必要か**を明確にコメントで記述すること。
+- **例外**: 著しく可読性またはパフォーマンスが低下する場合は、SOLID原則から逸脱してもよい。
+  - その場合、**なぜ逸脱が必要か**を明確にコメントで記述すること。
 
 **理由**
 
-* SOLID原則は、変更に強く、テスト可能で、再利用性の高い設計を促進する。
-* ただし、原則を盲目的に適用すると、過度な抽象化や不要なインターフェースの増加を招き、かえって複雑になる。
-* 可読性とパフォーマンスを最優先としつつ、原則の意図を尊重するバランスが重要。
+- SOLID原則は、変更に強く、テスト可能で、再利用性の高い設計を促進する。
+- ただし、原則を盲目的に適用すると、過度な抽象化や不要なインターフェースの増加を招き、かえって複雑になる。
+- 可読性とパフォーマンスを最優先としつつ、原則の意図を尊重するバランスが重要。
 
 ### 制御文のスタイル
 
-* `if`、`for`、`foreach` が1行で書ける場合でも、**必ず2行で書く**。
-* 波括弧 `{}` の省略は許可されるが、**1行の制御文は禁止**。
-* 非自明なロジックには波括弧を推奨。
-* このルールは `switch` 文に適用され、`switch` 式には適用されない。
+- `if`、`for`、`foreach` が1行で書ける場合でも、**必ず2行で書く**。
+- 波括弧 `{}` の省略は許可されるが、**1行の制御文は禁止**。
+- 非自明なロジックには波括弧を推奨。
+- このルールは `switch` 文に適用され、`switch` 式には適用されない。
 
 #### 例
 
@@ -104,9 +140,9 @@ foreach (var element in array)
 
 **理由**
 
-* Unityのデバッグでは、制御ブロック内にログやブレークポイントを追加することが頻繁にある。
-* ロジックを拡張する際に波括弧を追加し忘れることによる将来のバグを防ぐ。
-* よりクリーンな差分を生成し、コードレビューの明確さを向上させる。
+- Unityのデバッグでは、制御ブロック内にログやブレークポイントを追加することが頻繁にある。
+- ロジックを拡張する際に波括弧を追加し忘れることによる将来のバグを防ぐ。
+- よりクリーンな差分を生成し、コードレビューの明確さを向上させる。
 
 ## プロジェクト概要
 
@@ -124,11 +160,13 @@ UniTerminalは、LinuxライクなCLI実行フレームワークを提供するU
 ### テストの実行
 
 **Unity Editor経由:**
+
 - Window > General > Test Runner
 - Edit Modeタブでユニットテスト
 - Play Modeタブで統合テスト
 
 **CLI経由:**
+
 ```bash
 # Edit Modeテスト
 Unity -runTests -testPlatform editmode -projectPath .
@@ -138,6 +176,7 @@ Unity -runTests -testPlatform playmode -projectPath .
 ```
 
 ### テスト構成
+
 - `Packages/jp.xeon.uni-terminal/Tests/Editor/` - ユニットテスト（Parser、Tokenizer、Binder、Commands）
 - `Packages/jp.xeon.uni-terminal/Tests/Runtime/` - Play Modeテスト（GameObject操作）
 
@@ -156,18 +195,18 @@ Terminal.ExecuteAsync(input)
 
 ### `Packages/jp.xeon.uni-terminal/Runtime/Scripts/` の主要ディレクトリ
 
-| ディレクトリ | 目的 |
-|-----------|---------|
-| `Core/` | IAsyncTextReader/Writerインターフェース、CommandContext、ExitCode、PathUtility |
-| `Commands/` | ICommandインターフェース、CommandRegistry、CommandAttribute、OptionAttribute |
-| `BuiltInCommands/` | ファイル操作（echo、cat、grep、ls、cd、pwd、find、less、diff） |
-| `UnityCommands/` | シーン操作（hierarchy、go、transform、component、property） |
-| `Parsing/` | Parser、Tokenizer、Token型、ParsedPipeline構造体 |
-| `Binding/` | Binder、BoundCommand、CommandBindingContext |
-| `Execution/` | PipelineExecutor、ExecutionResult |
-| `UI/` | UniTerminal MonoBehaviour、OutputWriter |
-| `FlyweightScrollView/` | CircularBufferによる仮想スクロール（1000行リングバッファ） |
-| `UniTask/` | UniTask非同期サポート（条件付きコンパイル） |
+| ディレクトリ           | 目的                                                                           |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `Core/`                | IAsyncTextReader/Writerインターフェース、CommandContext、ExitCode、PathUtility |
+| `Commands/`            | ICommandインターフェース、CommandRegistry、CommandAttribute、OptionAttribute   |
+| `BuiltInCommands/`     | ファイル操作（echo、cat、grep、ls、cd、pwd、find、less、diff）                 |
+| `UnityCommands/`       | シーン操作（hierarchy、go、transform、component、property）                    |
+| `Parsing/`             | Parser、Tokenizer、Token型、ParsedPipeline構造体                               |
+| `Binding/`             | Binder、BoundCommand、CommandBindingContext                                    |
+| `Execution/`           | PipelineExecutor、ExecutionResult                                              |
+| `UI/`                  | UniTerminal MonoBehaviour、OutputWriter                                        |
+| `FlyweightScrollView/` | CircularBufferによる仮想スクロール（1000行リングバッファ）                     |
+| `UniTask/`             | UniTask非同期サポート（条件付きコンパイル）                                    |
 
 ### カスタムコマンドの作成
 
@@ -196,6 +235,7 @@ public class MyCommand : ICommand
 ### サブコマンドパターン
 
 `go`、`component`、`property` などのコマンドはサブコマンドを使用：
+
 ```csharp
 var subCommand = context.PositionalArguments[0].ToLower();
 var args = context.PositionalArguments.Skip(1).ToList();
@@ -216,6 +256,7 @@ return subCommand switch
 ### UIコンポーネント
 
 `UniTerminal.cs`（MonoBehaviour）の役割：
+
 - キーボード入力（Tab=補完、Up/Down=履歴、Enter=実行）
 - 仮想スクロール用のFlyweightVerticalScrollView
 - 固定サイズログ保存用のCircularBuffer

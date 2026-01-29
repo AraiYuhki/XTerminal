@@ -124,9 +124,9 @@ await terminal.ExecuteAsync("grep --pattern=pattern < input.txt", stdout, stderr
 |---------|-------------|---------|
 | `hierarchy` | Display scene hierarchy | `-r`, `-d`, `-a`, `-l`, `-s`, `-n`, `-c`, `-t`, `-y` |
 | `go` | GameObject operations | `--primitive`, `-P`, `-t`, `-n`, `-c`, `-i`, `-s` |
-| `transform` | Transform manipulation | `-p`, `-P`, `-r`, `-R`, `-s`, `--parent`, `-w` |
+| `transform` | Transform manipulation | `set`, `add`, `sub` subcommands; `-p`, `-P`, `-r`, `-R`, `-s`, `--parent`, `-w` |
 | `component` | Component management | `-a`, `-v`, `-i`, `-n` |
-| `property` | Property operations | `-a`, `-s`, `-n` |
+| `property` | Property operations | `list`, `get`, `set`, `add`, `sub`, `mul`, `div` subcommands; `-a`, `-s`, `-n` |
 
 ### Command Examples
 
@@ -179,8 +179,12 @@ go active /MyObject --toggle
 #### transform - Transform Operations
 
 ```bash
-# Set position (world)
+# Display transform info
+transform /MyObject
+
+# Set position (world) - both syntaxes work for backward compatibility
 transform /MyObject -p 1,2,3
+transform set /MyObject -p 1,2,3
 
 # Set position (local)
 transform /MyObject -P 0,1,0
@@ -193,6 +197,15 @@ transform /MyObject -s 2,2,2
 
 # Set parent
 transform /Child --parent /Parent
+
+# Add to position (increment)
+transform add /MyObject -p 1,0,0      # Move +1 on X axis
+transform add /MyObject -r 0,45,0     # Rotate +45 degrees on Y axis
+transform add /MyObject -s 0.5        # Increase scale by 0.5
+
+# Subtract from position (decrement)
+transform sub /MyObject -p 0,1,0      # Move -1 on Y axis
+transform sub /MyObject -r 0,90,0     # Rotate -90 degrees on Y axis
 ```
 
 #### component - Component Management
@@ -224,6 +237,20 @@ property get /MyObject Rigidbody mass
 # Set property value
 property set /MyObject Rigidbody mass 10
 property set /MyObject Transform position 1,2,3
+
+# Arithmetic operations (add, sub, mul, div)
+property add /MyObject Rigidbody mass 5       # Add 5 to mass
+property sub /MyObject Rigidbody drag 0.1     # Subtract 0.1 from drag
+property mul /MyObject Rigidbody mass 2       # Multiply mass by 2
+property div /MyObject Rigidbody mass 2       # Divide mass by 2
+
+# Supported types for arithmetic:
+# - Numeric: int, float, double, long, byte, short (add, sub, mul, div)
+# - Vector: Vector2, Vector3, Vector4, Vector2Int, Vector3Int (add, sub only)
+
+# Vector arithmetic examples
+property add /MyObject Transform localScale 1,1,1    # Increase scale
+property sub /MyObject Transform position 0,1,0      # Move down by 1
 ```
 
 ## Creating Custom Commands
