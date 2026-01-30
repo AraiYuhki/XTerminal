@@ -15,7 +15,6 @@ namespace Xeon.UniTerminal.Tests
             parser = new Parser();
         }
 
-
         [Test]
         public void VariableStore_SetAndGet_ReturnsValue()
         {
@@ -86,8 +85,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.Throws<System.ArgumentException>(() => store.Set("", "value"));
             Assert.Throws<System.ArgumentException>(() => store.Set("foo-bar", "value"));
         }
-
-
 
         [Test]
         public void Parse_UndefinedVariable_ExpandsToEmpty()

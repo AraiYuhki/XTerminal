@@ -23,8 +23,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-
-
         private static AssetDatabaseProvider provider;
 
         private static AssetDatabaseProvider Provider
@@ -39,8 +37,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 return provider;
             }
         }
-
-
 
         public string CommandName => "assetdb";
         public string Description => "Load and find assets via AssetDatabase (Editor only)";
@@ -81,8 +77,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> LoadAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -210,8 +204,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.RuntimeError;
         }
 
-
-
         private Type ResolveAssetType()
         {
             return string.IsNullOrEmpty(TypeFilter) ? null : TypeResolver.ResolveAssetType(TypeFilter);
@@ -249,8 +241,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return $"{bytes / (double)GB:F1} GB";
         }
 
-
-
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
             await context.Stderr.WriteLineAsync("assetdb: missing subcommand", ct);
@@ -265,8 +255,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Subcommands: load, find, list, path", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {

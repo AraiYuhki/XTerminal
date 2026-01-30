@@ -87,7 +87,7 @@ namespace Xeon.UniTerminal.BuiltInCommands
                         searchPaths.Add(resolvedPath);
                     }
                 }
-                
+
                 // ファイルタイプを解析
                 var fileType = ParseFileType(FileType);
 
@@ -191,7 +191,7 @@ namespace Xeon.UniTerminal.BuiltInCommands
             // ディレクトリの場合、サブエントリを検索
             if (!isDirectory)
                 yield break;
-            
+
             IEnumerable<string> entries;
             try
             {
@@ -227,7 +227,7 @@ namespace Xeon.UniTerminal.BuiltInCommands
                 .Replace("\\?", ".")
                 .Replace("\\[", "[")
                 .Replace("\\]", "]") + "$";
-            
+
             return Regex.IsMatch(name, regexPattern, param.RegexOption);
         }
 

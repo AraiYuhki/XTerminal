@@ -45,7 +45,6 @@ namespace Xeon.UniTerminal.Tests
             }
         }
 
-
         [Test]
         public async Task ExecuteUniTaskAsync_Echo_OutputsText()
         {
@@ -105,8 +104,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
         }
 
-
-
         [Test]
         public async Task ExecuteUniTaskAsync_Pipeline_PassesOutputToNextCommand()
         {
@@ -118,8 +115,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
             Assert.IsTrue(stdout.ToString().Contains("hello"));
         }
-
-
 
         [Test]
         public async Task ExecuteUniTaskAsync_UnknownCommand_ReturnsUsageError()
@@ -144,8 +139,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.UsageError, exitCode);
         }
 
-
-
         [Test]
         public async Task ExecuteUniTaskAsync_AddsToHistory()
         {
@@ -157,8 +150,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(1, terminal.CommandHistory.Count);
             Assert.AreEqual("echo test", terminal.CommandHistory[0]);
         }
-
-
 
         [Test]
         public async Task ExecuteUniTaskAsync_WithTaskWriters_Works()

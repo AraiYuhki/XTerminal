@@ -55,7 +55,6 @@ namespace Xeon.UniTerminal.Parsing
             return result;
         }
 
-
         private ParsedPipeline ParsePipeline(List<Token> tokens)
         {
             var pipeline = new ParsedPipeline();
@@ -117,8 +116,6 @@ namespace Xeon.UniTerminal.Parsing
 
             pipeline.Commands.Add(ParseCommand(commandTokens));
         }
-
-
 
         private ParsedCommand ParseCommand(List<Token> tokens)
         {
@@ -274,8 +271,6 @@ namespace Xeon.UniTerminal.Parsing
             return token.Kind == TokenKind.Word && !token.Value.StartsWith("-");
         }
 
-
-
         private ParsedOptionOccurrence ParseLongOption(string value, bool wasQuoted)
         {
             var withoutDashes = value.Substring(2);
@@ -333,8 +328,6 @@ namespace Xeon.UniTerminal.Parsing
             return results;
         }
 
-
-
         private static bool IsNumber(string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -357,8 +350,6 @@ namespace Xeon.UniTerminal.Parsing
 
             return true;
         }
-
-
 
         private class CommandParseContext
         {

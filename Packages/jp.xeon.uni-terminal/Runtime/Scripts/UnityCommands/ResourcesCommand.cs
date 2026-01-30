@@ -22,8 +22,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-
-
         private static ResourcesAssetProvider provider;
 
         private static ResourcesAssetProvider Provider
@@ -38,8 +36,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 return provider;
             }
         }
-
-
 
         public string CommandName => "res";
         public string Description => "Load assets via Resources (DEPRECATED)";
@@ -76,8 +72,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> LoadAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -185,14 +179,10 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-
-
         private Type ResolveAssetType()
         {
             return string.IsNullOrEmpty(TypeFilter) ? null : TypeResolver.ResolveAssetType(TypeFilter);
         }
-
-
 
         private async Task<ExitCode> ShowHelpAsync(CommandContext context, CancellationToken ct)
         {
@@ -231,8 +221,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Subcommands: load, unload, unloadunused, find, help", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {

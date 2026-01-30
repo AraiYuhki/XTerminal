@@ -45,7 +45,6 @@ namespace Xeon.UniTerminal.Tests
             File.WriteAllText(Path.Combine(testDir, name), content);
         }
 
-
         // TAIL-001 デフォルト（10行）
         [Test]
         public async Task Tail_Default_OutputsLast10Lines()
@@ -125,8 +124,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("line3"));
         }
 
-
-
         // TAIL-010 複数ファイル（ヘッダー表示）
         [Test]
         public async Task Tail_MultipleFiles_ShowsHeaders()
@@ -184,8 +181,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(output.Contains("==>"));
         }
 
-
-
         // TAIL-020 パイプからの入力
         [Test]
         public async Task Tail_PipeInput_ProcessesStdin()
@@ -195,8 +190,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
             Assert.IsTrue(stdout.ToString().Contains("line1"));
         }
-
-
 
         // TAIL-030 存在しないファイル
         [Test]

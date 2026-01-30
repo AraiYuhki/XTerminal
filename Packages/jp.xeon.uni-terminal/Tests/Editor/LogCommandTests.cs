@@ -29,7 +29,6 @@ namespace Xeon.UniTerminal.Tests
             terminal?.Dispose();
         }
 
-
         // LOG-001 基本動作
         [Test]
         public async Task Log_Basic_ShowsLogs()
@@ -79,8 +78,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("[ERROR]"));
             Assert.IsTrue(output.Contains("Test Error Message"));
         }
-
-
 
         // LOG-010 Infoフィルタ
         [Test]
@@ -166,8 +163,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(output.Contains("[ERROR]"));
         }
 
-
-
         // LOG-020 tailオプション
         [Test]
         public async Task Log_TailOption_ShowsLastN()
@@ -214,8 +209,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stderr.ToString().Contains("cannot specify both"));
         }
 
-
-
         // LOG-030 スタックトレースオプション
         [Test]
         public async Task Log_StackTraceOption_ShowsStackTrace()
@@ -232,8 +225,6 @@ namespace Xeon.UniTerminal.Tests
             // スタックトレースはインデントされて表示される
             Assert.IsTrue(output.Contains("    "));
         }
-
-
 
         // LOG-040 色付け（Info）
         [Test]

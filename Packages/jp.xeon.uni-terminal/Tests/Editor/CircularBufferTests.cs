@@ -100,8 +100,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, buffer.Count);
         }
 
-
-
         // CB-010 基本的なAdd
         [Test]
         public void Add_SingleItem_IncreasesCount()
@@ -193,8 +191,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(1, buffer.Count);
         }
 
-
-
         // CB-020 基本的なPushFront
         [Test]
         public void PushFront_SingleItem_AddsAtFront()
@@ -240,8 +236,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(2, buffer[2]); // 3が上書きされる
         }
 
-
-
         // CB-030 基本的なPopBack
         [Test]
         public void PopBack_RemovesLastItem()
@@ -282,8 +276,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(buffer.IsEmpty);
         }
 
-
-
         // CB-040 基本的なPopFront
         [Test]
         public void PopFront_RemovesFirstItem()
@@ -308,8 +300,6 @@ namespace Xeon.UniTerminal.Tests
 
             Assert.Throws<InvalidOperationException>(() => buffer.PopFront());
         }
-
-
 
         // CB-050 基本的なFront
         [Test]
@@ -378,8 +368,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(4, buffer.Back());
         }
 
-
-
         // CB-060 正常なインデックスアクセス
         [Test]
         public void Indexer_ValidIndex_ReturnsCorrectItem()
@@ -447,8 +435,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(5, buffer[2]);
         }
 
-
-
         // CB-070 基本的なClear
         [Test]
         public void Clear_RemovesAllItems()
@@ -504,8 +490,6 @@ namespace Xeon.UniTerminal.Tests
 
             Assert.IsFalse(eventFired);
         }
-
-
 
         // CB-080 Add時のイベント
         [Test]
@@ -635,8 +619,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, receivedArgs.NewStartingIndex);
         }
 
-
-
         // CB-090 基本的な列挙
         [Test]
         public void GetEnumerator_ReturnsItemsInOrder()
@@ -717,8 +699,6 @@ namespace Xeon.UniTerminal.Tests
 
             Assert.AreEqual(6, evenSum); // 2 + 4
         }
-
-
 
         // CB-100 容量1でのラップアラウンド
         [Test]

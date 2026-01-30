@@ -94,7 +94,7 @@ namespace Xeon.UniTerminal.BuiltInCommands
 
                 if (!isMatch)
                     continue;
-                
+
                 matchCount++;
 
                 if (!CountOnly)

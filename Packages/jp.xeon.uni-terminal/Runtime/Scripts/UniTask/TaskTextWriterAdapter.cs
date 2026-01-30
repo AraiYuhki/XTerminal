@@ -4,7 +4,7 @@ using System.Threading;
 namespace Xeon.UniTerminal.UniTask
 {
     using Cysharp.Threading.Tasks;
-    
+
     /// <summary>
     /// Task版のIAsyncTextWriterをUniTask版のIUniTaskTextWriterに変換するアダプター
     /// </summary>

@@ -5,7 +5,7 @@ using System.Threading;
 namespace Xeon.UniTerminal.UniTask
 {
     using Cysharp.Threading.Tasks;
-    
+
     /// <summary>
     /// UniTask版のリストテキストライター
     /// 行をリストに収集し、パイプライン接続に使用します

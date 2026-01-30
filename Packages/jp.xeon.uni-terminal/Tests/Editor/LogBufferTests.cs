@@ -24,7 +24,6 @@ namespace Xeon.UniTerminal.Tests
             logBuffer?.Dispose();
         }
 
-
         // LOGBUF-001 ログ追加
         [Test]
         public async Task LogBuffer_AddLog_StoresEntry()
@@ -77,8 +76,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(100, logBuffer.Capacity);
         }
 
-
-
         // LOGBUF-010 容量超過時の古いエントリ削除
         [Test]
         public async Task LogBuffer_ExceedsCapacity_RemovesOldEntries()
@@ -100,8 +97,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(entries.Exists(e => e.Message.Contains("Message 0")));
         }
 
-
-
         // LOGBUF-020 クリア
         [Test]
         public async Task LogBuffer_Clear_RemovesAllEntries()
@@ -114,8 +109,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, logBuffer.Count);
             Assert.IsEmpty(logBuffer.GetEntries());
         }
-
-
 
         // LOGBUF-030 OnLogReceivedイベント
         [Test]
@@ -137,8 +130,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsNotNull(receivedEntry);
             Assert.IsTrue(receivedEntry.Value.Message.Contains("Event Test"));
         }
-
-
 
         // LOGBUF-040 GetEntriesはコピーを返す
         [Test]

@@ -28,8 +28,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("namespace", "n", Description = "Component namespace for type resolution")]
         public string Namespace;
 
-
-
         public string CommandName => "component";
         public string Description => "Manage GameObject components";
 
@@ -69,8 +67,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> ListAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -217,8 +213,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return await TrySetComponentEnabled(context, target, enabled, ct);
         }
 
-
-
         private async Task<ExitCode> RemoveByIndexAsync(
             CommandContext context, GameObject go, Component[] components, int index, CancellationToken ct)
         {
@@ -298,8 +292,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-
-
         private async Task<ExitCode> TrySetComponentEnabled(CommandContext context, Component target, bool enabled, CancellationToken ct)
         {
             var stateStr = enabled ? "enabled" : "disabled";
@@ -340,8 +332,6 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-
-
         private Component ResolveComponent(GameObject go, string identifier)
         {
             // インデックス指定
@@ -360,8 +350,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return go.GetComponent(type);
         }
-
-
 
         private async Task WriteComponentListEntry(CommandContext context, Component comp, int index, CancellationToken ct)
         {
@@ -436,8 +424,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-
-
         private string FormatValue(object value)
         {
             return value switch
@@ -455,8 +441,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 _ => value.ToString()
             };
         }
-
-
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {

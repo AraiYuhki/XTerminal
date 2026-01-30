@@ -29,8 +29,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("setup", "s", Description = "Add default objects (Camera, Light) for create")]
         public bool Setup;
 
-
-
         public string CommandName => "scene";
         public string Description => "Manage scenes";
 
@@ -66,8 +64,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> ListAsync(CommandContext context, CancellationToken ct)
         {
@@ -246,8 +242,6 @@ namespace Xeon.UniTerminal.UnityCommands
 #endif
         }
 
-
-
         private async Task<ExitCode> ListLoadedScenesAsync(CommandContext context, Scene activeScene, CancellationToken ct)
         {
             var sceneCount = SceneManager.sceneCount;
@@ -323,8 +317,6 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-
-
         private async Task<ExitCode> LoadSceneSync(CommandContext context, string sceneName, LoadSceneMode mode, CancellationToken ct)
         {
             try
@@ -370,8 +362,6 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-
-
         private async Task WriteSceneInfo(CommandContext context, Scene scene, CancellationToken ct)
         {
             await context.Stdout.WriteLineAsync($"Scene: {scene.name}", ct);
@@ -401,8 +391,6 @@ namespace Xeon.UniTerminal.UnityCommands
             if (rootObjects.Length > 10)
                 await context.Stdout.WriteLineAsync($"    ... and {rootObjects.Length - 10} more", ct);
         }
-
-
 
         private string ResolveSceneName(string input)
         {
@@ -437,8 +425,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return SceneManager.GetSceneByPath(input);
         }
 
-
-
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
             await context.Stderr.WriteLineAsync("scene: missing subcommand", ct);
@@ -453,8 +439,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Available subcommands: list, load, unload, active, info, create", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {

@@ -54,8 +54,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("count", "", Description = "Clone count")]
         public int CloneCount = 1;
 
-
-
         public string CommandName => "go";
         public string Description => "Manage GameObjects";
 
@@ -92,8 +90,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> CreateAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -339,8 +335,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-
-
         private GameObject CreateGameObject(string name)
         {
             if (!string.IsNullOrEmpty(Primitive))
@@ -370,8 +364,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-
-
         private async Task<ExitCode> DeleteChildrenAsync(CommandContext context, GameObject go, CancellationToken ct)
         {
             var childCount = go.transform.childCount;
@@ -390,8 +382,6 @@ namespace Xeon.UniTerminal.UnityCommands
             else
                 Object.Destroy(go);
         }
-
-
 
         private List<GameObject> FindGameObjects()
         {
@@ -466,8 +456,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 : withComponent;
         }
 
-
-
         private Transform ResolveCloneParent(GameObject original)
         {
             if (!string.IsNullOrEmpty(ParentPath))
@@ -500,8 +488,6 @@ namespace Xeon.UniTerminal.UnityCommands
             var baseName = original.name.Replace("(Clone)", "").Trim();
             return count > 1 ? $"{baseName}_{index + 1}" : baseName;
         }
-
-
 
         private async Task WriteGameObjectInfo(CommandContext context, GameObject go, CancellationToken ct)
         {
@@ -547,8 +533,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 await context.Stdout.WriteLineAsync($"    ... and {t.childCount - 10} more", ct);
         }
 
-
-
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
             await context.Stderr.WriteLineAsync("go: missing subcommand", ct);
@@ -563,8 +547,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Subcommands: create, delete, find, rename, active, clone, info", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private static bool TryParseVector3(string input, out Vector3 result)
         {

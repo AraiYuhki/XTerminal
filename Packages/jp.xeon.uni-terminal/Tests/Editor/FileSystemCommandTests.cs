@@ -48,7 +48,6 @@ namespace Xeon.UniTerminal.Tests
             }
         }
 
-
         // PWD-001 基本動作
         [Test]
         public async Task Pwd_Basic_OutputsWorkingDirectory()
@@ -88,8 +87,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
             Assert.IsTrue(stdout.ToString().Contains(testDir));
         }
-
-
 
         // CD-001 絶対パス移動
         [Test]
@@ -220,8 +217,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
             Assert.IsTrue(stdout.ToString().Contains("subdir"));
         }
-
-
 
         // LS-001 カレントディレクトリ一覧
         [Test]
