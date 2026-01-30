@@ -13,7 +13,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("scene", "Manage scenes (list, load, unload, active, info, create)")]
     public class SceneCommand : ICommand
     {
-        #region Options
 
         [Option("all", "a", Description = "Show all scenes in Build Settings")]
         public bool All;
@@ -30,9 +29,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("setup", "s", Description = "Add default objects (Camera, Light) for create")]
         public bool Setup;
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "scene";
         public string Description => "Manage scenes";
@@ -70,9 +67,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> ListAsync(CommandContext context, CancellationToken ct)
         {
@@ -251,9 +246,7 @@ namespace Xeon.UniTerminal.UnityCommands
 #endif
         }
 
-        #endregion
 
-        #region List Helpers
 
         private async Task<ExitCode> ListLoadedScenesAsync(CommandContext context, Scene activeScene, CancellationToken ct)
         {
@@ -330,9 +323,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region Load Helpers
 
         private async Task<ExitCode> LoadSceneSync(CommandContext context, string sceneName, LoadSceneMode mode, CancellationToken ct)
         {
@@ -379,9 +370,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region Info Output
 
         private async Task WriteSceneInfo(CommandContext context, Scene scene, CancellationToken ct)
         {
@@ -413,9 +402,7 @@ namespace Xeon.UniTerminal.UnityCommands
                 await context.Stdout.WriteLineAsync($"    ... and {rootObjects.Length - 10} more", ct);
         }
 
-        #endregion
 
-        #region Scene Resolution
 
         private string ResolveSceneName(string input)
         {
@@ -450,9 +437,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return SceneManager.GetSceneByPath(input);
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
@@ -469,9 +454,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -505,6 +488,5 @@ namespace Xeon.UniTerminal.UnityCommands
                 : scenes.Where(s => s.StartsWith(prefix, System.StringComparison.OrdinalIgnoreCase));
         }
 
-        #endregion
     }
 }

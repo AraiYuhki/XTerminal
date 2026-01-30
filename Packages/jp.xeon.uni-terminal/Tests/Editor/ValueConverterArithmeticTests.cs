@@ -9,7 +9,6 @@ namespace Xeon.UniTerminal.Tests
     /// </summary>
     public class ValueConverterArithmeticTests
     {
-        #region IsArithmeticType Tests
 
         [Test]
         public void IsArithmeticType_Int_ReturnsTrue()
@@ -65,9 +64,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(ValueConverter.IsArithmeticType(typeof(Vector3)));
         }
 
-        #endregion
 
-        #region IsVectorType Tests
 
         [Test]
         public void IsVectorType_Vector2_ReturnsTrue()
@@ -111,9 +108,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(ValueConverter.IsVectorType(typeof(Quaternion)));
         }
 
-        #endregion
 
-        #region Add Tests - Numeric
 
         [Test]
         public void Add_Int_ReturnsCorrectSum()
@@ -150,9 +145,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(7, result);
         }
 
-        #endregion
 
-        #region Add Tests - Vector
 
         [Test]
         public void Add_Vector2_ReturnsCorrectSum()
@@ -199,9 +192,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(new Vector3Int(5, 7, 9), result);
         }
 
-        #endregion
 
-        #region Subtract Tests - Numeric
 
         [Test]
         public void Subtract_Int_ReturnsCorrectDifference()
@@ -224,9 +215,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(-7, result);
         }
 
-        #endregion
 
-        #region Subtract Tests - Vector
 
         [Test]
         public void Subtract_Vector3_ReturnsCorrectDifference()
@@ -246,9 +235,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(new Vector2Int(7, 15), result);
         }
 
-        #endregion
 
-        #region Multiply Tests
 
         [Test]
         public void Multiply_Int_ReturnsCorrectProduct()
@@ -288,9 +275,7 @@ namespace Xeon.UniTerminal.Tests
                 ValueConverter.Multiply(a, b, typeof(Vector3)));
         }
 
-        #endregion
 
-        #region Divide Tests
 
         [Test]
         public void Divide_Int_ReturnsCorrectQuotient()
@@ -330,9 +315,7 @@ namespace Xeon.UniTerminal.Tests
                 ValueConverter.Divide(a, b, typeof(Vector3)));
         }
 
-        #endregion
 
-        #region Unsupported Type Tests
 
         [Test]
         public void Add_String_ThrowsNotSupported()
@@ -358,6 +341,5 @@ namespace Xeon.UniTerminal.Tests
                 ValueConverter.Multiply(a, b, typeof(Quaternion)));
         }
 
-        #endregion
     }
 }

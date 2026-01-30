@@ -48,7 +48,6 @@ namespace Xeon.UniTerminal.Tests
             }
         }
 
-        #region pwd テスト
 
         // PWD-001 基本動作
         [Test]
@@ -90,9 +89,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stdout.ToString().Contains(testDir));
         }
 
-        #endregion
 
-        #region cd テスト
 
         // CD-001 絶対パス移動
         [Test]
@@ -224,9 +221,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stdout.ToString().Contains("subdir"));
         }
 
-        #endregion
 
-        #region ls テスト
 
         // LS-001 カレントディレクトリ一覧
         [Test]
@@ -386,6 +381,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("subdir/"));
         }
 
-        #endregion
     }
 }

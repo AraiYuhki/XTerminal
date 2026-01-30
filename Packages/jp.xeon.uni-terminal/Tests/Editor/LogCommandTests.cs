@@ -29,7 +29,6 @@ namespace Xeon.UniTerminal.Tests
             terminal?.Dispose();
         }
 
-        #region 基本動作テスト
 
         // LOG-001 基本動作
         [Test]
@@ -81,9 +80,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("Test Error Message"));
         }
 
-        #endregion
 
-        #region フィルタテスト
 
         // LOG-010 Infoフィルタ
         [Test]
@@ -169,9 +166,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(output.Contains("[ERROR]"));
         }
 
-        #endregion
 
-        #region head/tailテスト
 
         // LOG-020 tailオプション
         [Test]
@@ -219,9 +214,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stderr.ToString().Contains("cannot specify both"));
         }
 
-        #endregion
 
-        #region スタックトレーステスト
 
         // LOG-030 スタックトレースオプション
         [Test]
@@ -240,9 +233,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("    "));
         }
 
-        #endregion
 
-        #region 色付け確認テスト
 
         // LOG-040 色付け（Info）
         [Test]
@@ -288,6 +279,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("<color=red>"));
         }
 
-        #endregion
     }
 }

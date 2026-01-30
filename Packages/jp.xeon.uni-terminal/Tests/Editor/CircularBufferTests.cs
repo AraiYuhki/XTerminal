@@ -9,7 +9,6 @@ namespace Xeon.UniTerminal.Tests
 {
     public class CircularBufferTests
     {
-        #region Constructor Tests
 
         // CB-001 基本コンストラクタ
         [Test]
@@ -101,9 +100,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, buffer.Count);
         }
 
-        #endregion
 
-        #region Add/PushBack Tests
 
         // CB-010 基本的なAdd
         [Test]
@@ -196,9 +193,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(1, buffer.Count);
         }
 
-        #endregion
 
-        #region PushFront Tests
 
         // CB-020 基本的なPushFront
         [Test]
@@ -245,9 +240,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(2, buffer[2]); // 3が上書きされる
         }
 
-        #endregion
 
-        #region PopBack Tests
 
         // CB-030 基本的なPopBack
         [Test]
@@ -289,9 +282,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(buffer.IsEmpty);
         }
 
-        #endregion
 
-        #region PopFront Tests
 
         // CB-040 基本的なPopFront
         [Test]
@@ -318,9 +309,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.Throws<InvalidOperationException>(() => buffer.PopFront());
         }
 
-        #endregion
 
-        #region Front/Back Tests
 
         // CB-050 基本的なFront
         [Test]
@@ -389,9 +378,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(4, buffer.Back());
         }
 
-        #endregion
 
-        #region Indexer Tests
 
         // CB-060 正常なインデックスアクセス
         [Test]
@@ -460,9 +447,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(5, buffer[2]);
         }
 
-        #endregion
 
-        #region Clear Tests
 
         // CB-070 基本的なClear
         [Test]
@@ -520,9 +505,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(eventFired);
         }
 
-        #endregion
 
-        #region CollectionChanged Event Tests
 
         // CB-080 Add時のイベント
         [Test]
@@ -652,9 +635,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, receivedArgs.NewStartingIndex);
         }
 
-        #endregion
 
-        #region Enumeration Tests
 
         // CB-090 基本的な列挙
         [Test]
@@ -737,9 +718,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(6, evenSum); // 2 + 4
         }
 
-        #endregion
 
-        #region Edge Cases
 
         // CB-100 容量1でのラップアラウンド
         [Test]
@@ -842,6 +821,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(4, buffer[1]);
         }
 
-        #endregion
     }
 }

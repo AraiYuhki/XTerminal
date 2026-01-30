@@ -13,7 +13,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("asset", "Manage loaded assets (list, info, unload)")]
     public class AssetCommand : ICommand
     {
-        #region Options
 
         [Option("type", "t", Description = "Filter by asset type")]
         public string TypeFilter;
@@ -24,9 +23,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "asset";
         public string Description => "Manage loaded assets";
@@ -62,9 +59,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> ListAsync(CommandContext context, CancellationToken ct)
         {
@@ -176,9 +171,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-        #endregion
 
-        #region Helpers
 
         private Type ResolveAssetType()
         {
@@ -223,9 +216,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
@@ -242,9 +233,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -266,6 +255,5 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
     }
 }

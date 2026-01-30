@@ -15,7 +15,6 @@ namespace Xeon.UniTerminal.Tests
             parser = new Parser();
         }
 
-        #region VariableStore Tests
 
         [Test]
         public void VariableStore_SetAndGet_ReturnsValue()
@@ -88,9 +87,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.Throws<System.ArgumentException>(() => store.Set("foo-bar", "value"));
         }
 
-        #endregion
 
-        #region Variable Expansion Tests
 
         [Test]
         public void Parse_UndefinedVariable_ExpandsToEmpty()
@@ -232,6 +229,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual("$NAME", result.Pipeline.Commands[0].PositionalArguments[0]);
         }
 
-        #endregion
     }
 }

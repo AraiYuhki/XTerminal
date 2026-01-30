@@ -267,7 +267,6 @@ namespace Xeon.UniTerminal.Execution
             }
         }
 
-        #region Result Types
 
         private readonly struct StdinResolutionResult
         {
@@ -380,6 +379,5 @@ namespace Xeon.UniTerminal.Execution
                 => new CommandExecutionResult(false, ExitCode.RuntimeError, message);
         }
 
-        #endregion
     }
 }

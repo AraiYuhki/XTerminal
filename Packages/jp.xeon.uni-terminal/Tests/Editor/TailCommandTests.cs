@@ -45,7 +45,6 @@ namespace Xeon.UniTerminal.Tests
             File.WriteAllText(Path.Combine(testDir, name), content);
         }
 
-        #region 基本動作テスト
 
         // TAIL-001 デフォルト（10行）
         [Test]
@@ -126,9 +125,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("line3"));
         }
 
-        #endregion
 
-        #region 複数ファイルテスト
 
         // TAIL-010 複数ファイル（ヘッダー表示）
         [Test]
@@ -187,9 +184,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(output.Contains("==>"));
         }
 
-        #endregion
 
-        #region 標準入力テスト
 
         // TAIL-020 パイプからの入力
         [Test]
@@ -201,9 +196,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stdout.ToString().Contains("line1"));
         }
 
-        #endregion
 
-        #region エラーケーステスト
 
         // TAIL-030 存在しないファイル
         [Test]
@@ -262,6 +255,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsEmpty(stdout.ToString().Trim());
         }
 
-        #endregion
     }
 }

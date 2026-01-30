@@ -16,7 +16,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("assetdb", "Load and find assets via AssetDatabase (Editor only)")]
     public class AssetDbCommand : ICommand
     {
-        #region Options
 
         [Option("type", "t", Description = "Filter by asset type")]
         public string TypeFilter;
@@ -24,9 +23,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-        #endregion
 
-        #region Provider
 
         private static AssetDatabaseProvider provider;
 
@@ -43,9 +40,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "assetdb";
         public string Description => "Load and find assets via AssetDatabase (Editor only)";
@@ -87,9 +82,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> LoadAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -217,9 +210,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.RuntimeError;
         }
 
-        #endregion
 
-        #region Helpers
 
         private Type ResolveAssetType()
         {
@@ -258,9 +249,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return $"{bytes / (double)GB:F1} GB";
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
@@ -277,9 +266,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -311,7 +298,6 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
     }
 }
 #endif

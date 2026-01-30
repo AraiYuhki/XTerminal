@@ -15,7 +15,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("res", "Load assets via Resources (DEPRECATED - prefer Addressables)")]
     public class ResourcesCommand : ICommand
     {
-        #region Options
 
         [Option("type", "t", Description = "Asset type to load")]
         public string TypeFilter;
@@ -23,9 +22,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-        #endregion
 
-        #region Provider
 
         private static ResourcesAssetProvider provider;
 
@@ -42,9 +39,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "res";
         public string Description => "Load assets via Resources (DEPRECATED)";
@@ -82,9 +77,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> LoadAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -192,18 +185,14 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-        #endregion
 
-        #region Helpers
 
         private Type ResolveAssetType()
         {
             return string.IsNullOrEmpty(TypeFilter) ? null : TypeResolver.ResolveAssetType(TypeFilter);
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task<ExitCode> ShowHelpAsync(CommandContext context, CancellationToken ct)
         {
@@ -243,9 +232,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -267,6 +254,5 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
     }
 }

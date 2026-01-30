@@ -13,7 +13,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("transform", "Manipulate GameObject Transform (set, add, sub)")]
     public class TransformCommand : ICommand
     {
-        #region Options
 
         [Option("position", "p", Description = "World position (x,y,z)")]
         public string Position;
@@ -36,9 +35,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("world", "w", Description = "Maintain world position when changing parent")]
         public bool WorldPositionStays = true;
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "transform";
         public string Description => "Manipulate GameObject Transform";
@@ -93,9 +90,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Array.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private static bool IsSubCommand(string arg)
         {
@@ -198,9 +193,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Transform Operations
 
         private enum TransformOperation { Set, Add, Subtract }
 
@@ -386,9 +379,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return (ExitCode.Success, true);
         }
 
-        #endregion
 
-        #region Display
 
         private async Task DisplayTransformInfoAsync(CommandContext context, GameObject go, CancellationToken ct)
         {
@@ -406,9 +397,7 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stdout.WriteLineAsync($"  Sibling Index:   {t.GetSiblingIndex()}", ct);
         }
 
-        #endregion
 
-        #region Utility
 
         private bool TryParseVector3(string input, out Vector3 result)
         {
@@ -455,6 +444,5 @@ namespace Xeon.UniTerminal.UnityCommands
 
         private static string FormatVector3(Vector3 v) => $"({v.x:F2}, {v.y:F2}, {v.z:F2})";
 
-        #endregion
     }
 }

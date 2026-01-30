@@ -24,7 +24,6 @@ namespace Xeon.UniTerminal.Tests
             logBuffer?.Dispose();
         }
 
-        #region 基本動作テスト
 
         // LOGBUF-001 ログ追加
         [Test]
@@ -78,9 +77,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(100, logBuffer.Capacity);
         }
 
-        #endregion
 
-        #region CircularBuffer動作テスト
 
         // LOGBUF-010 容量超過時の古いエントリ削除
         [Test]
@@ -103,9 +100,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(entries.Exists(e => e.Message.Contains("Message 0")));
         }
 
-        #endregion
 
-        #region クリアテスト
 
         // LOGBUF-020 クリア
         [Test]
@@ -120,9 +115,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsEmpty(logBuffer.GetEntries());
         }
 
-        #endregion
 
-        #region イベントテスト
 
         // LOGBUF-030 OnLogReceivedイベント
         [Test]
@@ -145,9 +138,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(receivedEntry.Value.Message.Contains("Event Test"));
         }
 
-        #endregion
 
-        #region スレッドセーフティテスト
 
         // LOGBUF-040 GetEntriesはコピーを返す
         [Test]
@@ -166,6 +157,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreNotEqual(entries1.Count, entries2.Count);
         }
 
-        #endregion
     }
 }

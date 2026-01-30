@@ -787,7 +787,6 @@ namespace Xeon.UniTerminal
             throw new FormatException($"Shader not found: {name}");
         }
 
-        #region Arithmetic Operations
 
         /// <summary>
         /// 型が数値演算をサポートしているかどうかを判定します
@@ -928,6 +927,5 @@ namespace Xeon.UniTerminal
             throw new NotSupportedException($"Vector type '{targetType.Name}' not supported");
         }
 
-        #endregion
     }
 }

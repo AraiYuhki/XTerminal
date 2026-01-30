@@ -15,7 +15,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("component", "Manage GameObject components (list, add, remove, info, enable, disable)")]
     public class ComponentCommand : ICommand
     {
-        #region Options
 
         [Option("all", "a", Description = "Include all / remove all matching components")]
         public bool All;
@@ -29,9 +28,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("namespace", "n", Description = "Component namespace for type resolution")]
         public string Namespace;
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "component";
         public string Description => "Manage GameObject components";
@@ -73,9 +70,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> ListAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -222,9 +217,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return await TrySetComponentEnabled(context, target, enabled, ct);
         }
 
-        #endregion
 
-        #region Remove Helpers
 
         private async Task<ExitCode> RemoveByIndexAsync(
             CommandContext context, GameObject go, Component[] components, int index, CancellationToken ct)
@@ -305,9 +298,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-        #endregion
 
-        #region Enable/Disable Helpers
 
         private async Task<ExitCode> TrySetComponentEnabled(CommandContext context, Component target, bool enabled, CancellationToken ct)
         {
@@ -349,9 +340,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region Component Resolution
 
         private Component ResolveComponent(GameObject go, string identifier)
         {
@@ -372,9 +361,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return go.GetComponent(type);
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task WriteComponentListEntry(CommandContext context, Component comp, int index, CancellationToken ct)
         {
@@ -449,9 +436,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Value Formatting
 
         private string FormatValue(object value)
         {
@@ -471,9 +456,7 @@ namespace Xeon.UniTerminal.UnityCommands
             };
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -508,6 +491,5 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
     }
 }

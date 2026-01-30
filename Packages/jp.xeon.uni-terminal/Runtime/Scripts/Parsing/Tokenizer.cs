@@ -35,7 +35,6 @@ namespace Xeon.UniTerminal.Parsing
             return tokens;
         }
 
-        #region Token Reading
 
         private static void SkipSpaces(TokenizeContext context)
         {
@@ -104,9 +103,7 @@ namespace Xeon.UniTerminal.Parsing
             return new Token(kind, value, new SourceSpan(start, length));
         }
 
-        #endregion
 
-        #region Word Parsing
 
         private Token ReadWord(TokenizeContext context)
         {
@@ -205,9 +202,7 @@ namespace Xeon.UniTerminal.Parsing
             return new Token(TokenKind.Word, value, span, wasQuoted, segments);
         }
 
-        #endregion
 
-        #region Escape Processing
 
         private static void ProcessEscape(TokenizeContext context, StringBuilder builder, StringBuilder segmentBuilder)
         {
@@ -234,9 +229,7 @@ namespace Xeon.UniTerminal.Parsing
             context.Advance();
         }
 
-        #endregion
 
-        #region Quote Processing
 
         private void ReadDoubleQuotedContent(TokenizeContext context, StringBuilder builder, StringBuilder segmentBuilder)
         {
@@ -317,9 +310,7 @@ namespace Xeon.UniTerminal.Parsing
             throw new ParseException($"Unclosed single quote starting at position {quoteStart}");
         }
 
-        #endregion
 
-        #region Context
 
         private class TokenizeContext
         {
@@ -369,6 +360,5 @@ namespace Xeon.UniTerminal.Parsing
             public void Advance(int count = 1) => Position += count;
         }
 
-        #endregion
     }
 }

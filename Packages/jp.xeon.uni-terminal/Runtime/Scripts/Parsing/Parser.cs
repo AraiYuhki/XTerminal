@@ -55,7 +55,6 @@ namespace Xeon.UniTerminal.Parsing
             return result;
         }
 
-        #region Pipeline Parsing
 
         private ParsedPipeline ParsePipeline(List<Token> tokens)
         {
@@ -119,9 +118,7 @@ namespace Xeon.UniTerminal.Parsing
             pipeline.Commands.Add(ParseCommand(commandTokens));
         }
 
-        #endregion
 
-        #region Command Parsing
 
         private ParsedCommand ParseCommand(List<Token> tokens)
         {
@@ -277,9 +274,7 @@ namespace Xeon.UniTerminal.Parsing
             return token.Kind == TokenKind.Word && !token.Value.StartsWith("-");
         }
 
-        #endregion
 
-        #region Option Parsing
 
         private ParsedOptionOccurrence ParseLongOption(string value, bool wasQuoted)
         {
@@ -338,9 +333,7 @@ namespace Xeon.UniTerminal.Parsing
             return results;
         }
 
-        #endregion
 
-        #region Utility
 
         private static bool IsNumber(string value)
         {
@@ -365,9 +358,7 @@ namespace Xeon.UniTerminal.Parsing
             return true;
         }
 
-        #endregion
 
-        #region Parse Context
 
         private class CommandParseContext
         {
@@ -397,6 +388,5 @@ namespace Xeon.UniTerminal.Parsing
             public RedirectMode StdoutMode { get; set; } = RedirectMode.None;
         }
 
-        #endregion
     }
 }

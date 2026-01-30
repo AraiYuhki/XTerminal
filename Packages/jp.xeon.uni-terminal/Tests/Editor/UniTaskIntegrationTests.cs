@@ -45,7 +45,6 @@ namespace Xeon.UniTerminal.Tests
             }
         }
 
-        #region Basic Execution Tests
 
         [Test]
         public async Task ExecuteUniTaskAsync_Echo_OutputsText()
@@ -106,9 +105,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
         }
 
-        #endregion
 
-        #region Pipeline Tests
 
         [Test]
         public async Task ExecuteUniTaskAsync_Pipeline_PassesOutputToNextCommand()
@@ -122,9 +119,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stdout.ToString().Contains("hello"));
         }
 
-        #endregion
 
-        #region Error Handling Tests
 
         [Test]
         public async Task ExecuteUniTaskAsync_UnknownCommand_ReturnsUsageError()
@@ -149,9 +144,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.UsageError, exitCode);
         }
 
-        #endregion
 
-        #region History Tests
 
         [Test]
         public async Task ExecuteUniTaskAsync_AddsToHistory()
@@ -165,9 +158,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual("echo test", terminal.CommandHistory[0]);
         }
 
-        #endregion
 
-        #region Task Adapter Overload Tests
 
         [Test]
         public async Task ExecuteUniTaskAsync_WithTaskWriters_Works()
@@ -181,7 +172,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stdout.ToString().Contains("Adapter Test"));
         }
 
-        #endregion
     }
 }
 #endif

@@ -14,7 +14,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("adr", "Load, release, and find assets via Addressables")]
     public class AddressableCommand : ICommand
     {
-        #region Options
 
         [Option("type", "t", Description = "Filter by asset type")]
         public string TypeFilter;
@@ -22,9 +21,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-        #endregion
 
-        #region Provider
 
         private static AddressableAssetProvider provider;
 
@@ -41,9 +38,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "adr";
         public string Description => "Load, release, and find assets via Addressables";
@@ -81,9 +76,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> LoadAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -224,9 +217,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-        #endregion
 
-        #region Helpers
 
         private Type ResolveAssetType()
         {
@@ -245,9 +236,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
@@ -264,9 +253,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -288,7 +275,6 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
     }
 }
 #endif

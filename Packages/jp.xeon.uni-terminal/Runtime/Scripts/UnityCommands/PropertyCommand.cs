@@ -16,7 +16,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("property", "Get or set component properties (list, get, set, add, sub, mul, div)")]
     public class PropertyCommand : ICommand
     {
-        #region Options
 
         [Option("all", "a", Description = "Include private fields")]
         public bool IncludePrivate;
@@ -27,9 +26,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("namespace", "n", Description = "Component namespace")]
         public string Namespace;
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "property";
         public string Description => "Get or set component properties";
@@ -75,9 +72,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> ListAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -417,9 +412,7 @@ namespace Xeon.UniTerminal.UnityCommands
             };
         }
 
-        #endregion
 
-        #region Set Helpers
 
         private async Task<ExitCode> SetFieldValueAsync(
             CommandContext context, Component comp, Type compType, FieldInfo field,
@@ -569,9 +562,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region List Output Helpers
 
         private async Task WriteFields(
             CommandContext context, Component comp, Type type, BindingFlags bindingFlags, CancellationToken ct)
@@ -635,9 +626,7 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
 
-        #region Resolution Helpers
 
         private (GameObject go, Component comp, string error) ResolveComponent(string path, string compName)
         {
@@ -716,9 +705,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return (null, null, $"property: '{memberName}' is not an array or list");
         }
 
-        #endregion
 
-        #region Utility
 
         private BindingFlags GetBindingFlags()
         {
@@ -764,9 +751,7 @@ namespace Xeon.UniTerminal.UnityCommands
             };
         }
 
-        #endregion
 
-        #region Output Helpers
 
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
@@ -783,9 +768,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Completion Helpers
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {
@@ -864,6 +847,5 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-        #endregion
     }
 }

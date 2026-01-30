@@ -14,7 +14,6 @@ namespace Xeon.UniTerminal.UnityCommands
     [Command("go", "Manage GameObjects (create, delete, find, rename, active, clone, info)")]
     public class GoCommand : ICommand
     {
-        #region Options
 
         [Option("primitive", "p", Description = "Primitive type (Cube, Sphere, Capsule, Cylinder, Plane, Quad)")]
         public string Primitive;
@@ -55,9 +54,7 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("count", "", Description = "Clone count")]
         public int CloneCount = 1;
 
-        #endregion
 
-        #region ICommand
 
         public string CommandName => "go";
         public string Description => "Manage GameObjects";
@@ -96,9 +93,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return Enumerable.Empty<string>();
         }
 
-        #endregion
 
-        #region Subcommands
 
         private async Task<ExitCode> CreateAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -344,9 +339,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-        #endregion
 
-        #region Create Helpers
 
         private GameObject CreateGameObject(string name)
         {
@@ -377,9 +370,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-        #endregion
 
-        #region Delete Helpers
 
         private async Task<ExitCode> DeleteChildrenAsync(CommandContext context, GameObject go, CancellationToken ct)
         {
@@ -400,9 +391,7 @@ namespace Xeon.UniTerminal.UnityCommands
                 Object.Destroy(go);
         }
 
-        #endregion
 
-        #region Find Helpers
 
         private List<GameObject> FindGameObjects()
         {
@@ -477,9 +466,7 @@ namespace Xeon.UniTerminal.UnityCommands
                 : withComponent;
         }
 
-        #endregion
 
-        #region Clone Helpers
 
         private Transform ResolveCloneParent(GameObject original)
         {
@@ -514,9 +501,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return count > 1 ? $"{baseName}_{index + 1}" : baseName;
         }
 
-        #endregion
 
-        #region Info Output
 
         private async Task WriteGameObjectInfo(CommandContext context, GameObject go, CancellationToken ct)
         {
@@ -562,9 +547,7 @@ namespace Xeon.UniTerminal.UnityCommands
                 await context.Stdout.WriteLineAsync($"    ... and {t.childCount - 10} more", ct);
         }
 
-        #endregion
 
-        #region Usage/Error Output
 
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
@@ -581,9 +564,7 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-        #endregion
 
-        #region Utility
 
         private static bool TryParseVector3(string input, out Vector3 result)
         {
@@ -636,6 +617,5 @@ namespace Xeon.UniTerminal.UnityCommands
             return subCommands.Where(cmd => cmd.StartsWith(token, StringComparison.OrdinalIgnoreCase));
         }
 
-        #endregion
     }
 }

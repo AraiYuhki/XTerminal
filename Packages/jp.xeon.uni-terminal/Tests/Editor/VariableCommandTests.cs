@@ -24,7 +24,6 @@ namespace Xeon.UniTerminal.Tests
             terminal?.Dispose();
         }
 
-        #region Set Command Tests
 
         [Test]
         public async Task SetCommand_ValidAssignment_SetsVariable()
@@ -78,9 +77,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.UsageError, exitCode);
         }
 
-        #endregion
 
-        #region Unset Command Tests
 
         [Test]
         public async Task UnsetCommand_ExistingVariable_RemovesVariable()
@@ -122,9 +119,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.UsageError, exitCode);
         }
 
-        #endregion
 
-        #region Env Command Tests
 
         [Test]
         public async Task EnvCommand_NoVariables_OutputsNothing()
@@ -154,9 +149,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual("ZZZ=3", stdout.Lines[2]);
         }
 
-        #endregion
 
-        #region Integration Tests
 
         [Test]
         public async Task SetAndEcho_VariableIsExpanded()
@@ -213,6 +206,5 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, stdout.Lines.Count);
         }
 
-        #endregion
     }
 }

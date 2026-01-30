@@ -17,7 +17,6 @@ namespace Xeon.UniTerminal.Tests
     [TestFixture]
     public class UniTaskAdapterTests
     {
-        #region IUniTaskTextWriter Tests
 
         [Test]
         public async Task UniTaskStringBuilderTextWriter_WriteLine_AppendsLine()
@@ -82,9 +81,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual("Partial", writer.Lines[0]);
         }
 
-        #endregion
 
-        #region IUniTaskTextReader Tests
 
         [Test]
         public async Task UniTaskListTextReader_ReadLinesAsync_ReturnsAllLines()
@@ -118,9 +115,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(0, result.Count);
         }
 
-        #endregion
 
-        #region Adapter Tests
 
         [Test]
         public async Task TaskTextWriterAdapter_WrapsTaskWriter()
@@ -176,9 +171,7 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(2, result.Count);
         }
 
-        #endregion
 
-        #region Cancellation Tests
 
         [Test]
         public void UniTaskStringBuilderTextWriter_ThrowsOnCancellation()
@@ -206,7 +199,6 @@ namespace Xeon.UniTerminal.Tests
             });
         }
 
-        #endregion
     }
 }
 #endif
