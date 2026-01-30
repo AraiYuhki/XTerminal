@@ -81,8 +81,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual("Partial", writer.Lines[0]);
         }
 
-
-
         [Test]
         public async Task UniTaskListTextReader_ReadLinesAsync_ReturnsAllLines()
         {
@@ -114,8 +112,6 @@ namespace Xeon.UniTerminal.Tests
 
             Assert.AreEqual(0, result.Count);
         }
-
-
 
         [Test]
         public async Task TaskTextWriterAdapter_WrapsTaskWriter()
@@ -170,8 +166,6 @@ namespace Xeon.UniTerminal.Tests
 
             Assert.AreEqual(2, result.Count);
         }
-
-
 
         [Test]
         public void UniTaskStringBuilderTextWriter_ThrowsOnCancellation()

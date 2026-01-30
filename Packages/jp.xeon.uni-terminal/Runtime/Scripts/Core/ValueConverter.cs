@@ -787,7 +787,6 @@ namespace Xeon.UniTerminal
             throw new FormatException($"Shader not found: {name}");
         }
 
-
         /// <summary>
         /// 型が数値演算をサポートしているかどうかを判定します
         /// </summary>

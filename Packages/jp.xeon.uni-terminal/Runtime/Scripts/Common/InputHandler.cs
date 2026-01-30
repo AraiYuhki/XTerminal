@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 #endif
 
-
 namespace Xeon.UniTerminal.Common
 {
     /// <summary>

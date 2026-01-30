@@ -35,8 +35,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("world", "w", Description = "Maintain world position when changing parent")]
         public bool WorldPositionStays = true;
 
-
-
         public string CommandName => "transform";
         public string Description => "Manipulate GameObject Transform";
 
@@ -89,8 +87,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Array.Empty<string>();
         }
-
-
 
         private static bool IsSubCommand(string arg)
         {
@@ -192,8 +188,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Subcommands: set, add, sub", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private enum TransformOperation { Set, Add, Subtract }
 
@@ -379,8 +373,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return (ExitCode.Success, true);
         }
 
-
-
         private async Task DisplayTransformInfoAsync(CommandContext context, GameObject go, CancellationToken ct)
         {
             var t = go.transform;
@@ -396,8 +388,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stdout.WriteLineAsync($"  Children:        {t.childCount}", ct);
             await context.Stdout.WriteLineAsync($"  Sibling Index:   {t.GetSiblingIndex()}", ct);
         }
-
-
 
         private bool TryParseVector3(string input, out Vector3 result)
         {

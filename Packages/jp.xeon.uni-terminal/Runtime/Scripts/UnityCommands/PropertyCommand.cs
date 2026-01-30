@@ -26,8 +26,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("namespace", "n", Description = "Component namespace")]
         public string Namespace;
 
-
-
         public string CommandName => "property";
         public string Description => "Get or set component properties";
 
@@ -71,8 +69,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> ListAsync(CommandContext context, List<string> args, CancellationToken ct)
         {
@@ -412,8 +408,6 @@ namespace Xeon.UniTerminal.UnityCommands
             };
         }
 
-
-
         private async Task<ExitCode> SetFieldValueAsync(
             CommandContext context, Component comp, Type compType, FieldInfo field,
             string baseName, int? arrayIndex, string newValueStr, string propName, CancellationToken ct)
@@ -562,8 +556,6 @@ namespace Xeon.UniTerminal.UnityCommands
             }
         }
 
-
-
         private async Task WriteFields(
             CommandContext context, Component comp, Type type, BindingFlags bindingFlags, CancellationToken ct)
         {
@@ -625,8 +617,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 await context.Stdout.WriteLineAsync($"  {prop.Name,-24} {typeName,-14} (error){readOnly}", ct);
             }
         }
-
-
 
         private (GameObject go, Component comp, string error) ResolveComponent(string path, string compName)
         {
@@ -705,8 +695,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return (null, null, $"property: '{memberName}' is not an array or list");
         }
 
-
-
         private BindingFlags GetBindingFlags()
         {
             var bindingFlags = BindingFlags.Public | BindingFlags.Instance;
@@ -751,8 +739,6 @@ namespace Xeon.UniTerminal.UnityCommands
             };
         }
 
-
-
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
             await context.Stderr.WriteLineAsync("property: missing subcommand", ct);
@@ -767,8 +753,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Subcommands: list, get, set, add, sub, mul, div", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {

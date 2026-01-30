@@ -45,7 +45,6 @@ namespace Xeon.UniTerminal.Tests
             File.WriteAllText(Path.Combine(testDir, name), content);
         }
 
-
         // HEAD-001 デフォルト（10行）
         [Test]
         public async Task Head_Default_OutputsFirst10Lines()
@@ -123,8 +122,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(output.Contains("line3"));
         }
 
-
-
         // HEAD-010 複数ファイル（ヘッダー表示）
         [Test]
         public async Task Head_MultipleFiles_ShowsHeaders()
@@ -182,8 +179,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(output.Contains("==>"));
         }
 
-
-
         // HEAD-020 パイプからの入力
         [Test]
         public async Task Head_PipeInput_ProcessesStdin()
@@ -193,8 +188,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
             Assert.IsTrue(stdout.ToString().Contains("line1"));
         }
-
-
 
         // HEAD-030 存在しないファイル
         [Test]

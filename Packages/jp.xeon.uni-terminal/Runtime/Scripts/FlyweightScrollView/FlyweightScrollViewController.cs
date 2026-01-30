@@ -53,7 +53,6 @@ namespace Xeon.Common.FlyweightScrollView
         /// <inheritdoc/>
         public override int ItemCount => dataList == null ? 0 : dataList.Count;
 
-
         // ====================================================================================================
         // Constructor
         // ====================================================================================================

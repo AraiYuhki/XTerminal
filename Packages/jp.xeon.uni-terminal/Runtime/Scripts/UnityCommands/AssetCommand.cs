@@ -23,8 +23,6 @@ namespace Xeon.UniTerminal.UnityCommands
         [Option("long", "l", Description = "Show detailed information")]
         public bool LongFormat;
 
-
-
         public string CommandName => "asset";
         public string Description => "Manage loaded assets";
 
@@ -58,8 +56,6 @@ namespace Xeon.UniTerminal.UnityCommands
 
             return Enumerable.Empty<string>();
         }
-
-
 
         private async Task<ExitCode> ListAsync(CommandContext context, CancellationToken ct)
         {
@@ -171,8 +167,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.Success;
         }
 
-
-
         private Type ResolveAssetType()
         {
             return string.IsNullOrEmpty(TypeFilter) ? null : TypeResolver.ResolveAssetType(TypeFilter);
@@ -216,8 +210,6 @@ namespace Xeon.UniTerminal.UnityCommands
             return ExitCode.UsageError;
         }
 
-
-
         private async Task<ExitCode> ShowUsageAsync(CommandContext context, CancellationToken ct)
         {
             await context.Stderr.WriteLineAsync("asset: missing subcommand", ct);
@@ -232,8 +224,6 @@ namespace Xeon.UniTerminal.UnityCommands
             await context.Stderr.WriteLineAsync("Subcommands: list, info, unload, providers", ct);
             return ExitCode.UsageError;
         }
-
-
 
         private static IEnumerable<string> GetSubCommandCompletions(string token)
         {

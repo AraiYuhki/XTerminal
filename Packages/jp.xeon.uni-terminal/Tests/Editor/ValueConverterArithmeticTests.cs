@@ -64,8 +64,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(ValueConverter.IsArithmeticType(typeof(Vector3)));
         }
 
-
-
         [Test]
         public void IsVectorType_Vector2_ReturnsTrue()
         {
@@ -108,8 +106,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsFalse(ValueConverter.IsVectorType(typeof(Quaternion)));
         }
 
-
-
         [Test]
         public void Add_Int_ReturnsCorrectSum()
         {
@@ -144,8 +140,6 @@ namespace Xeon.UniTerminal.Tests
             var result = ValueConverter.Add(10, -3, typeof(int));
             Assert.AreEqual(7, result);
         }
-
-
 
         [Test]
         public void Add_Vector2_ReturnsCorrectSum()
@@ -192,8 +186,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(new Vector3Int(5, 7, 9), result);
         }
 
-
-
         [Test]
         public void Subtract_Int_ReturnsCorrectDifference()
         {
@@ -215,8 +207,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(-7, result);
         }
 
-
-
         [Test]
         public void Subtract_Vector3_ReturnsCorrectDifference()
         {
@@ -234,8 +224,6 @@ namespace Xeon.UniTerminal.Tests
             var result = (Vector2Int)ValueConverter.Subtract(a, b, typeof(Vector2Int));
             Assert.AreEqual(new Vector2Int(7, 15), result);
         }
-
-
 
         [Test]
         public void Multiply_Int_ReturnsCorrectProduct()
@@ -275,8 +263,6 @@ namespace Xeon.UniTerminal.Tests
                 ValueConverter.Multiply(a, b, typeof(Vector3)));
         }
 
-
-
         [Test]
         public void Divide_Int_ReturnsCorrectQuotient()
         {
@@ -314,8 +300,6 @@ namespace Xeon.UniTerminal.Tests
             Assert.Throws<NotSupportedException>(() =>
                 ValueConverter.Divide(a, b, typeof(Vector3)));
         }
-
-
 
         [Test]
         public void Add_String_ThrowsNotSupported()

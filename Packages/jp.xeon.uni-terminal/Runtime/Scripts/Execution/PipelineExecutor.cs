@@ -267,7 +267,6 @@ namespace Xeon.UniTerminal.Execution
             }
         }
 
-
         private readonly struct StdinResolutionResult
         {
             /// <summary>

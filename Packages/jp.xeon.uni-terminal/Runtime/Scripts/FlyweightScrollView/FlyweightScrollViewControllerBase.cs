@@ -128,7 +128,6 @@ namespace Xeon.Common.FlyweightScrollView
         /// </summary>
         public bool IsDirty { get; set; }
 
-
         // ====================================================================================================
         // Constructor
         // ====================================================================================================
@@ -146,7 +145,6 @@ namespace Xeon.Common.FlyweightScrollView
         {
             this.onChangedItemCount = onChangedItemCount;
         }
-
 
         // ====================================================================================================
         // Public Methods (API)
@@ -355,7 +353,6 @@ namespace Xeon.Common.FlyweightScrollView
         /// <returns>表示に適したアイテムサイズ</returns>
         public Vector2 GetFitItemSize() => layouter.GetFitItemSize();
 
-
         // ====================================================================================================
         // Protected Methods (For Derived Classes & Core Logic)
         // ====================================================================================================
@@ -520,7 +517,6 @@ namespace Xeon.Common.FlyweightScrollView
             onChangedItemCount?.Invoke(ItemCount);
         }
 
-
         /// <summary>
         /// スクロールコンテンツ全体のサイズを更新します
         /// </summary>
@@ -548,7 +544,6 @@ namespace Xeon.Common.FlyweightScrollView
         {
             return layouter.GetPosition(index);
         }
-
 
         // ====================================================================================================
         // Private Methods (Implementation Details)
@@ -594,7 +589,6 @@ namespace Xeon.Common.FlyweightScrollView
                 itemList.AddLast(item);
             }
         }
-
 
         // ====================================================================================================
         // Abstract Methods (Must be implemented by Derived Classes)
