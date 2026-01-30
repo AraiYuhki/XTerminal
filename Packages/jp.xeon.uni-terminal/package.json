@@ -1,6 +1,6 @@
 {
   "name": "jp.xeon.uni-terminal",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "displayName": "UniTerminal",
   "description": "A string-based CLI execution framework for Unity with Linux-like behavior. Supports pipelines, redirects, and extensible custom commands.",
   "license": "MIT OR Apache-2.0",
@@ -18,8 +18,8 @@
   ],
   "author": {
     "name": "Xeon",
-    "email": "xeon.lagunas@gmail.com",
-    "url": "https://github.com/AraiYuhki"
+    "url": "https://github.com/AraiYuhki",
+    "email": "xeon.lagunas@gmail.com"
   },
   "repository": {
     "type": "git",
