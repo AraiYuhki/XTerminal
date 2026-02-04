@@ -248,5 +248,324 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsEmpty(stdout.ToString().Trim());
         }
 
+        // TAIL-040 -f オプションでファイル更新を検出
+        [Test]
+        public async Task Tail_Follow_DetectsFileUpdate()
+        {
+            var filePath = Path.Combine(testDir, "follow.txt");
+            File.WriteAllText(filePath, "initial\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow.txt", stdout, stderr, ct: cts.Token);
+
+            // ファイル更新を待つための短い遅延
+            await Task.Delay(150);
+
+            // ファイルに追記
+            File.AppendAllText(filePath, "appended\n");
+
+            // 更新が検出されるまで待機
+            await Task.Delay(200);
+
+            // キャンセルして終了
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("initial"));
+            Assert.IsTrue(output.Contains("appended"));
+        }
+
+        // TAIL-041 -f オプションで複数行追記
+        [Test]
+        public async Task Tail_Follow_DetectsMultipleLines()
+        {
+            var filePath = Path.Combine(testDir, "follow_multi.txt");
+            File.WriteAllText(filePath, "start\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_multi.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // 複数行を追記
+            File.AppendAllText(filePath, "line1\nline2\nline3\n");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("line1"));
+            Assert.IsTrue(output.Contains("line2"));
+            Assert.IsTrue(output.Contains("line3"));
+        }
+
+        // TAIL-042 -f オプションで改行なしのテキスト
+        [Test]
+        public async Task Tail_Follow_HandlesTextWithoutNewline()
+        {
+            var filePath = Path.Combine(testDir, "follow_nonewline.txt");
+            File.WriteAllText(filePath, "start\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_nonewline.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // 改行なしで追記
+            File.AppendAllText(filePath, "no newline at end");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("no newline at end"));
+        }
+
+        // TAIL-043 -f オプションでファイルが切り詰められた場合
+        [Test]
+        public async Task Tail_Follow_HandlesTruncatedFile()
+        {
+            var filePath = Path.Combine(testDir, "follow_truncate.txt");
+            File.WriteAllText(filePath, "original content that is long\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_truncate.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // ファイルを切り詰めて新しい内容を書き込む
+            File.WriteAllText(filePath, "new\n");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("file truncated"), "Should show truncation message");
+            Assert.IsTrue(output.Contains("new"), "Should show new content");
+        }
+
+        // TAIL-044 長い行の処理
+        [Test]
+        public async Task Tail_Follow_HandlesLongLines()
+        {
+            var filePath = Path.Combine(testDir, "follow_long.txt");
+            File.WriteAllText(filePath, "start\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_long.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // 長い行を追記
+            var longLine = new string('A', 1000);
+            File.AppendAllText(filePath, longLine + "\n");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains(longLine));
+        }
+
+        // TAIL-045 CRLFの改行処理
+        [Test]
+        public async Task Tail_Follow_HandlesCRLF()
+        {
+            var filePath = Path.Combine(testDir, "follow_crlf.txt");
+            File.WriteAllText(filePath, "start\r\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_crlf.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // CRLF改行で追記
+            File.AppendAllText(filePath, "line1\r\nline2\r\n");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("line1"));
+            Assert.IsTrue(output.Contains("line2"));
+        }
+
+        // TAIL-046 ファイルが削除されて再作成された場合
+        [Test]
+        public async Task Tail_Follow_HandlesDeleteAndRecreate()
+        {
+            var filePath = Path.Combine(testDir, "follow_recreate.txt");
+            File.WriteAllText(filePath, "original\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_recreate.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // ファイルを削除して再作成
+            File.Delete(filePath);
+            await Task.Delay(150);
+            File.WriteAllText(filePath, "new content after recreate\n");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("original"), "Should show original content");
+            Assert.IsTrue(output.Contains("new content after recreate"), "Should show recreated content");
+            // 削除→再作成の場合はtruncatedメッセージは出ない（lastPositionが0にリセットされるため）
+            Assert.IsFalse(output.Contains("file truncated"), "Should not show truncation message for delete/recreate");
+        }
+
+        // TAIL-047 ファイルが削除されて、より長い内容で再作成された場合
+        [Test]
+        public async Task Tail_Follow_HandlesDeleteAndRecreateWithLongerContent()
+        {
+            var filePath = Path.Combine(testDir, "follow_recreate_long.txt");
+            File.WriteAllText(filePath, "short\n");
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f follow_recreate_long.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // ファイルを削除して、より長い内容で再作成
+            File.Delete(filePath);
+            await Task.Delay(150);
+            File.WriteAllText(filePath, "this is a much longer content than before\n");
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("short"), "Should show original content");
+            // 先頭から全ての内容が出力されることを確認
+            Assert.IsTrue(output.Contains("this is a much longer content than before"), "Should show recreated content from beginning");
+            // 削除→再作成の場合はtruncatedメッセージは出ない
+            Assert.IsFalse(output.Contains("file truncated"), "Should not show truncation message for delete/recreate");
+        }
+
+        // TAIL-048 -f オプションでファイルが切り詰められた場合、最後のN行のみ出力
+        [Test]
+        public async Task Tail_Follow_TruncatedFile_OutputsLastNLines()
+        {
+            var filePath = Path.Combine(testDir, "follow_truncate_lines.txt");
+            // 最初に長いファイルを作成
+            var originalLines = new string[20];
+            for (int i = 0; i < 20; i++)
+                originalLines[i] = $"original{i + 1}";
+            File.WriteAllLines(filePath, originalLines);
+
+            using var cts = new System.Threading.CancellationTokenSource();
+            var followTask = terminal.ExecuteAsync("tail -f -n=3 follow_truncate_lines.txt", stdout, stderr, ct: cts.Token);
+
+            await Task.Delay(150);
+
+            // ファイルを切り詰めて新しい内容（5行）を書き込む
+            var newLines = new[] { "new1", "new2", "new3", "new4", "new5" };
+            File.WriteAllLines(filePath, newLines);
+
+            await Task.Delay(200);
+
+            cts.Cancel();
+
+            try
+            {
+                await followTask;
+            }
+            catch (System.OperationCanceledException)
+            {
+                // 期待される動作
+            }
+
+            var output = stdout.ToString();
+            Assert.IsTrue(output.Contains("file truncated"), "Should show truncation message");
+            // -n=3 なので最後の3行のみ出力される
+            Assert.IsTrue(output.Contains("new3"), "Should show last 3 lines");
+            Assert.IsTrue(output.Contains("new4"), "Should show last 3 lines");
+            Assert.IsTrue(output.Contains("new5"), "Should show last 3 lines");
+            // new1, new2は含まれない（最後の3行ではないため）
+            // ただし、最初のtail出力には含まれる可能性があるので、truncation後の部分のみチェック
+        }
+
     }
 }

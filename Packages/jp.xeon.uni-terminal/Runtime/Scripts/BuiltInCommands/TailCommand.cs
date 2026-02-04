@@ -239,7 +239,7 @@ namespace Xeon.UniTerminal
         }
 
         /// <summary>
-        /// FileSystemWatcherを使用してファイルの追記を監視
+        /// ポーリングでファイルの追記を監視
         /// Ctrl+CでCancellationTokenがキャンセルされると終了
         /// </summary>
         private async Task<ExitCode> FollowFileAsync(
@@ -247,42 +247,43 @@ namespace Xeon.UniTerminal
             string filePath,
             CancellationToken ct)
         {
-            var directory = Path.GetDirectoryName(filePath);
-            var fileName = Path.GetFileName(filePath);
+            const int pollIntervalMs = 100;
             var lastPosition = new FileInfo(filePath).Length;
+            var (lineCount, _) = ParseCount(Lines, DefaultLines);
 
-            using var watcher = new FileSystemWatcher(directory, fileName);
-            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-
-            watcher.Changed += async (sender, e) =>
-            {
-                try
-                {
-                    lastPosition = await OutputNewContentAsync(context, filePath, lastPosition, ct);
-                }
-                catch (OperationCanceledException)
-                {
-                    // キャンセル時は何もしない
-                }
-                catch (Exception ex)
-                {
-                    try
-                    {
-                        await context.Stderr.WriteLineAsync($"tail: error reading file: {ex.Message}", ct);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        // キャンセル時は何もしない
-                    }
-                }
-            };
-
-            watcher.EnableRaisingEvents = true;
-
-            // Ctrl+C（CancellationToken）でキャンセルされるまで待機
             try
             {
-                await Task.Delay(Timeout.Infinite, ct);
+                while (!ct.IsCancellationRequested)
+                {
+                    await Task.Delay(pollIntervalMs, ct);
+
+                    if (!File.Exists(filePath))
+                    {
+                        // ファイルが削除された場合、次回は先頭から読む
+                        lastPosition = 0;
+                        continue;
+                    }
+
+                    try
+                    {
+                        var newPosition = await OutputNewContentAsync(context, filePath, lastPosition, ct);
+
+                        // ファイルが切り詰められた場合
+                        if (newPosition == -1)
+                        {
+                            await context.Stdout.WriteLineAsync("tail: file truncated", ct);
+                            lastPosition = await OutputFileLinesAndGetPositionAsync(context, filePath, lineCount, ct);
+                        }
+                        else
+                        {
+                            lastPosition = newPosition;
+                        }
+                    }
+                    catch (IOException)
+                    {
+                        // ファイルがロックされている場合は次のポーリングで再試行
+                    }
+                }
             }
             catch (OperationCanceledException)
             {
@@ -293,7 +294,28 @@ namespace Xeon.UniTerminal
         }
 
         /// <summary>
+        /// ファイルの末尾N行を出力し、ファイルの現在位置を返す
+        /// </summary>
+        private async Task<long> OutputFileLinesAndGetPositionAsync(
+            CommandContext context,
+            string filePath,
+            int lineCount,
+            CancellationToken ct)
+        {
+            var lines = await File.ReadAllLinesAsync(filePath, ct);
+            var outputLines = lines.TakeLast(lineCount);
+
+            foreach (var line in outputLines)
+            {
+                await context.Stdout.WriteLineAsync(line, ct);
+            }
+
+            return new FileInfo(filePath).Length;
+        }
+
+        /// <summary>
         /// ファイルの新しい内容を出力し、新しい位置を返す
+        /// ファイルが切り詰められた場合は-1を返す
         /// </summary>
         private async Task<long> OutputNewContentAsync(
             CommandContext context,
@@ -304,9 +326,9 @@ namespace Xeon.UniTerminal
             var fileInfo = new FileInfo(filePath);
             var currentLength = fileInfo.Length;
 
-            // ファイルが切り詰められた場合は先頭から
+            // ファイルが切り詰められた場合は-1を返して再取得を促す
             if (currentLength < lastPosition)
-                lastPosition = 0;
+                return -1;
 
             if (currentLength <= lastPosition)
                 return lastPosition;
@@ -326,10 +348,38 @@ namespace Xeon.UniTerminal
             if (bytesRead > 0)
             {
                 var text = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                await context.Stdout.WriteAsync(text, ct);
+                await OutputTextByLinesAsync(context, text, ct);
             }
 
             return currentLength;
+        }
+
+        /// <summary>
+        /// テキストを行単位で出力する
+        /// </summary>
+        private static async Task OutputTextByLinesAsync(
+            CommandContext context,
+            string text,
+            CancellationToken ct)
+        {
+            var lines = text.Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var isLastLine = i == lines.Length - 1;
+                var line = lines[i];
+
+                if (isLastLine && !text.EndsWith("\n") && !text.EndsWith("\r"))
+                {
+                    // 末尾が改行で終わっていない場合は改行なしで出力
+                    if (!string.IsNullOrEmpty(line))
+                        await context.Stdout.WriteAsync(line, ct);
+                }
+                else
+                {
+                    await context.Stdout.WriteLineAsync(line, ct);
+                }
+            }
         }
 
         /// <summary>
