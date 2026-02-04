@@ -1,0 +1,51 @@
+using System;
+using TMPro;
+using UnityEngine;
+using Xeon.Common;
+
+namespace Xeon.UniTerminal.Sample
+{
+    /// <summary>
+    /// ターミナル出力アイテムのUIコンポーネント
+    /// 出力データをUIにバインドする
+    /// </summary>
+    public class OutputItem : MonoBehaviour, IBindable<OutputData>
+    {
+        [SerializeField] private TMP_Text label;
+
+        public TMP_Text Label => label;
+
+        private OutputData currentData;
+        private bool isDataBound;
+
+        /// <summary>
+        /// 出力データをUIにバインドする
+        /// </summary>
+        /// <param name="data">バインドするデータ</param>
+        public void Bind(OutputData data)
+        {
+            if (label == null)
+                return;
+
+            if (isDataBound && currentData.Message == data.Message && currentData.IsError == data.IsError)
+                return;
+
+            currentData = data;
+            isDataBound = true;
+
+            if (data.IsError)
+            {
+                label.text = $"<color=red>{data.Message}</color>";
+            }
+            else
+            {
+                label.text = data.Message;
+            }
+        }
+
+        /// <summary>
+        /// アイテムが選択されたときに発火するイベント
+        /// </summary>
+        public event Action<OutputData> OnSelect;
+    }
+}
