@@ -176,6 +176,9 @@ transform add /Player -p 1,0,0
 
 # 回転を減算
 transform sub /Player -r 0,90,0
+
+# スケールを乗算
+transform mul /Player -s 2,2,2
 ```
 
 #### property - プロパティ操作
@@ -190,9 +193,9 @@ property get /Player Rigidbody mass
 # 値を設定
 property set /Player Rigidbody mass 10
 
-# 演算操作（数値型: add, sub, mul, div / Vector型: add, sub）
+# 演算操作（数値型・Vector型共に: add, sub, mul, div）
 property add /Player Rigidbody mass 5
-property mul /Player Transform localScale 2
+property mul /Player Transform localScale 2,2,2
 ```
 
 ## カスタムコマンドの作成
