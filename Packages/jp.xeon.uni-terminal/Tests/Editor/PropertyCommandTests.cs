@@ -427,17 +427,32 @@ namespace Xeon.UniTerminal.Tests
             Assert.AreEqual(12, rb.solverIterations);
         }
 
-        // PROP-122 mul - Vector3はサポートしない
+        // PROP-122 mul - Vector3 スカラー乗算
         [Test]
-        public async Task Property_Mul_Vector3_ReturnsError()
+        public async Task Property_Mul_Vector3_Scalar()
         {
-            var obj = CreateTestObject("PropTest_MulVec3");
-            obj.transform.localScale = new Vector3(1, 1, 1);
+            var obj = CreateTestObject("PropTest_MulVec3Scalar");
+            obj.transform.localScale = new Vector3(1, 2, 3);
 
-            var exitCode = await terminal.ExecuteAsync("property mul /PropTest_MulVec3 Transform localScale 2,2,2", stdout, stderr);
+            stdout = new StringBuilderTextWriter();
+            var exitCode = await terminal.ExecuteAsync("property mul /PropTest_MulVec3Scalar Transform localScale 2", stdout, stderr);
 
-            Assert.AreEqual(ExitCode.RuntimeError, exitCode);
-            Assert.IsTrue(stderr.ToString().Contains("does not support"));
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(2, 4, 6), obj.transform.localScale);
+        }
+
+        // PROP-123 mul - Vector3 成分ごとの乗算
+        [Test]
+        public async Task Property_Mul_Vector3_ComponentWise()
+        {
+            var obj = CreateTestObject("PropTest_MulVec3Comp");
+            obj.transform.localScale = new Vector3(1, 2, 3);
+
+            stdout = new StringBuilderTextWriter();
+            var exitCode = await terminal.ExecuteAsync("property mul /PropTest_MulVec3Comp Transform localScale 2,3,4", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(2, 6, 12), obj.transform.localScale);
         }
 
         // PROP-130 div - float
@@ -469,17 +484,45 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(stderr.ToString().Contains("division by zero"));
         }
 
-        // PROP-132 div - Vector3はサポートしない
+        // PROP-132 div - Vector3 スカラー除算
         [Test]
-        public async Task Property_Div_Vector3_ReturnsError()
+        public async Task Property_Div_Vector3_Scalar()
         {
-            var obj = CreateTestObject("PropTest_DivVec3");
-            obj.transform.localScale = new Vector3(2, 2, 2);
+            var obj = CreateTestObject("PropTest_DivVec3Scalar");
+            obj.transform.localScale = new Vector3(4, 6, 8);
 
-            var exitCode = await terminal.ExecuteAsync("property div /PropTest_DivVec3 Transform localScale 2,2,2", stdout, stderr);
+            stdout = new StringBuilderTextWriter();
+            var exitCode = await terminal.ExecuteAsync("property div /PropTest_DivVec3Scalar Transform localScale 2", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(2, 3, 4), obj.transform.localScale);
+        }
+
+        // PROP-133 div - Vector3 成分ごとの除算
+        [Test]
+        public async Task Property_Div_Vector3_ComponentWise()
+        {
+            var obj = CreateTestObject("PropTest_DivVec3Comp");
+            obj.transform.localScale = new Vector3(10, 20, 30);
+
+            stdout = new StringBuilderTextWriter();
+            var exitCode = await terminal.ExecuteAsync("property div /PropTest_DivVec3Comp Transform localScale 2,4,5", stdout, stderr);
+
+            Assert.AreEqual(ExitCode.Success, exitCode);
+            Assert.AreEqual(new Vector3(5, 5, 6), obj.transform.localScale);
+        }
+
+        // PROP-134 div - Vector3 ゼロ除算エラー
+        [Test]
+        public async Task Property_Div_Vector3_ByZero_ReturnsError()
+        {
+            var obj = CreateTestObject("PropTest_DivVec3Zero");
+            obj.transform.localScale = new Vector3(1, 2, 3);
+
+            var exitCode = await terminal.ExecuteAsync("property div /PropTest_DivVec3Zero Transform localScale 2,0,2", stdout, stderr);
 
             Assert.AreEqual(ExitCode.RuntimeError, exitCode);
-            Assert.IsTrue(stderr.ToString().Contains("does not support"));
+            Assert.IsTrue(stderr.ToString().Contains("division by zero"));
         }
 
         // PROP-140 非対応型エラー（string）

@@ -268,7 +268,13 @@ namespace Xeon.UniTerminal.Parsing
 
         private static bool IsOptionValue(Token token)
         {
-            return token.Kind == TokenKind.Word && !token.Value.StartsWith("-");
+            if (token.Kind != TokenKind.Word)
+                return false;
+
+            if (!token.Value.StartsWith("-"))
+                return true;
+
+            return IsNumber(token.Value);
         }
 
         private ParsedOptionOccurrence ParseLongOption(string value, bool wasQuoted)
@@ -341,14 +347,17 @@ namespace Xeon.UniTerminal.Parsing
                 start = 1;
             }
 
+            bool hasDigit = false;
             for (int i = start; i < value.Length; i++)
             {
                 char c = value[i];
-                if (!char.IsDigit(c) && c != '.')
+                if (char.IsDigit(c))
+                    hasDigit = true;
+                else if (c != '.' && c != ',' && c != '-')
                     return false;
             }
 
-            return true;
+            return hasDigit;
         }
 
         private class CommandParseContext

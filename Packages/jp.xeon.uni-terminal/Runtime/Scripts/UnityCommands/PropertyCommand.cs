@@ -300,12 +300,6 @@ namespace Xeon.UniTerminal.UnityCommands
                 return ExitCode.RuntimeError;
             }
 
-            if ((operation == ArithmeticOperation.Multiply || operation == ArithmeticOperation.Divide) && ValueConverter.IsVectorType(targetType))
-            {
-                await context.Stderr.WriteLineAsync($"property: {targetType.Name} does not support {operation.ToString().ToLower()}", ct);
-                return ExitCode.RuntimeError;
-            }
-
             try
             {
                 var operand = ValueConverter.Convert(operandStr, targetType);

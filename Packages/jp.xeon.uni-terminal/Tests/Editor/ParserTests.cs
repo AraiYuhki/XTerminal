@@ -215,5 +215,92 @@ namespace Xeon.UniTerminal.Tests
             Assert.IsTrue(cmd.Options[0].HasValue);
             Assert.AreEqual("", cmd.Options[0].RawValue);
         }
+
+        // PRS-100 負の数は位置引数として扱う
+        [Test]
+        public void Parse_NegativeNumber_TreatedAsPositionalArgument()
+        {
+            var result = parser.Parse("cmd -5");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(0, cmd.Options.Count);
+            Assert.AreEqual(1, cmd.PositionalArguments.Count);
+            Assert.AreEqual("-5", cmd.PositionalArguments[0]);
+        }
+
+        // PRS-101 負の小数は位置引数として扱う
+        [Test]
+        public void Parse_NegativeDecimal_TreatedAsPositionalArgument()
+        {
+            var result = parser.Parse("cmd -3.14");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(0, cmd.Options.Count);
+            Assert.AreEqual(1, cmd.PositionalArguments.Count);
+            Assert.AreEqual("-3.14", cmd.PositionalArguments[0]);
+        }
+
+        // PRS-102 負の値を含むVector形式は位置引数として扱う
+        [Test]
+        public void Parse_NegativeVector_TreatedAsPositionalArgument()
+        {
+            var result = parser.Parse("cmd -1,2,3");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(0, cmd.Options.Count);
+            Assert.AreEqual(1, cmd.PositionalArguments.Count);
+            Assert.AreEqual("-1,2,3", cmd.PositionalArguments[0]);
+        }
+
+        // PRS-103 すべて負の値を含むVector形式は位置引数として扱う
+        [Test]
+        public void Parse_AllNegativeVector_TreatedAsPositionalArgument()
+        {
+            var result = parser.Parse("cmd -1,-2,-3");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(0, cmd.Options.Count);
+            Assert.AreEqual(1, cmd.PositionalArguments.Count);
+            Assert.AreEqual("-1,-2,-3", cmd.PositionalArguments[0]);
+        }
+
+        // PRS-104 オプションの値として負の数を指定
+        [Test]
+        public void Parse_OptionWithNegativeValue_SpaceSeparated()
+        {
+            var result = parser.Parse("cmd --value -5");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(1, cmd.Options.Count);
+            Assert.AreEqual("value", cmd.Options[0].Name);
+            Assert.IsTrue(cmd.Options[0].HasValue);
+            Assert.AreEqual("-5", cmd.Options[0].RawValue);
+        }
+
+        // PRS-105 オプションの値として負のVector形式を指定
+        [Test]
+        public void Parse_OptionWithNegativeVector_SpaceSeparated()
+        {
+            var result = parser.Parse("cmd --position -1,2,-3");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(1, cmd.Options.Count);
+            Assert.AreEqual("position", cmd.Options[0].Name);
+            Assert.IsTrue(cmd.Options[0].HasValue);
+            Assert.AreEqual("-1,2,-3", cmd.Options[0].RawValue);
+        }
+
+        // PRS-106 ショートオプションの値として負の数を指定
+        [Test]
+        public void Parse_ShortOptionWithNegativeValue_SpaceSeparated()
+        {
+            var result = parser.Parse("cmd -p -1,2,3");
+
+            var cmd = result.Pipeline.Commands[0];
+            Assert.AreEqual(1, cmd.Options.Count);
+            Assert.AreEqual("p", cmd.Options[0].Name);
+            Assert.IsTrue(cmd.Options[0].HasValue);
+            Assert.AreEqual("-1,2,3", cmd.Options[0].RawValue);
+        }
     }
 }

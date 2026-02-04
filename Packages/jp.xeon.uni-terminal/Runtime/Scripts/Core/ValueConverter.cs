@@ -841,25 +841,31 @@ namespace Xeon.UniTerminal
         }
 
         /// <summary>
-        /// 乗算を実行します（数値型のみ）
+        /// 乗算を実行します（数値型およびVector型）
         /// </summary>
         public static object Multiply(object current, object operand, Type targetType)
         {
-            if (!IsArithmeticType(targetType))
-                throw new NotSupportedException($"Type '{targetType.Name}' does not support multiplication");
+            if (IsArithmeticType(targetType))
+                return MultiplyNumeric(current, operand, targetType);
 
-            return MultiplyNumeric(current, operand, targetType);
+            if (IsVectorType(targetType))
+                return MultiplyVector(current, operand, targetType);
+
+            throw new NotSupportedException($"Type '{targetType.Name}' does not support multiplication");
         }
 
         /// <summary>
-        /// 除算を実行します（数値型のみ）
+        /// 除算を実行します（数値型およびVector型）
         /// </summary>
         public static object Divide(object current, object operand, Type targetType)
         {
-            if (!IsArithmeticType(targetType))
-                throw new NotSupportedException($"Type '{targetType.Name}' does not support division");
+            if (IsArithmeticType(targetType))
+                return DivideNumeric(current, operand, targetType);
 
-            return DivideNumeric(current, operand, targetType);
+            if (IsVectorType(targetType))
+                return DivideVector(current, operand, targetType);
+
+            throw new NotSupportedException($"Type '{targetType.Name}' does not support division");
         }
 
         private static object AddNumeric(object current, object operand, Type targetType)
@@ -924,6 +930,81 @@ namespace Xeon.UniTerminal
                 return (Vector3Int)current - (Vector3Int)operand;
 
             throw new NotSupportedException($"Vector type '{targetType.Name}' not supported");
+        }
+
+        private static object MultiplyVector(object current, object operand, Type targetType)
+        {
+            if (targetType == typeof(Vector2))
+                return Vector2.Scale((Vector2)current, (Vector2)operand);
+            if (targetType == typeof(Vector3))
+                return Vector3.Scale((Vector3)current, (Vector3)operand);
+            if (targetType == typeof(Vector4))
+                return Vector4.Scale((Vector4)current, (Vector4)operand);
+            if (targetType == typeof(Vector2Int))
+                return (Vector2Int)current * (Vector2Int)operand;
+            if (targetType == typeof(Vector3Int))
+                return (Vector3Int)current * (Vector3Int)operand;
+
+            throw new NotSupportedException($"Vector type '{targetType.Name}' not supported for multiplication");
+        }
+
+        private static object DivideVector(object current, object operand, Type targetType)
+        {
+            if (targetType == typeof(Vector2))
+            {
+                var a = (Vector2)current;
+                var b = (Vector2)operand;
+                CheckVectorDivision(b.x, b.y);
+                return new Vector2(a.x / b.x, a.y / b.y);
+            }
+            if (targetType == typeof(Vector3))
+            {
+                var a = (Vector3)current;
+                var b = (Vector3)operand;
+                CheckVectorDivision(b.x, b.y, b.z);
+                return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+            }
+            if (targetType == typeof(Vector4))
+            {
+                var a = (Vector4)current;
+                var b = (Vector4)operand;
+                CheckVectorDivision(b.x, b.y, b.z, b.w);
+                return new Vector4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w);
+            }
+            if (targetType == typeof(Vector2Int))
+            {
+                var a = (Vector2Int)current;
+                var b = (Vector2Int)operand;
+                CheckVectorDivision(b.x, b.y);
+                return new Vector2Int(a.x / b.x, a.y / b.y);
+            }
+            if (targetType == typeof(Vector3Int))
+            {
+                var a = (Vector3Int)current;
+                var b = (Vector3Int)operand;
+                CheckVectorDivision(b.x, b.y, b.z);
+                return new Vector3Int(a.x / b.x, a.y / b.y, a.z / b.z);
+            }
+
+            throw new NotSupportedException($"Vector type '{targetType.Name}' not supported for division");
+        }
+
+        private static void CheckVectorDivision(params float[] components)
+        {
+            foreach (var c in components)
+            {
+                if (Math.Abs(c) < float.Epsilon)
+                    throw new DivideByZeroException("Division by zero in vector component");
+            }
+        }
+
+        private static void CheckVectorDivision(params int[] components)
+        {
+            foreach (var c in components)
+            {
+                if (c == 0)
+                    throw new DivideByZeroException("Division by zero in vector component");
+            }
         }
 
     }

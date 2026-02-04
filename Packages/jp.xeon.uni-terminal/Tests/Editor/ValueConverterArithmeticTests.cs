@@ -254,13 +254,57 @@ namespace Xeon.UniTerminal.Tests
         }
 
         [Test]
-        public void Multiply_Vector3_ThrowsNotSupported()
+        public void Multiply_Vector2_ReturnsCorrectProduct()
+        {
+            var a = new Vector2(2, 3);
+            var b = new Vector2(4, 5);
+            var result = (Vector2)ValueConverter.Multiply(a, b, typeof(Vector2));
+            Assert.AreEqual(new Vector2(8, 15), result);
+        }
+
+        [Test]
+        public void Multiply_Vector3_ReturnsCorrectProduct()
         {
             var a = new Vector3(1, 2, 3);
             var b = new Vector3(2, 2, 2);
+            var result = (Vector3)ValueConverter.Multiply(a, b, typeof(Vector3));
+            Assert.AreEqual(new Vector3(2, 4, 6), result);
+        }
 
-            Assert.Throws<NotSupportedException>(() =>
-                ValueConverter.Multiply(a, b, typeof(Vector3)));
+        [Test]
+        public void Multiply_Vector3_ScalarStyle_ReturnsCorrectProduct()
+        {
+            var a = new Vector3(1, 2, 3);
+            var scalar = new Vector3(2, 2, 2);
+            var result = (Vector3)ValueConverter.Multiply(a, scalar, typeof(Vector3));
+            Assert.AreEqual(new Vector3(2, 4, 6), result);
+        }
+
+        [Test]
+        public void Multiply_Vector4_ReturnsCorrectProduct()
+        {
+            var a = new Vector4(1, 2, 3, 4);
+            var b = new Vector4(2, 3, 4, 5);
+            var result = (Vector4)ValueConverter.Multiply(a, b, typeof(Vector4));
+            Assert.AreEqual(new Vector4(2, 6, 12, 20), result);
+        }
+
+        [Test]
+        public void Multiply_Vector2Int_ReturnsCorrectProduct()
+        {
+            var a = new Vector2Int(3, 4);
+            var b = new Vector2Int(2, 5);
+            var result = (Vector2Int)ValueConverter.Multiply(a, b, typeof(Vector2Int));
+            Assert.AreEqual(new Vector2Int(6, 20), result);
+        }
+
+        [Test]
+        public void Multiply_Vector3Int_ReturnsCorrectProduct()
+        {
+            var a = new Vector3Int(1, 2, 3);
+            var b = new Vector3Int(2, 3, 4);
+            var result = (Vector3Int)ValueConverter.Multiply(a, b, typeof(Vector3Int));
+            Assert.AreEqual(new Vector3Int(2, 6, 12), result);
         }
 
         [Test]
@@ -292,13 +336,81 @@ namespace Xeon.UniTerminal.Tests
         }
 
         [Test]
-        public void Divide_Vector3_ThrowsNotSupported()
+        public void Divide_Vector2_ReturnsCorrectQuotient()
+        {
+            var a = new Vector2(8, 15);
+            var b = new Vector2(4, 5);
+            var result = (Vector2)ValueConverter.Divide(a, b, typeof(Vector2));
+            Assert.AreEqual(2f, result.x, 0.001f);
+            Assert.AreEqual(3f, result.y, 0.001f);
+        }
+
+        [Test]
+        public void Divide_Vector3_ReturnsCorrectQuotient()
         {
             var a = new Vector3(4, 6, 8);
             var b = new Vector3(2, 2, 2);
+            var result = (Vector3)ValueConverter.Divide(a, b, typeof(Vector3));
+            Assert.AreEqual(new Vector3(2, 3, 4), result);
+        }
 
-            Assert.Throws<NotSupportedException>(() =>
+        [Test]
+        public void Divide_Vector3_ScalarStyle_ReturnsCorrectQuotient()
+        {
+            var a = new Vector3(10, 20, 30);
+            var scalar = new Vector3(2, 2, 2);
+            var result = (Vector3)ValueConverter.Divide(a, scalar, typeof(Vector3));
+            Assert.AreEqual(new Vector3(5, 10, 15), result);
+        }
+
+        [Test]
+        public void Divide_Vector4_ReturnsCorrectQuotient()
+        {
+            var a = new Vector4(10, 20, 30, 40);
+            var b = new Vector4(2, 4, 5, 8);
+            var result = (Vector4)ValueConverter.Divide(a, b, typeof(Vector4));
+            Assert.AreEqual(5f, result.x, 0.001f);
+            Assert.AreEqual(5f, result.y, 0.001f);
+            Assert.AreEqual(6f, result.z, 0.001f);
+            Assert.AreEqual(5f, result.w, 0.001f);
+        }
+
+        [Test]
+        public void Divide_Vector2Int_ReturnsCorrectQuotient()
+        {
+            var a = new Vector2Int(10, 20);
+            var b = new Vector2Int(2, 5);
+            var result = (Vector2Int)ValueConverter.Divide(a, b, typeof(Vector2Int));
+            Assert.AreEqual(new Vector2Int(5, 4), result);
+        }
+
+        [Test]
+        public void Divide_Vector3Int_ReturnsCorrectQuotient()
+        {
+            var a = new Vector3Int(10, 20, 30);
+            var b = new Vector3Int(2, 4, 5);
+            var result = (Vector3Int)ValueConverter.Divide(a, b, typeof(Vector3Int));
+            Assert.AreEqual(new Vector3Int(5, 5, 6), result);
+        }
+
+        [Test]
+        public void Divide_Vector3_ByZero_ThrowsDivideByZero()
+        {
+            var a = new Vector3(4, 6, 8);
+            var b = new Vector3(2, 0, 2);
+
+            Assert.Throws<DivideByZeroException>(() =>
                 ValueConverter.Divide(a, b, typeof(Vector3)));
+        }
+
+        [Test]
+        public void Divide_Vector2Int_ByZero_ThrowsDivideByZero()
+        {
+            var a = new Vector2Int(10, 20);
+            var b = new Vector2Int(0, 5);
+
+            Assert.Throws<DivideByZeroException>(() =>
+                ValueConverter.Divide(a, b, typeof(Vector2Int)));
         }
 
         [Test]

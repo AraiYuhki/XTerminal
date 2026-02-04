@@ -487,19 +487,79 @@ namespace Xeon.UniTerminal.Tests.Runtime
         }
 
         [UnityTest]
-        public IEnumerator Property_Mul_Vector3_ReturnsError()
+        public IEnumerator Property_Mul_Vector3_ScalarMultiplication()
         {
             var target = CreateTestObject("PlayMode_PropMulVec");
-            target.transform.localScale = new Vector3(1, 1, 1);
+            target.transform.localScale = new Vector3(1, 2, 3);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property mul /PlayMode_PropMulVec Transform localScale 2", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(2, 4, 6), target.transform.localScale);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Mul_Vector3_ComponentWise()
+        {
+            var target = CreateTestObject("PlayMode_PropMulVecComp");
+            target.transform.localScale = new Vector3(1, 2, 3);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property mul /PlayMode_PropMulVecComp Transform localScale 2,3,4", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(2, 6, 12), target.transform.localScale);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Div_Vector3_ScalarDivision()
+        {
+            var target = CreateTestObject("PlayMode_PropDivVec");
+            target.transform.localScale = new Vector3(4, 6, 8);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property div /PlayMode_PropDivVec Transform localScale 2", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(2, 3, 4), target.transform.localScale);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Div_Vector3_ComponentWise()
+        {
+            var target = CreateTestObject("PlayMode_PropDivVecComp");
+            target.transform.localScale = new Vector3(10, 20, 30);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property div /PlayMode_PropDivVecComp Transform localScale 2,4,5", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(5, 5, 6), target.transform.localScale);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Div_Vector3_ByZero_ReturnsError()
+        {
+            var target = CreateTestObject("PlayMode_PropDivVecZero");
+            target.transform.localScale = new Vector3(1, 2, 3);
 
             yield return null;
 
             stderr = new StringBuilderTextWriter();
-            var task = terminal.ExecuteAsync("property mul /PlayMode_PropMulVec Transform localScale 2,2,2", stdout, stderr);
+            var task = terminal.ExecuteAsync("property div /PlayMode_PropDivVecZero Transform localScale 2,0,2", stdout, stderr);
             while (!task.IsCompleted) yield return null;
 
             Assert.AreEqual(ExitCode.RuntimeError, task.Result);
-            Assert.IsTrue(stderr.ToString().Contains("does not support"));
+            Assert.IsTrue(stderr.ToString().Contains("division by zero"));
         }
 
         [UnityTest]
@@ -599,6 +659,66 @@ namespace Xeon.UniTerminal.Tests.Runtime
             var output = stdout.ToString();
             // 出力に演算記号が含まれることを確認
             Assert.IsTrue(output.Contains("+") || output.Contains("mass"));
+        }
+
+        // --- 負の値テスト ---
+
+        [UnityTest]
+        public IEnumerator Property_Set_NegativeVector3()
+        {
+            var target = CreateTestObject("PlayMode_PropSetNegVec");
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property set /PlayMode_PropSetNegVec Transform position -1,-2,-3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(-1, -2, -3), target.transform.position);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Set_MixedSignVector3()
+        {
+            var target = CreateTestObject("PlayMode_PropSetMixedVec");
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property set /PlayMode_PropSetMixedVec Transform position -1,2,-3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(-1, 2, -3), target.transform.position);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Add_NegativeVector3()
+        {
+            var target = CreateTestObject("PlayMode_PropAddNegVec");
+            target.transform.position = new Vector3(5, 5, 5);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property add /PlayMode_PropAddNegVec Transform position -1,-2,-3", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(4, 3, 2), target.transform.position);
+        }
+
+        [UnityTest]
+        public IEnumerator Property_Mul_NegativeScalar()
+        {
+            var target = CreateTestObject("PlayMode_PropMulNegScalar");
+            target.transform.localScale = new Vector3(1, 2, 3);
+
+            yield return null;
+
+            var task = terminal.ExecuteAsync("property mul /PlayMode_PropMulNegScalar Transform localScale -1", stdout, stderr);
+            while (!task.IsCompleted) yield return null;
+
+            Assert.AreEqual(ExitCode.Success, task.Result);
+            Assert.AreEqual(new Vector3(-1, -2, -3), target.transform.localScale);
         }
     }
 }
