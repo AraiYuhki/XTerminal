@@ -7,7 +7,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Editor
+namespace Xeon.XTerminal.Editor
 {
     /// <summary>
     /// コマンドドキュメントを自動生成するエディタツール
@@ -21,7 +21,7 @@ namespace Xeon.UniTerminal.Editor
         private string previewText = "";
         private CommandDocConfig config;
 
-        [MenuItem("Tools/UniTerminal/Generate Command Documentation")]
+        [MenuItem("Tools/XTerminal/Generate Command Documentation")]
         public static void ShowWindow()
         {
             var window = GetWindow<CommandDocumentationGenerator>("Command Doc Generator");
@@ -237,8 +237,8 @@ namespace Xeon.UniTerminal.Editor
             sb.AppendLine(isJapanese ? "# 組み込みコマンド" : "# Built-in Commands");
             sb.AppendLine();
             sb.AppendLine(isJapanese
-                ? "UniTerminalは、カテゴリ別に整理された包括的な組み込みコマンドセットを提供します。"
-                : "UniTerminal provides a comprehensive set of built-in commands organized into categories.");
+                ? "XTerminalは、カテゴリ別に整理された包括的な組み込みコマンドセットを提供します。"
+                : "XTerminal provides a comprehensive set of built-in commands organized into categories.");
             sb.AppendLine();
             sb.AppendLine(isJapanese ? "## コマンドカテゴリ" : "## Command Categories");
             sb.AppendLine();

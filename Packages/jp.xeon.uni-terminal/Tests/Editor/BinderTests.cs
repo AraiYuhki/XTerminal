@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Xeon.UniTerminal.Binding;
-using Xeon.UniTerminal.BuiltInCommands;
-using Xeon.UniTerminal.Parsing;
+using Xeon.XTerminal.Binding;
+using Xeon.XTerminal.BuiltInCommands;
+using Xeon.XTerminal.Parsing;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     // Binderテスト用のテストコマンド
     public enum TestMode

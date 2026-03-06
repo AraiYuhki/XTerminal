@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using Xeon.UniTerminal.Parsing;
+using Xeon.XTerminal.Parsing;
 
-namespace Xeon.UniTerminal.Binding
+namespace Xeon.XTerminal.Binding
 {
     /// <summary>
     /// パースされたコマンドを型変換されたオプションを持つコマンドインスタンスにバインドします

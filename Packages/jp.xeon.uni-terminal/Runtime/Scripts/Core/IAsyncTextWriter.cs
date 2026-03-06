@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// stdout/stderr出力用の非同期テキストライターインターフェース

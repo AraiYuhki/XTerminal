@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using Xeon.UniTerminal.Assets;
+using Xeon.XTerminal.Assets;
 
-namespace Xeon.UniTerminal.UnityCommands
+namespace Xeon.XTerminal.UnityCommands
 {
     /// <summary>
     /// AssetDatabase経由でアセットを管理するコマンド（エディタ専用）

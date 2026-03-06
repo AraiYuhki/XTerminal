@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// ファイルの先頭を出力するコマンド

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// アセット管理の中央クラス

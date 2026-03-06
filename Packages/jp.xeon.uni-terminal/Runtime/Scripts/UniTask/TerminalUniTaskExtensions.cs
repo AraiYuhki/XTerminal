@@ -1,10 +1,10 @@
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
 using System;
 using System.Threading;
-using Xeon.UniTerminal.Binding;
-using Xeon.UniTerminal.Parsing;
+using Xeon.XTerminal.Binding;
+using Xeon.XTerminal.Parsing;
 
-namespace Xeon.UniTerminal.UniTask
+namespace Xeon.XTerminal.UniTask
 {
     using Cysharp.Threading.Tasks;
 

@@ -1,30 +1,28 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Xeon.Common.FlyweightScrollView;
 using Xeon.Common.FlyweightScrollView.Model;
-using Xeon.UniTerminal.Common;
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
-using Xeon.UniTerminal.UniTask;
-#endif
+using Xeon.XTerminal.Common;
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
     using Cysharp.Threading.Tasks;
+    using Xeon.XTerminal.UniTask;
 #else
     using System.Threading.Tasks;
 #endif
 
     /// <summary>
-    /// UniTerminalのUIコントローラー
+    /// XTerminalのUIコントローラー
     /// ターミナルUIの入出力を管理し、コマンドの実行を行う
     /// </summary>
-    public class UniTerminal : MonoBehaviour
+    public class XTerminal : MonoBehaviour
     {
         private const int BufferSize = 1000;
 
@@ -45,7 +43,7 @@ namespace Xeon.UniTerminal.Sample
         private Terminal terminal;
         private FlyweightScrollViewController<OutputData, OutputItem> scrollViewController;
         private CircularBuffer<OutputData> buffer = new(BufferSize);
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
         private OutputWriterUniTask normalOutput;
         private OutputWriterUniTask errorOutput;
 #else
@@ -80,7 +78,7 @@ namespace Xeon.UniTerminal.Sample
             terminal = new Terminal(Application.persistentDataPath, Application.persistentDataPath, maxHistorySize: BufferSize);
             scrollViewController = new FlyweightScrollViewController<OutputData, OutputItem>(messagePrefab, buffer);
             scrollView.Setup(scrollViewController);
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
             normalOutput = new OutputWriterUniTask(buffer, false, () => maxCharsPerLine);
             errorOutput = new OutputWriterUniTask(buffer, true, () => maxCharsPerLine);
 #else
@@ -180,7 +178,7 @@ namespace Xeon.UniTerminal.Sample
             }
         }
 
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
         private async UniTask ProcessCompletions()
 #else
         private async Task ProcessCompletions()
@@ -316,7 +314,7 @@ namespace Xeon.UniTerminal.Sample
 
                 try
                 {
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
                     await terminal.ExecuteUniTaskAsync(command, normalOutput, errorOutput, ct: commandCancellationTokenSource.Token);
 #else
                     await terminal.ExecuteAsync(command, normalOutput, errorOutput, ct: commandCancellationTokenSource.Token);

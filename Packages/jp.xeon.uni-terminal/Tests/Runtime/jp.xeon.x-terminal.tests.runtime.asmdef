@@ -1,18 +1,16 @@
 {
-    "name": "jp.xeon.uni-terminal.tests.editor",
-    "rootNamespace": "Xeon.UniTerminal.Tests",
+    "name": "jp.xeon.x-terminal.tests.runtime",
+    "rootNamespace": "Xeon.XTerminal.Tests.Runtime",
     "references": [
-        "jp.xeon.uni-terminal.runtime",
         "Unity.Addressables",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UniTask",
         "UniTask.Addressables",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "jp.xeon.x-terminal.runtime"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
@@ -27,7 +25,7 @@
         {
             "name": "com.cysharp.unitask",
             "expression": "",
-            "define": "UNI_TERMINAL_UNI_TASK_SUPPORT"
+            "define": "X_TERMINAL_UNI_TASK_SUPPORT"
         }
     ],
     "noEngineReferences": false

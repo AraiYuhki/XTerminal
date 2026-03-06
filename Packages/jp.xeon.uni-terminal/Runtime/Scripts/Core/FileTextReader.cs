@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// ファイルから行を読み取るテキストリーダー

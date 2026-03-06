@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Xeon.UniTerminal.Common;
+using Xeon.XTerminal.Common;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// TextMeshUtilityのテキスト整形に関するテスト

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// LogBufferのテスト。

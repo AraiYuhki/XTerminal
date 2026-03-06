@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// Resources経由のアセットプロバイダー

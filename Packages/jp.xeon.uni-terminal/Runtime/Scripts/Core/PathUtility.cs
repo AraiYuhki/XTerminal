@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// パス解決用ユーティリティ

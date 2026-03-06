@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// CommandAttributeとOptionAttributesから抽出されたコマンドのメタデータ

@@ -1,6 +1,6 @@
-# UniTerminal Basic Usage Sample
+# XTerminal Basic Usage Sample
 
-This sample demonstrates the basic usage of UniTerminal.
+This sample demonstrates the basic usage of XTerminal.
 
 ## Contents
 
@@ -52,7 +52,7 @@ greet --name=Unity
 greet -n Unity -t 3 -u
 
 # Count words in pipeline
-echo "Hello World from UniTerminal" | count --words
+echo "Hello World from XTerminal" | count --words
 
 # Count lines
 hierarchy -r | count

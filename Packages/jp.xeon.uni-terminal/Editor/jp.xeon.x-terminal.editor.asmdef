@@ -1,9 +1,9 @@
 {
-    "name": "jp.xeon.uni-terminal.editor",
-    "rootNamespace": "Xeon.UniTerminal.Editor",
+    "name": "jp.xeon.x-terminal.editor",
+    "rootNamespace": "Xeon.XTerminal.Editor",
     "references": [
-        "jp.xeon.uni-terminal.runtime",
-        "UniTask"
+        "UniTask",
+        "jp.xeon.x-terminal.runtime"
     ],
     "includePlatforms": [
         "Editor"
@@ -18,7 +18,7 @@
         {
             "name": "com.cysharp.unitask",
             "expression": "",
-            "define": "UNI_TERMINAL_UNI_TASK_SUPPORT"
+            "define": "X_TERMINAL_UNI_TASK_SUPPORT"
         }
     ],
     "noEngineReferences": false

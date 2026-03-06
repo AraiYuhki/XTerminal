@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.Common
+namespace Xeon.XTerminal.Common
 {
     /// <summary>
     /// TextMeshPro向けのテキスト計測・整形ユーティリティ

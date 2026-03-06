@@ -2,9 +2,9 @@ using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Xeon.UniTerminal.Common;
+using Xeon.XTerminal.Common;
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
 #if UNI_TERMINAL_UNI_TASK_SUPPORT
     using Cysharp.Threading.Tasks;

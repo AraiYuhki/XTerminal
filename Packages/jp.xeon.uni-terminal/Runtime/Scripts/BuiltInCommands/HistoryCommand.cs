@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// コマンド履歴を表示・管理します

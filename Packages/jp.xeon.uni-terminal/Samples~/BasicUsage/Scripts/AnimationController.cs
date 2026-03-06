@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
     /// <summary>
     /// CanvasGroupのフェードアニメーションを制御します

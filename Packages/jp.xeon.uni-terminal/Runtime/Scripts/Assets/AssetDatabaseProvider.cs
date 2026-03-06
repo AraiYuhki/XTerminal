@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// AssetDatabase経由のアセットプロバイダー（エディタ専用）

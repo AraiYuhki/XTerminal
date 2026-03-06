@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
-namespace Xeon.UniTerminal.Parsing
+namespace Xeon.XTerminal.Parsing
 {
     /// <summary>
     /// トークン化された入力をAST構造にパースします

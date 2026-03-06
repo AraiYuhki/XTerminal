@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using Xeon.UniTerminal.Assets;
+using Xeon.XTerminal.Assets;
 
-namespace Xeon.UniTerminal.Tests.Runtime
+namespace Xeon.XTerminal.Tests.Runtime
 {
     /// <summary>
     /// assetコマンドのPlayModeテスト

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.UnityCommands
+namespace Xeon.XTerminal.UnityCommands
 {
     /// <summary>
     /// GameObjectのTransformを操作するコマンド

@@ -1,4 +1,4 @@
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// パス確認の結果を表す列挙型

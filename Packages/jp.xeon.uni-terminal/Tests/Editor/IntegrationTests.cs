@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     public class IntegrationTests
     {
@@ -14,7 +14,7 @@ namespace Xeon.UniTerminal.Tests
         [SetUp]
         public void SetUp()
         {
-            testDir = Path.Combine(Path.GetTempPath(), "UniTerminalTests");
+            testDir = Path.Combine(Path.GetTempPath(), "XTerminalTests");
             Directory.CreateDirectory(testDir);
 
             terminal = new Terminal(testDir, testDir, registerBuiltInCommands: true);

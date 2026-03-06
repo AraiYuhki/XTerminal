@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// ファイルの内容またはstdinを連結して表示します

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
-using Xeon.UniTerminal.Assets;
+using Xeon.XTerminal.Assets;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// ValueConverterのアセット参照変換機能のテスト

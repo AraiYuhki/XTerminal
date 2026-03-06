@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// lsコマンドの表示パラメータを保持する構造体

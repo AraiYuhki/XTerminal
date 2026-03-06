@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Xeon.UniTerminal.Tests.Runtime
+namespace Xeon.XTerminal.Tests.Runtime
 {
     /// <summary>
     /// componentコマンドのPlayModeテスト

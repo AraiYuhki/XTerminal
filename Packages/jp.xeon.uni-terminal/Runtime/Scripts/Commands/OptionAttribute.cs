@@ -1,6 +1,6 @@
 using System;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// フィールドまたはプロパティをコマンドオプションとしてマークするための属性

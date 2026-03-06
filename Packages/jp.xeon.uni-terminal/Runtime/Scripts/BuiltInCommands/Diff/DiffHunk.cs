@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// Normal形式のハンク

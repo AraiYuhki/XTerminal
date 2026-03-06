@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// lessコマンドのテスト
@@ -18,7 +18,7 @@ namespace Xeon.UniTerminal.Tests
         [SetUp]
         public void SetUp()
         {
-            testDir = Path.Combine(Path.GetTempPath(), "UniTerminalLessTests");
+            testDir = Path.Combine(Path.GetTempPath(), "XTerminalLessTests");
             Directory.CreateDirectory(testDir);
 
             // テストファイルを作成（50行）

@@ -1,4 +1,4 @@
-namespace Xeon.UniTerminal.Completion
+namespace Xeon.XTerminal.Completion
 {
     /// <summary>
     /// 補完対象の種別

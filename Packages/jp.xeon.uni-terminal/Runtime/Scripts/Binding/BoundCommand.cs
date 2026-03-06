@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Xeon.UniTerminal.Parsing;
+using Xeon.XTerminal.Parsing;
 
-namespace Xeon.UniTerminal.Binding
+namespace Xeon.XTerminal.Binding
 {
     /// <summary>
     /// 型変換されたオプションでバインドされたコマンド

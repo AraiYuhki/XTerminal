@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Globalization;
 using UnityEngine;
-using Xeon.UniTerminal.Assets;
-using Xeon.UniTerminal.UnityCommands;
+using Xeon.XTerminal.Assets;
+using Xeon.XTerminal.UnityCommands;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// 文字列からUnity/C#の型への変換を行うユーティリティ

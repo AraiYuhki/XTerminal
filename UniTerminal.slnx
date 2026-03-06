@@ -1,7 +1,9 @@
 ﻿<Solution>
-  <Project Path="jp.xeon.uni-terminal.runtime.csproj" />
-  <Project Path="jp.xeon.uni-terminal.tests.runtime.csproj" />
-  <Project Path="jp.xeon.uni-terminal.tests.editor.csproj" />
-  <Project Path="xeon.jp.uni-terminal.sample.csproj" />
+  <Project Path="asset-store-tools-editor.csproj" />
+  <Project Path="jp.xeon.x-terminal.runtime.csproj" />
+  <Project Path="jp.xeon.x-terminal.tests.runtime.csproj" />
+  <Project Path="jp.xeon.x-terminal.tests.editor.csproj" />
+  <Project Path="xeon.jp.x-terminal.sample.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="jp.xeon.x-terminal.editor.csproj" />
 </Solution>

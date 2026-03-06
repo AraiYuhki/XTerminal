@@ -1,4 +1,4 @@
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// タブ補完時に提供されるコンテキスト

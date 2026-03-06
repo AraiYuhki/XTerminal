@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Xeon.UniTerminal.UnityCommands
+namespace Xeon.XTerminal.UnityCommands
 {
     /// <summary>
     /// GameObjectのコンポーネントを管理するコマンド

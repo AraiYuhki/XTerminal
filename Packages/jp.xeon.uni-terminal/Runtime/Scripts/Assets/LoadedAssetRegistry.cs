@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Object = UnityEngine.Object;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// ロード済みアセットを管理するレジストリ

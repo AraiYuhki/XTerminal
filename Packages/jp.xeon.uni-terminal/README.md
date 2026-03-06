@@ -1,7 +1,7 @@
-# UniTerminal
+# XTerminal
 
 <p align="center">
-  <img src="Documentation~/Images/icon.png" alt="UniTerminal Logo" width="256" height="256">
+  <img src="Documentation~/Images/icon.png" alt="XTerminal Logo" width="256" height="256">
 </p>
 
 Unity向けのLinuxライクなCLI実行フレームワークです。文字列ベースのコマンドを解析・実行し、パイプラインやリダイレクトなどのシェル機能をサポートします。
@@ -27,29 +27,7 @@ Unity向けのLinuxライクなCLI実行フレームワークです。文字列�
 
 詳細なコマンドリファレンスやAPIドキュメントは以下を参照してください：
 
-- **リファレンス**: https://araiyuhki.github.io/UniTerminal_Reference/index.html
-
-## インストール
-
-### Package Manager経由
-
-1. Window > Package Manager を開く
-2. 「+」ボタン > 「Add package from git URL...」を選択
-3. 以下のURLを入力:
-```
-https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
-```
-
-### manifest.json経由
-
-`Packages/manifest.json` に以下を追加:
-```json
-{
-  "dependencies": {
-    "jp.xeon.uni-terminal": "https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal"
-  }
-}
-```
+- **リファレンス**: https://araiyuhki.github.io/XTerminal_Reference/index.html
 
 ### UniTaskサポートを有効にする
 
@@ -60,14 +38,14 @@ UniTaskがプロジェクトにインストールされている場合、自動�
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 
-2. UniTerminalがUniTaskを検出すると、`UNI_TERMINAL_UNI_TASK_SUPPORT` シンボルが自動定義されます
+2. XTerminalがUniTaskを検出すると、`UNI_TERMINAL_UNI_TASK_SUPPORT` シンボルが自動定義されます
 
 ## 基本的な使い方
 
 ### Terminalの初期化
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 // Terminalインスタンスを作成
 var terminal = new Terminal(
@@ -80,7 +58,7 @@ var terminal = new Terminal(
 ### コマンドの実行
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 // 出力用のIAsyncTextWriter
 var stdout = new StringBuilderTextWriter();
@@ -97,7 +75,7 @@ Debug.Log(stdout.ToString());  // "Hello, World!"
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 // UniTask版の非同期実行
 var exitCode = await terminal.ExecuteUniTaskAsync("echo Hello!", stdout, stderr);
@@ -141,7 +119,7 @@ await terminal.ExecuteAsync("unset NAME", stdout, stderr);
 
 ## 組み込みコマンド
 
-UniTerminalには多数の組み込みコマンドが用意されています。各コマンドの詳細なオプションや使用例については、[リファレンスドキュメント](https://araiyuhki.github.io/UniTerminal_Reference/index.html)を参照してください。
+XTerminalには多数の組み込みコマンドが用意されています。各コマンドの詳細なオプションや使用例については、[リファレンスドキュメント](https://araiyuhki.github.io/XTerminal_Reference/index.html)を参照してください。
 
 ### コマンド一覧
 
@@ -203,7 +181,7 @@ property mul /Player Transform localScale 2,2,2
 ### 基本的なコマンド
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -255,7 +233,7 @@ UniTaskを使用する場合は `IUniTaskCommand` インターフェースを実
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 [Command("delay", "Wait for specified time")]
 public class DelayCommand : IUniTaskCommand
@@ -309,7 +287,7 @@ public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationTok
 }
 ```
 
-詳細なコマンド作成方法については、[カスタムコマンドガイド](https://araiyuhki.github.io/UniTerminal_Reference/articles/custom-commands.html)を参照してください。
+詳細なコマンド作成方法については、[カスタムコマンドガイド](https://araiyuhki.github.io/XTerminal_Reference/articles/custom-commands.html)を参照してください。
 
 ## 終了コード
 
@@ -318,12 +296,6 @@ public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationTok
 | `ExitCode.Success` (0) | 正常終了 |
 | `ExitCode.UsageError` (1) | 使用方法エラー |
 | `ExitCode.RuntimeError` (2) | 実行時エラー |
-
-## ライセンス
-
-MIT OR Apache-2.0（デュアルライセンス）
-
-詳細は [LICENSE.md](LICENSE.md) を参照してください。
 
 ## 作者
 

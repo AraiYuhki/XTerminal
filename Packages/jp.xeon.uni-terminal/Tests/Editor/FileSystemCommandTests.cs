@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// ファイルシステム関連コマンド（pwd, cd, ls）のテスト
@@ -19,7 +19,7 @@ namespace Xeon.UniTerminal.Tests
         public void SetUp()
         {
             // パスをスラッシュで正規化（Terminal内部でスラッシュに統一されるため）
-            testDir = PathUtility.NormalizeToSlash(Path.Combine(Path.GetTempPath(), "UniTerminalFsTests"));
+            testDir = PathUtility.NormalizeToSlash(Path.Combine(Path.GetTempPath(), "XTerminalFsTests"));
             homeDir = PathUtility.NormalizeToSlash(Path.Combine(testDir, "home"));
 
             // テストディレクトリ構造を作成
@@ -55,7 +55,7 @@ namespace Xeon.UniTerminal.Tests
             var exitCode = await terminal.ExecuteAsync("pwd", stdout, stderr);
 
             Assert.AreEqual(ExitCode.Success, exitCode);
-            Assert.IsTrue(stdout.ToString().Trim().EndsWith("UniTerminalFsTests"));
+            Assert.IsTrue(stdout.ToString().Trim().EndsWith("XTerminalFsTests"));
         }
 
         // PWD-002 論理パス明示

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Xeon.UniTerminal.Parsing
+namespace Xeon.XTerminal.Parsing
 {
     /// <summary>
     /// CLI入力をトークンに分割します

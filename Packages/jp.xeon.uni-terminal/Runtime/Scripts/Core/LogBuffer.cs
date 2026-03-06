@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Xeon.Common.FlyweightScrollView.Model;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// Unityログのエントリ

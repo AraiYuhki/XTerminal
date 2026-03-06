@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.BuiltInCommands.Less
+namespace Xeon.XTerminal.BuiltInCommands.Less
 {
     /// <summary>
     /// lessコマンドの入力読み取り結果

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.Completion
+namespace Xeon.XTerminal.Completion
 {
     /// <summary>
     /// 補完結果

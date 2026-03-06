@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Xeon.Common.FlyweightScrollView.Model;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     public class CircularBufferTests
     {

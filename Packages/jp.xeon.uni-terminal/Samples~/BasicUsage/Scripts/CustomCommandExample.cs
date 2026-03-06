@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
-namespace Xeon.UniTerminal.Samples
+namespace Xeon.XTerminal.Samples
 {
     /// <summary>
-    /// Example of creating a custom command for UniTerminal
+    /// Example of creating a custom command for XTerminal
     /// </summary>
     [Command("greet", "A sample greeting command")]
     public class GreetCommand : ICommand

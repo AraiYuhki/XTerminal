@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Xeon.UniTerminal.Assets;
+using Xeon.XTerminal.Assets;
 
-namespace Xeon.UniTerminal.UnityCommands
+namespace Xeon.XTerminal.UnityCommands
 {
     /// <summary>
     /// ロード済みアセットを管理するコマンド

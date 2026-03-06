@@ -564,7 +564,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2501667189754526442, guid: 6835c9c1e34e44b42b17b64a08c8783a, type: 3}
       propertyPath: m_Name
-      value: UniTerminal
+      value: XTerminal
       objectReference: {fileID: 0}
     - target: {fileID: 3611574852525850457, guid: 6835c9c1e34e44b42b17b64a08c8783a, type: 3}
       propertyPath: m_AnchorMax.y

@@ -1,12 +1,12 @@
 using System.IO;
 using System.Threading;
 using UnityEngine;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
-namespace Xeon.UniTerminal.Samples
+namespace Xeon.XTerminal.Samples
 {
     /// <summary>
-    /// Basic example demonstrating how to use UniTerminal
+    /// Basic example demonstrating how to use XTerminal
     /// </summary>
     public class TerminalExample : MonoBehaviour
     {
@@ -15,7 +15,7 @@ namespace Xeon.UniTerminal.Samples
         private StringWriter stderr;
 
         [SerializeField]
-        private string initialCommand = "echo Hello, UniTerminal!";
+        private string initialCommand = "echo Hello, XTerminal!";
 
         private async void Start()
         {
@@ -54,15 +54,15 @@ namespace Xeon.UniTerminal.Samples
 
             if (!string.IsNullOrEmpty(output))
             {
-                Debug.Log($"[UniTerminal] Output:\n{output}");
+                Debug.Log($"[XTerminal] Output:\n{output}");
             }
 
             if (!string.IsNullOrEmpty(error))
             {
-                Debug.LogError($"[UniTerminal] Error:\n{error}");
+                Debug.LogError($"[XTerminal] Error:\n{error}");
             }
 
-            Debug.Log($"[UniTerminal] Exit Code: {exitCode}");
+            Debug.Log($"[XTerminal] Exit Code: {exitCode}");
         }
 
         /// <summary>

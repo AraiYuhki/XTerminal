@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// OptionAttributeから抽出されたコマンドオプションのメタデータ

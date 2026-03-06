@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.Parsing
+namespace Xeon.XTerminal.Parsing
 {
     /// <summary>
     /// CLIトークナイザーのトークン種別

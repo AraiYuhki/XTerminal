@@ -106,6 +106,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Assembly definition files for proper code separation
 - Comprehensive unit tests and PlayMode tests
 
-[1.0.0]: https://github.com/AraiYuhki/UniTerminal/releases/tag/v1.0.0
-[0.1.1]: https://github.com/AraiYuhki/UniTerminal/releases/tag/v0.1.1
-[0.1.0]: https://github.com/AraiYuhki/UniTerminal/releases/tag/v0.1.0
+[1.0.0]: https://github.com/AraiYuhki/XTerminal/releases/tag/v1.0.0
+[0.1.1]: https://github.com/AraiYuhki/XTerminal/releases/tag/v0.1.1
+[0.1.0]: https://github.com/AraiYuhki/XTerminal/releases/tag/v0.1.0

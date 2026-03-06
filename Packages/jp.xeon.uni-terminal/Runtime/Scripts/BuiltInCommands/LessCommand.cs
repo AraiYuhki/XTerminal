@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Xeon.UniTerminal.BuiltInCommands.Less;
+using Xeon.XTerminal.BuiltInCommands.Less;
 
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// ファイルの内容をページ単位で表示するコマンド

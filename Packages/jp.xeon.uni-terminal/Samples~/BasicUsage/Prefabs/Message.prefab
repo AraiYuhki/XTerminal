@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f188f5e3c75ab4ef09db1ec5ded4f2fd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: jp.xeon.uni-terminal.runtime::Xeon.UniTerminal.UniTerminalMessage
+  m_EditorClassIdentifier: jp.xeon.uni-terminal.runtime::Xeon.XTerminal.XTerminalMessage
   label: {fileID: 3018503236890601489}
 --- !u!1 &8417956351070659529
 GameObject:

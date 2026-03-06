@@ -1,10 +1,10 @@
-# UniTerminal Documentation
+# XTerminal Documentation
 
 <p align="center">
-  <img src="Images/key-image.jpg" alt="UniTerminal Key Image" width="800">
+  <img src="Images/key-image.jpg" alt="XTerminal Key Image" width="800">
 </p>
 
-UniTerminal is a string-based CLI execution framework for Unity with Linux-like behavior. It allows you to execute commands with support for pipelines, redirects, and extensible custom commands.
+XTerminal is a string-based CLI execution framework for Unity with Linux-like behavior. It allows you to execute commands with support for pipelines, redirects, and extensible custom commands.
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ UniTerminal is a string-based CLI execution framework for Unity with Linux-like 
 3. Enter the following URL:
 
 ```
-https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
+https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.uni-terminal
 ```
 
 ### Via manifest.json
@@ -35,7 +35,7 @@ Add the following to your `Packages/manifest.json`:
 ```json
 {
   "dependencies": {
-    "jp.xeon.uni-terminal": "https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal"
+    "jp.xeon.uni-terminal": "https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.uni-terminal"
   }
 }
 ```
@@ -45,7 +45,7 @@ Add the following to your `Packages/manifest.json`:
 ### Initialize Terminal
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 var terminal = new Terminal(
     workingDirectory: Application.dataPath,
@@ -258,7 +258,7 @@ property sub /MyObject Transform position 0,1,0      # Move down by 1
 ### Basic Command
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -308,7 +308,7 @@ UniTask support is automatically enabled when UniTask is installed in your proje
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 // Execute with UniTask
 var exitCode = await terminal.ExecuteUniTaskAsync("echo Hello!", stdout, stderr);

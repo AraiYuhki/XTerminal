@@ -9,7 +9,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// Addressables経由のアセットプロバイダー

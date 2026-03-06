@@ -1,13 +1,13 @@
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Xeon.UniTerminal;
-using Xeon.UniTerminal.UniTask;
+using Xeon.XTerminal;
+using Xeon.XTerminal.UniTask;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     using Cysharp.Threading.Tasks;
 

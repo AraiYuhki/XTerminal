@@ -1,6 +1,6 @@
 using System;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// コマンドのドキュメント情報を提供する属性

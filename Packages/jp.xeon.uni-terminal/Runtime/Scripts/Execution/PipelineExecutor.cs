@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Xeon.UniTerminal.Binding;
-using Xeon.UniTerminal.Parsing;
+using Xeon.XTerminal.Binding;
+using Xeon.XTerminal.Parsing;
 
-namespace Xeon.UniTerminal.Execution
+namespace Xeon.XTerminal.Execution
 {
     /// <summary>
     /// バインドされたパイプラインを実行します

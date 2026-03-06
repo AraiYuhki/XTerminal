@@ -1,4 +1,4 @@
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// 標準終了コード

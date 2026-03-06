@@ -2,7 +2,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// StringBuilderに書き込むテキストライター

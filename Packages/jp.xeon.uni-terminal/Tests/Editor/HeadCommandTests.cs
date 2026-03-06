@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// headコマンドのテスト。
@@ -17,7 +17,7 @@ namespace Xeon.UniTerminal.Tests
         [SetUp]
         public void SetUp()
         {
-            testDir = Path.Combine(Path.GetTempPath(), "UniTerminalHeadTests");
+            testDir = Path.Combine(Path.GetTempPath(), "XTerminalHeadTests");
             Directory.CreateDirectory(testDir);
 
             terminal = new Terminal(testDir, testDir, registerBuiltInCommands: true);

@@ -1,8 +1,8 @@
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Xeon.UniTerminal.UniTask
+namespace Xeon.XTerminal.UniTask
 {
     using Cysharp.Threading.Tasks;
     using Cysharp.Threading.Tasks.Linq;

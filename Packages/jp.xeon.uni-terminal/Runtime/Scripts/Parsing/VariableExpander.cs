@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
-namespace Xeon.UniTerminal.Parsing
+namespace Xeon.XTerminal.Parsing
 {
     /// <summary>
     /// トークン内の変数を展開します

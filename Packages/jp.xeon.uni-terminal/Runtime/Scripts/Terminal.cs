@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Xeon.UniTerminal.Binding;
-using Xeon.UniTerminal.BuiltInCommands;
-using Xeon.UniTerminal.Completion;
-using Xeon.UniTerminal.Execution;
-using Xeon.UniTerminal.Parsing;
-using Xeon.UniTerminal.UnityCommands;
+using Xeon.XTerminal.Binding;
+using Xeon.XTerminal.BuiltInCommands;
+using Xeon.XTerminal.Completion;
+using Xeon.XTerminal.Execution;
+using Xeon.XTerminal.Parsing;
+using Xeon.XTerminal.UnityCommands;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// ターミナルCLIのメインエントリポイント

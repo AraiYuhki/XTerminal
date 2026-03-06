@@ -1,6 +1,6 @@
 using System;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// ターミナルエラーの基底例外クラス

@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 #endif
 
-namespace Xeon.UniTerminal.Common
+namespace Xeon.XTerminal.Common
 {
     /// <summary>
     /// 入力システムの差異を吸収するユーティリティ

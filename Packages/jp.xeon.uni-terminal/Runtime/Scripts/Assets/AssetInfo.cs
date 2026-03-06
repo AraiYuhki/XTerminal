@@ -1,6 +1,6 @@
 using System;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// アセット情報を表すクラス

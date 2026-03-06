@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.Binding
+namespace Xeon.XTerminal.Binding
 {
     /// <summary>
     /// 実行準備が完了したバインドされたパイプライン

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xeon.UniTerminal.Parsing;
+using Xeon.XTerminal.Parsing;
 
-namespace Xeon.UniTerminal.Binding
+namespace Xeon.XTerminal.Binding
 {
     /// <summary>
     /// コマンドのオプションを解析し、バインド結果を構築するためのコンテキスト

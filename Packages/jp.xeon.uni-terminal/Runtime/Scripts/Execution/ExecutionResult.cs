@@ -1,4 +1,4 @@
-namespace Xeon.UniTerminal.Execution
+namespace Xeon.XTerminal.Execution
 {
     /// <summary>
     /// パイプライン実行の結果

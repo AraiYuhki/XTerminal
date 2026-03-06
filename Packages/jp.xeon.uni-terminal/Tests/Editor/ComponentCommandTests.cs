@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// componentコマンドのテスト

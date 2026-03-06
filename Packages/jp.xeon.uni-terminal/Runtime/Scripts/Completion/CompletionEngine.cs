@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Xeon.UniTerminal.Completion
+namespace Xeon.XTerminal.Completion
 {
     /// <summary>
     /// タブ補完用エンジン

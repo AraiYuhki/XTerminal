@@ -6,7 +6,7 @@ This package may use third-party libraries or assets. Below are the notices and 
 
 ## UniTask (Optional Dependency)
 
-**Note:** UniTask is an optional dependency. UniTerminal will work without it, but if you choose to install UniTask for enhanced async support, please note its license below.
+**Note:** UniTask is an optional dependency. XTerminal will work without it, but if you choose to install UniTask for enhanced async support, please note its license below.
 
 **Project:** UniTask - Provides an efficient allocation free async/await integration for Unity
 **Author:** Cysharp, Inc.
@@ -49,10 +49,24 @@ This package uses Unity Engine APIs and is designed to work with Unity Editor.
 **License:** Unity's standard license terms apply to Unity Engine components
 
 ---
+PlemolJP Console Nerd Font
+
+Font file used: PlemolJPConsoleNF-Regular.ttf
+
+PlemolJP
+Copyright (c) 2021 yuru7
+Licensed under the SIL Open Font License, Version 1.1
+
+Nerd Fonts
+Copyright (c) Nerd Fonts contributors
+Licensed under the MIT License
+https://github.com/ryanoasis/nerd-fonts
+
+---
 
 ## No Other Third-Party Dependencies
 
-UniTerminal has no required third-party dependencies beyond Unity's standard packages. All core functionality is implemented using Unity's built-in systems.
+XTerminal has no required third-party dependencies beyond Unity's standard packages. All core functionality is implemented using Unity's built-in systems.
 
 ---
 

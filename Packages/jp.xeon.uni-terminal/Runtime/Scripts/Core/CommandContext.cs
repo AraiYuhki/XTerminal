@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// コマンド実行時に提供されるコンテキスト

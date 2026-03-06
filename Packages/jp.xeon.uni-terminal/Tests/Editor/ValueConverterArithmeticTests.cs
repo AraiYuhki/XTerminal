@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Tests
+namespace Xeon.XTerminal.Tests
 {
     /// <summary>
     /// ValueConverterの演算メソッドのテスト

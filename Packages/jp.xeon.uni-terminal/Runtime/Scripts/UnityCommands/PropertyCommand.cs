@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.UnityCommands
+namespace Xeon.XTerminal.UnityCommands
 {
     /// <summary>
     /// コンポーネントのプロパティを取得・設定するコマンド

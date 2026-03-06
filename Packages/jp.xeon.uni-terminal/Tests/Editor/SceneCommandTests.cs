@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Xeon.UniTerminal.Tests.Editor
+namespace Xeon.XTerminal.Tests.Editor
 {
     /// <summary>
     /// sceneコマンドのEditorテスト

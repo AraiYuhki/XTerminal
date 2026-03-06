@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using Xeon.Common;
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
     /// <summary>
     /// ターミナル出力アイテムのUIコンポーネント

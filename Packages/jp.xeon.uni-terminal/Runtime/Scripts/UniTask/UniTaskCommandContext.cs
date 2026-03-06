@@ -1,8 +1,8 @@
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
 using System;
 using System.Collections.Generic;
 
-namespace Xeon.UniTerminal.UniTask
+namespace Xeon.XTerminal.UniTask
 {
     /// <summary>
     /// UniTask版のコマンド実行コンテキスト

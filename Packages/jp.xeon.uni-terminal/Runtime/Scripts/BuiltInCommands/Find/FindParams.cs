@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Xeon.UniTerminal.BuiltInCommands
+namespace Xeon.XTerminal.BuiltInCommands
 {
     /// <summary>
     /// findコマンドの検索条件

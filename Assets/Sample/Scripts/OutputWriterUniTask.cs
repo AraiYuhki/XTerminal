@@ -1,11 +1,11 @@
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
 using System;
 using System.Threading;
 using Xeon.Common.FlyweightScrollView.Model;
-using Xeon.UniTerminal.UniTask;
-using Xeon.UniTerminal.Common;
+using Xeon.XTerminal.UniTask;
+using Xeon.XTerminal.Common;
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
     using Cysharp.Threading.Tasks;
     /// <summary>

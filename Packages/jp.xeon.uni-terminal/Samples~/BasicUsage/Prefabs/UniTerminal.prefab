@@ -573,7 +573,7 @@ GameObject:
   - component: {fileID: 7451773037677677382}
   - component: {fileID: 9122262688616756520}
   m_Layer: 5
-  m_Name: UniTerminal
+  m_Name: XTerminal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -651,7 +651,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41759e3a0bc8b458cafae9d9ffbafeec, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: jp.xeon.uni-terminal.runtime::Xeon.UniTerminal.UniTerminal
+  m_EditorClassIdentifier: jp.xeon.uni-terminal.runtime::Xeon.XTerminal.XTerminal
   input: {fileID: 8957956180611247019}
   messagePrefab: {fileID: 796008145072161414, guid: beaf53140f7654fddbf96886d4273738, type: 3}
   scrollView: {fileID: 4639714274021058225}
@@ -1587,7 +1587,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5ed02cea1fd8d7c4fb0241c36464c244, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: xeon.jp.uni-terminal.sample::Xeon.UniTerminal.Sample.ConfirmDialog
+  m_EditorClassIdentifier: xeon.jp.uni-terminal.sample::Xeon.XTerminal.Sample.ConfirmDialog
   canvasGroup: {fileID: 599809989530098814}
   message: {fileID: 4799972826039997297}
   yesButton: {fileID: 5690813837378688529}

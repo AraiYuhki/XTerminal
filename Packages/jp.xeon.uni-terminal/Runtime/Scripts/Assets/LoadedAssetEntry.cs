@@ -1,6 +1,6 @@
 using System;
 
-namespace Xeon.UniTerminal.Assets
+namespace Xeon.XTerminal.Assets
 {
     /// <summary>
     /// ロード済みアセットのエントリ

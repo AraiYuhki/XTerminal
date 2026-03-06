@@ -7,12 +7,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Xeon.Common.FlyweightScrollView;
 using Xeon.Common.FlyweightScrollView.Model;
-using Xeon.UniTerminal.Common;
+using Xeon.XTerminal.Common;
 #if UNI_TERMINAL_UNI_TASK_SUPPORT
-using Xeon.UniTerminal.UniTask;
+using Xeon.XTerminal.UniTask;
 #endif
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
 #if UNI_TERMINAL_UNI_TASK_SUPPORT
     using Cysharp.Threading.Tasks;
@@ -21,10 +21,10 @@ namespace Xeon.UniTerminal.Sample
 #endif
 
     /// <summary>
-    /// UniTerminalのUIコントローラー
+    /// XTerminalのUIコントローラー
     /// ターミナルUIの入出力を管理し、コマンドの実行を行う
     /// </summary>
-    public class UniTerminal : MonoBehaviour
+    public class XTerminal : MonoBehaviour
     {
         private const int BufferSize = 1000;
 

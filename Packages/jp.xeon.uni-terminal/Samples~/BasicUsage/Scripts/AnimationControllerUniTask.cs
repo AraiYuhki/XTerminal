@@ -2,7 +2,7 @@
 using System.Threading;
 using UnityEngine;
 
-namespace Xeon.UniTerminal.Sample
+namespace Xeon.XTerminal.Sample
 {
     using Cysharp.Threading.Tasks;
     /// <summary>
