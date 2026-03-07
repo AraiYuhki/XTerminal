@@ -28,8 +28,7 @@ It parses and executes string-based commands and supports shell features such as
 
 For detailed command references and API documentation, see:
 
-- **Reference**  
-  https://araiyuhki.github.io/XTerminal_Reference/index.html
+- **Reference**: https://agnitionis.xsrv.jp/XTerminalReference/
 
 ### Enabling UniTask Support
 

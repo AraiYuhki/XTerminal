@@ -8,13 +8,13 @@ using UnityEngine.UI;
 using Xeon.Common.FlyweightScrollView;
 using Xeon.Common.FlyweightScrollView.Model;
 using Xeon.XTerminal.Common;
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
 using Xeon.XTerminal.UniTask;
 #endif
 
 namespace Xeon.XTerminal.Sample
 {
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
     using Cysharp.Threading.Tasks;
 #else
     using System.Threading.Tasks;
@@ -45,7 +45,7 @@ namespace Xeon.XTerminal.Sample
         private Terminal terminal;
         private FlyweightScrollViewController<OutputData, OutputItem> scrollViewController;
         private CircularBuffer<OutputData> buffer = new(BufferSize);
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
         private OutputWriterUniTask normalOutput;
         private OutputWriterUniTask errorOutput;
 #else
@@ -80,7 +80,7 @@ namespace Xeon.XTerminal.Sample
             terminal = new Terminal(Application.persistentDataPath, Application.persistentDataPath, maxHistorySize: BufferSize);
             scrollViewController = new FlyweightScrollViewController<OutputData, OutputItem>(messagePrefab, buffer);
             scrollView.Setup(scrollViewController);
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
             normalOutput = new OutputWriterUniTask(buffer, false, () => maxCharsPerLine);
             errorOutput = new OutputWriterUniTask(buffer, true, () => maxCharsPerLine);
 #else
@@ -180,7 +180,7 @@ namespace Xeon.XTerminal.Sample
             }
         }
 
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
         private async UniTask ProcessCompletions()
 #else
         private async Task ProcessCompletions()
@@ -316,7 +316,7 @@ namespace Xeon.XTerminal.Sample
 
                 try
                 {
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
                     await terminal.ExecuteUniTaskAsync(command, normalOutput, errorOutput, ct: commandCancellationTokenSource.Token);
 #else
                     await terminal.ExecuteAsync(command, normalOutput, errorOutput, ct: commandCancellationTokenSource.Token);

@@ -1,8 +1,8 @@
 {
-    "name": "xeon.jp.uni-terminal.sample",
+    "name": "xeon.jp.x-terminal.sample",
     "rootNamespace": "",
     "references": [
-        "jp.xeon.uni-terminal.runtime",
+        "jp.xeon.x-terminal.runtime",
         "UniTask",
         "UniTask.Linq",
         "Unity.Addressables",
@@ -21,7 +21,7 @@
         {
             "name": "com.cysharp.unitask",
             "expression": "",
-            "define": "UNI_TERMINAL_UNI_TASK_SUPPORT"
+            "define": "X_TERMINAL_UNI_TASK_SUPPORT"
         }
     ],
     "noEngineReferences": false

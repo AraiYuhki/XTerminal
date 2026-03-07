@@ -6,7 +6,7 @@ using Xeon.XTerminal.Common;
 
 namespace Xeon.XTerminal.Sample
 {
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
     using Cysharp.Threading.Tasks;
 #else
     using System.Threading.Tasks;
@@ -22,7 +22,7 @@ namespace Xeon.XTerminal.Sample
         [SerializeField]
         private Button noButton;
 
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
         UniTaskCompletionSource<bool> completionSource;
         AnimationControllerUniTask animationController;
 #else
@@ -34,14 +34,14 @@ namespace Xeon.XTerminal.Sample
         {
             yesButton.onClick.AddListener(OnClickYes);
             noButton.onClick.AddListener(OnClickNo);
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
             animationController = new AnimationControllerUniTask(canvasGroup);
 #else
             animationController = new AnimationController(canvasGroup, this);
 #endif
         }
 
-#if UNI_TERMINAL_UNI_TASK_SUPPORT
+#if X_TERMINAL_UNI_TASK_SUPPORT
         public async UniTask<bool> ShowAsync(string message, CancellationToken token = default)
         {
             completionSource = new UniTaskCompletionSource<bool>();

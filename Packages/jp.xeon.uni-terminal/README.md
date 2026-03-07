@@ -27,7 +27,7 @@ Unity向けのLinuxライクなCLI実行フレームワークです。文字列�
 
 詳細なコマンドリファレンスやAPIドキュメントは以下を参照してください：
 
-- **リファレンス**: https://araiyuhki.github.io/XTerminal_Reference/index.html
+- **リファレンス** : https://agnitionis.xsrv.jp/XTerminalReference/
 
 ### UniTaskサポートを有効にする
 
