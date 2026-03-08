@@ -1,13 +1,11 @@
 {
   "name": "jp.xeon.uni-terminal",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "XTerminal",
   "description": "A string-based CLI execution framework for Unity with Linux-like behavior. Supports pipelines, redirects, and extensible custom commands.",
-  "license": "MIT OR Apache-2.0",
   "unity": "6000.0",
   "documentationUrl": "https://github.com/AraiYuhki/XTerminal#readme",
   "changelogUrl": "https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.uni-terminal/CHANGELOG.md",
-  "licensesUrl": "https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.uni-terminal/LICENSE.md",
   "keywords": [
     "terminal",
     "cli",
