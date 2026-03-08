@@ -320,7 +320,7 @@
       "url": "https://packages.unity.com"
     },
     "jp.xeon.uni-terminal": {
-      "version": "file:jp.xeon.uni-terminal",
+      "version": "file:jp.xeon.x-terminal",
       "depth": 0,
       "source": "embedded",
       "dependencies": {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Xeon.XTerminal;
 
 namespace Xeon.XTerminal.Samples
 {
@@ -43,7 +43,7 @@ namespace Xeon.XTerminal.Samples
         public IEnumerable<string> GetCompletions(CompletionContext context)
         {
             // Provide completion suggestions for the --name option
-            if (context.CurrentOption == "name" || context.CurrentOption == "n")
+            if (context.CurrentToken == "name" || context.CurrentToken == "n")
             {
                 yield return "Alice";
                 yield return "Bob";
@@ -69,24 +69,26 @@ namespace Xeon.XTerminal.Samples
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {
-            var input = await context.Stdin.ReadToEndAsync(ct);
-
-            if (CountChars)
+            var count = 0;
+            await foreach (var line in context.Stdin.ReadLinesAsync(ct))
             {
-                await context.Stdout.WriteLineAsync(input.Length.ToString(), ct);
-            }
-            else if (CountWords)
-            {
-                var words = input.Split(new[] { ' ', '\t', '\n', '\r' },
+                if (CountChars)
+                {
+                    count += line.Count();
+                }
+                else if (CountWords)
+                {
+                    var words = line.Split(new[] { ' ', '\t', '\n', '\r' },
                     System.StringSplitOptions.RemoveEmptyEntries);
-                await context.Stdout.WriteLineAsync(words.Length.ToString(), ct);
+                    count += words.Length;
+                }
+                else
+                {
+                    var lines = line.Split('\n');
+                    count += lines.Length;
+                }
             }
-            else
-            {
-                var lines = input.Split('\n');
-                var count = string.IsNullOrEmpty(input) ? 0 : lines.Length;
-                await context.Stdout.WriteLineAsync(count.ToString(), ct);
-            }
+            await context.Stdout.WriteLineAsync(count.ToString(), ct);
 
             return ExitCode.Success;
         }

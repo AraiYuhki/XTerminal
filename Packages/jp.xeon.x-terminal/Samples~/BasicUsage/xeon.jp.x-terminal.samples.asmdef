@@ -1,5 +1,5 @@
 {
-    "name": "xeon.jp.x-terminal.sample",
+    "name": "xeon.jp.x-terminal.samples",
     "rootNamespace": "",
     "references": [
         "jp.xeon.x-terminal.runtime",

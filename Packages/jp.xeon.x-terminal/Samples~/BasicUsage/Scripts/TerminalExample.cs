@@ -1,7 +1,6 @@
-using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
-using Xeon.XTerminal;
 
 namespace Xeon.XTerminal.Samples
 {
@@ -11,8 +10,47 @@ namespace Xeon.XTerminal.Samples
     public class TerminalExample : MonoBehaviour
     {
         private Terminal terminal;
-        private StringWriter stdout;
-        private StringWriter stderr;
+
+        private class LogWriter : IAsyncTextWriter
+        {
+            private bool isError;
+            public LogWriter(bool isError)
+            {
+                this.isError = isError;
+            }
+
+            public void Clear()
+            {
+                Debug.ClearDeveloperConsole();
+            }
+
+            public async Task WriteAsync(string text, CancellationToken ct = default)
+            {
+                WriteInternal($"[XTerminal] {text}");
+            }
+
+            public async Task WriteLineAsync(string line, CancellationToken ct = default)
+            {
+                if (string.IsNullOrEmpty(line))
+                {
+                    WriteInternal("[XTerminal]");
+                    return;
+                }
+                foreach (var text in line.Split('\n'))
+                    WriteInternal(text);
+            }
+
+            private void WriteInternal(string text)
+            {
+                if (isError)
+                    Debug.LogError($"[XTerminal] {text}");
+                else
+                    Debug.Log($"[XTerminal] {text}");
+            }
+        }
+
+        private LogWriter stdout;
+        private LogWriter stderr;
 
         [SerializeField]
         private string initialCommand = "echo Hello, XTerminal!";
@@ -26,11 +64,11 @@ namespace Xeon.XTerminal.Samples
                 registerBuiltInCommands: true
             );
 
-            stdout = new StringWriter();
-            stderr = new StringWriter();
+            stdout = new LogWriter(true);
+            stderr = new LogWriter(false);
 
             // Execute initial command
-            await ExecuteCommand(initialCommand);
+            ExecuteCommand(initialCommand);
         }
 
         /// <summary>
@@ -42,11 +80,11 @@ namespace Xeon.XTerminal.Samples
                 return;
 
             // Clear previous output
-            stdout.GetStringBuilder().Clear();
-            stderr.GetStringBuilder().Clear();
+            stdout.Clear();
+            stderr.Clear();
 
             // Execute command
-            var exitCode = await terminal.ExecuteAsync(command, stdout, stderr, CancellationToken.None);
+            var exitCode = await terminal.ExecuteAsync(command, stdout, stderr);
 
             // Log results
             var output = stdout.ToString();
