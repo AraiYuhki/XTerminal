@@ -2,7 +2,6 @@
     "name": "jp.xeon.x-terminal.editor",
     "rootNamespace": "Xeon.XTerminal.Editor",
     "references": [
-        "UniTask",
         "jp.xeon.x-terminal.runtime"
     ],
     "includePlatforms": [
