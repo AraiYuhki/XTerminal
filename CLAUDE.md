@@ -150,12 +150,12 @@ foreach (var element in array)
 
 ## Project Overview
 
-UniTerminal is a Unity package providing a Linux-like CLI execution framework. It parses and executes string-based commands with shell features like pipes (`|`) and redirects (`>`, `>>`, `<`).
+XTerminal is a Unity package providing a Linux-like CLI execution framework. It parses and executes string-based commands with shell features like pipes (`|`) and redirects (`>`, `>>`, `<`).
 
 - **Unity Version**: 6000.0+ required (project uses 6000.3.2f1)
 - **Target Framework**: .NET Standard 2.1, C# 9.0
-- **Package Path**: `Packages/jp.xeon.uni-terminal/`
-- **Optional**: UniTask support (auto-detected via `UNI_TERMINAL_UNI_TASK_SUPPORT` define)
+- **Package Path**: `Packages/jp.xeon.x-terminal/`
+- **Optional**: UniTask support (auto-detected via `X_TERMINAL_UNI_TASK_SUPPORT` define)
 
 ## Build & Test Commands
 
@@ -178,8 +178,8 @@ Unity -runTests -testPlatform playmode -projectPath .
 ```
 
 ### Test Structure
-- `Packages/jp.xeon.uni-terminal/Tests/Editor/` - Unit tests (Parser, Tokenizer, Binder, Commands)
-- `Packages/jp.xeon.uni-terminal/Tests/Runtime/` - Play Mode tests (GameObject operations)
+- `Packages/jp.xeon.x-terminal/Tests/Editor/` - Unit tests (Parser, Tokenizer, Binder, Commands)
+- `Packages/jp.xeon.x-terminal/Tests/Runtime/` - Play Mode tests (GameObject operations)
 
 ## Architecture
 
@@ -194,7 +194,7 @@ Terminal.ExecuteAsync(input)
     → ExitCode
 ```
 
-### Key Directories in `Packages/jp.xeon.uni-terminal/Runtime/Scripts/`
+### Key Directories in `Packages/jp.xeon.x-terminal/Runtime/Scripts/`
 
 | Directory | Purpose |
 |-----------|---------|
@@ -205,7 +205,7 @@ Terminal.ExecuteAsync(input)
 | `Parsing/` | Parser, Tokenizer, Token types, ParsedPipeline structures |
 | `Binding/` | Binder, BoundCommand, CommandBindingContext |
 | `Execution/` | PipelineExecutor, ExecutionResult |
-| `UI/` | UniTerminal MonoBehaviour, OutputWriter |
+| `UI/` | XTerminal MonoBehaviour, OutputWriter |
 | `FlyweightScrollView/` | Virtual scrolling with CircularBuffer (1000-line ring buffer) |
 | `UniTask/` | UniTask async support (conditional compilation) |
 
@@ -255,17 +255,17 @@ return subCommand switch
 
 ### UI Component
 
-`UniTerminal.cs` (MonoBehaviour) handles:
+`XTerminal.cs` (MonoBehaviour) handles:
 - Keyboard input (Tab=completion, Up/Down=history, Enter=execute)
 - FlyweightVerticalScrollView for virtual scrolling
 - CircularBuffer for fixed-size log storage
 
 ## Assembly Definitions
 
-- `jp.xeon.uni-terminal.runtime.asmdef` - Main library
-- `jp.xeon.uni-terminal.editor.asmdef` - Editor-only code
-- `jp.xeon.uni-terminal.tests.runtime.asmdef` - Runtime tests
-- `jp.xeon.uni-terminal.tests.editor.asmdef` - Editor tests
+- `jp.xeon.x-terminal.runtime.asmdef` - Main library
+- `jp.xeon.x-terminal.editor.asmdef` - Editor-only code
+- `jp.xeon.x-terminal.tests.runtime.asmdef` - Runtime tests
+- `jp.xeon.x-terminal.tests.editor.asmdef` - Editor tests
 
 ## ExitCode Values
 

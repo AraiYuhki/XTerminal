@@ -1,6 +1,6 @@
 # UniTaskサポート
 
-UniTerminalは、高パフォーマンスな非同期操作のために[UniTask](https://github.com/Cysharp/UniTask)とのオプション統合を提供します。
+XTerminalは、高パフォーマンスな非同期操作のために[UniTask](https://github.com/Cysharp/UniTask)とのオプション統合を提供します。
 
 ## 概要
 
@@ -28,7 +28,7 @@ https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 }
 ```
 
-UniTerminalは自動的にUniTaskを検出してサポートを有効にします。
+XTerminalは自動的にUniTaskを検出してサポートを有効にします。
 
 ## UniTask実行の使用
 
@@ -36,7 +36,7 @@ UniTerminalは自動的にUniTaskを検出してサポートを有効にしま�
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 public class UniTaskExample : MonoBehaviour
 {
@@ -71,7 +71,7 @@ public class UniTaskExample : MonoBehaviour
 
 ### UniTask テキストライター
 
-UniTerminalはUniTask用の特殊なテキストライターを提供します:
+XTerminalはUniTask用の特殊なテキストライターを提供します:
 
 | クラス | 説明 |
 |-------|------|
@@ -99,7 +99,7 @@ UniTaskを使用するコマンドには `IUniTaskCommand` を実装します:
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -186,7 +186,7 @@ public interface IUniTaskTextReader
 
 ## 標準とUniTaskコマンドの混在
 
-UniTerminalは標準の `ICommand` と `IUniTaskCommand` の両方をシームレスに処理します:
+XTerminalは標準の `ICommand` と `IUniTaskCommand` の両方をシームレスに処理します:
 
 ```csharp
 // 両方のタイプを登録

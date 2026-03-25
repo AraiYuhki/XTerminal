@@ -20,19 +20,19 @@
     "output": "_site",
     "template": ["default", "modern"],
     "globalMetadata": {
-      "_appTitle": "UniTerminal",
-      "_appName": "UniTerminal",
+      "_appTitle": "XTerminal",
+      "_appName": "XTerminal",
       "_appLogoPath": "images/logo.svg",
       "_appFaviconPath": "images/favicon.ico",
       "_enableSearch": true,
       "_enableNewTab": true,
       "_gitContribute": {
-        "repo": "https://github.com/AraiYuhki/UniTerminal",
+        "repo": "https://github.com/AraiYuhki/XTerminal",
         "branch": "main"
       }
     },
     "sitemap": {
-      "baseUrl": "https://araiyuhki.github.io/UniTerminal_Reference"
+      "baseUrl": "https://araiyuhki.github.io/XTerminal_Reference"
     },
     "xref": [
       "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"

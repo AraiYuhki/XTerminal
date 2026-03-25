@@ -1,13 +1,13 @@
 # Custom Commands
 
-Learn how to create and register your own commands in UniTerminal.
+Learn how to create and register your own commands in XTerminal.
 
 ## Basic Command Structure
 
 Every command must implement the `ICommand` interface:
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

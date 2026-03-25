@@ -46,7 +46,7 @@ head [OPTION]... [FILE]...
 
 #### HeadCommand.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/HeadCommand.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/HeadCommand.cs`
 
 ```csharp
 using System;
@@ -57,7 +57,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// ファイルの先頭を出力するコマンド
@@ -295,7 +295,7 @@ namespace Xeon.UniTerminal
 
 #### Terminal.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Terminal.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Terminal.cs`
 
 **変更内容**: `RegisterBuiltInCommands()`に`HeadCommand`を追加
 
@@ -393,10 +393,10 @@ cat test.txt | head -n 5
 ## ファイル一覧
 
 ### 新規作成
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/HeadCommand.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/HeadCommand.cs`
 
 ### 修正
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Terminal.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Terminal.cs`
 
 ## headとtailの比較
 

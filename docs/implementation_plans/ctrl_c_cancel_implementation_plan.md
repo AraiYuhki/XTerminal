@@ -7,7 +7,7 @@ Linuxターミナルの標準的な動作を再現し、long-runningコマンド
 
 ## 現状の問題
 
-現在のUniTerminalでは：
+現在のXTerminalでは：
 - コマンド実行中は`input.interactable = false`となり、キー入力を受け付けない
 - `destroyCancellationToken`はオブジェクト破棄時のみキャンセルされる
 - 実行中のコマンドをユーザーが中断する手段がない
@@ -38,7 +38,7 @@ ExecuteAsync() が OperationCanceledException をスロー
 
 #### 1. InputHandler.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Common/InputHandler.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Common/InputHandler.cs`
 
 **変更内容**: `IsPressedCtrlC()`メソッドを追加
 
@@ -64,9 +64,9 @@ public static bool IsPressedCtrlC()
 }
 ```
 
-#### 2. UniTerminal.cs
+#### 2. XTerminal.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Sample/Scripts/UniTerminal.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Sample/Scripts/XTerminal.cs`
 
 **変更内容**:
 
@@ -192,7 +192,7 @@ if (!input.isFocused || !input.interactable)
 ## 実装順序
 
 1. `InputHandler.cs`に`IsPressedCtrlC()`を追加
-2. `UniTerminal.cs`にフィールドを追加
+2. `XTerminal.cs`にフィールドを追加
 3. `Update()`にCtrl+C検出を追加
 4. `OnInputCommand()`を修正
 5. 動作確認
@@ -220,8 +220,8 @@ tail -f test.log
 ## ファイル一覧
 
 ### 修正
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Common/InputHandler.cs`
-- `Packages/jp.xeon.uni-terminal/Sample/Scripts/UniTerminal.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Common/InputHandler.cs`
+- `Packages/jp.xeon.x-terminal/Sample/Scripts/XTerminal.cs`
 
 ## CLAUDE.md準拠
 

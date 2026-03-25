@@ -1,7 +1,7 @@
-# UniTerminal
+# XTerminal
 
 <p align="center">
-  <img src="../../Packages/jp.xeon.uni-terminal/Documentation~/Images/icon.png" alt="UniTerminal Logo" width="256" height="256">
+  <img src="../../Packages/jp.xeon.x-terminal/Documentation~/Images/icon.png" alt="XTerminal Logo" width="256" height="256">
 </p>
 
 Unity向けのLinuxライクなCLI実行フレームワークです。
@@ -27,17 +27,17 @@ Unity向けのLinuxライクなCLI実行フレームワークです。
 ### Package Manager経由（Git URL）
 
 ```
-https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
+https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
 ### Unity Asset Store経由
 
-Asset Storeウィンドウで「UniTerminal」を検索してください。
+Asset Storeウィンドウで「XTerminal」を検索してください。
 
 ## 基本的な使い方
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 var terminal = new Terminal(
     workingDirectory: Application.dataPath,
@@ -53,4 +53,4 @@ await terminal.ExecuteAsync("echo Hello, World!", stdout, stderr, ct);
 
 ## ライセンス
 
-MIT License - [LICENSE](https://github.com/AraiYuhki/UniTerminal/blob/main/Packages/jp.xeon.uni-terminal/LICENSE.md)を参照
+MIT License - [LICENSE](https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.x-terminal/LICENSE.md)を参照

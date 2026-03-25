@@ -1,13 +1,13 @@
 # カスタムコマンド
 
-UniTerminalで独自のコマンドを作成して登録する方法を説明します。
+XTerminalで独自のコマンドを作成して登録する方法を説明します。
 
 ## 基本的なコマンド構造
 
 すべてのコマンドは `ICommand` インターフェースを実装する必要があります:
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

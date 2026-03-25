@@ -47,7 +47,7 @@ tail [OPTION]... [FILE]...
 
 ### -fオプションの終了方法
 
-Linuxでは`Ctrl+C`で終了します。UniTerminalでも同様に`Ctrl+C`でキャンセルします。
+Linuxでは`Ctrl+C`で終了します。XTerminalでも同様に`Ctrl+C`でキャンセルします。
 - `Ctrl+C` → `CancellationToken`がキャンセル → `OperationCanceledException` → 正常終了
 
 ### 対象外とする機能
@@ -64,7 +64,7 @@ Linuxでは`Ctrl+C`で終了します。UniTerminalでも同様に`Ctrl+C`でキ
 
 #### TailCommand.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/TailCommand.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/TailCommand.cs`
 
 ```csharp
 using System;
@@ -75,7 +75,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// ファイルの末尾を出力するコマンド
@@ -434,7 +434,7 @@ namespace Xeon.UniTerminal
 
 #### Terminal.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Terminal.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Terminal.cs`
 
 **変更内容**: `RegisterBuiltInCommands()`に`TailCommand`を追加
 
@@ -470,7 +470,7 @@ watcher.EnableRaisingEvents = true;
 ```
 ユーザーがCtrl+Cを押す
     ↓
-UniTerminal.Update()でIsPressedCtrlC()を検出
+XTerminal.Update()でIsPressedCtrlC()を検出
     ↓
 commandCancellationTokenSource.Cancel()
     ↓
@@ -478,7 +478,7 @@ Task.Delay(Timeout.Infinite, ct)がOperationCanceledExceptionをスロー
     ↓
 FollowFileAsync()が正常終了（ExitCode.Success）
     ↓
-UniTerminal.OnInputCommand()で"^C"を表示
+XTerminal.OnInputCommand()で"^C"を表示
 ```
 
 ### ParseCount メソッド
@@ -582,10 +582,10 @@ echo "new line" >> test.log
 ## ファイル一覧
 
 ### 新規作成
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/TailCommand.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/TailCommand.cs`
 
 ### 修正
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Terminal.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Terminal.cs`
 
 ## 依存関係
 

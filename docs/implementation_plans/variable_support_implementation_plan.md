@@ -2,7 +2,7 @@
 
 ## 概要
 
-UniTerminalに「シェル変数（ユーザー定義変数）」を導入し、入力文字列内の変数展開と、変数の設定・削除・一覧表示を提供します。既存のパーサー／バインダー／実行パイプラインに大きな影響を与えず、軽量な前処理と新規コマンドの追加で対応する方針です。
+XTerminalに「シェル変数（ユーザー定義変数）」を導入し、入力文字列内の変数展開と、変数の設定・削除・一覧表示を提供します。既存のパーサー／バインダー／実行パイプラインに大きな影響を与えず、軽量な前処理と新規コマンドの追加で対応する方針です。
 
 ## 目的
 
@@ -74,16 +74,16 @@ UniTerminalに「シェル変数（ユーザー定義変数）」を導入し、
 
 ## 変更対象（予定）
 
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Core/VariableStore.cs`（新規）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Core/CommandContext.cs`（Variables追加）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Parsing/Tokenizer.cs`（セグメント情報を保持できるよう拡張）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Parsing/Token.cs`（Wordトークンにセグメント情報を追加）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Parsing/Parser.cs`（展開を適用する流れを追加）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Execution/PipelineExecutor.cs`（変数ストアの受け渡し）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/SetCommand.cs`（新規）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/UnsetCommand.cs`（新規）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/EnvCommand.cs`（新規）
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Completion/CompletionEngine.cs`（変数補完）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Core/VariableStore.cs`（新規）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Core/CommandContext.cs`（Variables追加）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Parsing/Tokenizer.cs`（セグメント情報を保持できるよう拡張）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Parsing/Token.cs`（Wordトークンにセグメント情報を追加）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Parsing/Parser.cs`（展開を適用する流れを追加）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Execution/PipelineExecutor.cs`（変数ストアの受け渡し）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/SetCommand.cs`（新規）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/UnsetCommand.cs`（新規）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/EnvCommand.cs`（新規）
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Completion/CompletionEngine.cs`（変数補完）
 
 ## 実装順序
 

@@ -6,30 +6,30 @@ This section contains the API documentation generated from source code comments.
 
 | Class | Description |
 |-------|-------------|
-| [Terminal](Xeon.UniTerminal.Terminal.html) | Main entry point for CLI execution |
-| [CommandRegistry](Xeon.UniTerminal.CommandRegistry.html) | Command registration and lookup |
-| [CommandContext](Xeon.UniTerminal.CommandContext.html) | Execution context for commands |
+| [Terminal](Xeon.XTerminal.Terminal.html) | Main entry point for CLI execution |
+| [CommandRegistry](Xeon.XTerminal.CommandRegistry.html) | Command registration and lookup |
+| [CommandContext](Xeon.XTerminal.CommandContext.html) | Execution context for commands |
 
 ## Interfaces
 
 | Interface | Description |
 |-----------|-------------|
-| [ICommand](Xeon.UniTerminal.ICommand.html) | Command implementation interface |
-| [IAsyncTextReader](Xeon.UniTerminal.IAsyncTextReader.html) | Async text input stream |
-| [IAsyncTextWriter](Xeon.UniTerminal.IAsyncTextWriter.html) | Async text output stream |
+| [ICommand](Xeon.XTerminal.ICommand.html) | Command implementation interface |
+| [IAsyncTextReader](Xeon.XTerminal.IAsyncTextReader.html) | Async text input stream |
+| [IAsyncTextWriter](Xeon.XTerminal.IAsyncTextWriter.html) | Async text output stream |
 
 ## Attributes
 
 | Attribute | Description |
 |-----------|-------------|
-| [CommandAttribute](Xeon.UniTerminal.CommandAttribute.html) | Marks a class as a command |
-| [OptionAttribute](Xeon.UniTerminal.OptionAttribute.html) | Marks a field as a command option |
+| [CommandAttribute](Xeon.XTerminal.CommandAttribute.html) | Marks a class as a command |
+| [OptionAttribute](Xeon.XTerminal.OptionAttribute.html) | Marks a field as a command option |
 
 ## Enums
 
 | Enum | Description |
 |------|-------------|
-| [ExitCode](Xeon.UniTerminal.ExitCode.html) | Command exit codes |
+| [ExitCode](Xeon.XTerminal.ExitCode.html) | Command exit codes |
 
 ## UniTask Support
 
@@ -37,10 +37,10 @@ When UniTask is installed, these additional types are available:
 
 | Type | Description |
 |------|-------------|
-| [IUniTaskCommand](Xeon.UniTerminal.IUniTaskCommand.html) | UniTask-based command interface |
-| [UniTaskCommandContext](Xeon.UniTerminal.UniTaskCommandContext.html) | UniTask execution context |
-| [IUniTaskTextReader](Xeon.UniTerminal.IUniTaskTextReader.html) | UniTask text input stream |
-| [IUniTaskTextWriter](Xeon.UniTerminal.IUniTaskTextWriter.html) | UniTask text output stream |
+| [IUniTaskCommand](Xeon.XTerminal.IUniTaskCommand.html) | UniTask-based command interface |
+| [UniTaskCommandContext](Xeon.XTerminal.UniTaskCommandContext.html) | UniTask execution context |
+| [IUniTaskTextReader](Xeon.XTerminal.IUniTaskTextReader.html) | UniTask text input stream |
+| [IUniTaskTextWriter](Xeon.XTerminal.IUniTaskTextWriter.html) | UniTask text output stream |
 
 ## FlyweightScrollView
 

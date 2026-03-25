@@ -36,8 +36,8 @@ echo Hello, World!
 # Output: Hello, World!
 
 # Multiple arguments
-echo Hello World from UniTerminal
-# Output: Hello World from UniTerminal
+echo Hello World from XTerminal
+# Output: Hello World from XTerminal
 
 # Output without trailing newline
 echo -n "No newline here"

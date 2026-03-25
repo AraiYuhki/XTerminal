@@ -128,7 +128,7 @@ public class TerminalDisplay : MonoBehaviour
 
 ```csharp
 using UnityEngine;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using Xeon.Common.FlyweightScrollView;
 using Xeon.Common.FlyweightScrollView.Model;
 using System.Threading;
@@ -268,9 +268,9 @@ foreach (var line in lines)
 
 ## Prefabs
 
-UniTerminal includes ready-to-use prefabs:
+XTerminal includes ready-to-use prefabs:
 
 - `FlyweightVerticalScrollView.prefab`
 - `FlyweightHorizontalScrollView.prefab`
 
-Located in: `Packages/jp.xeon.uni-terminal/Runtime/Prefabs/`
+Located in: `Packages/jp.xeon.x-terminal/Runtime/Prefabs/`

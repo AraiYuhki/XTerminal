@@ -1,6 +1,6 @@
 # UniTask Support
 
-UniTerminal provides optional integration with [UniTask](https://github.com/Cysharp/UniTask) for high-performance async operations.
+XTerminal provides optional integration with [UniTask](https://github.com/Cysharp/UniTask) for high-performance async operations.
 
 ## Overview
 
@@ -28,7 +28,7 @@ Or via manifest.json:
 }
 ```
 
-UniTerminal will automatically detect UniTask and enable support.
+XTerminal will automatically detect UniTask and enable support.
 
 ## Using UniTask Execution
 
@@ -36,7 +36,7 @@ UniTerminal will automatically detect UniTask and enable support.
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 public class UniTaskExample : MonoBehaviour
 {
@@ -71,7 +71,7 @@ public class UniTaskExample : MonoBehaviour
 
 ### UniTask Text Writers
 
-UniTerminal provides specialized text writers for UniTask:
+XTerminal provides specialized text writers for UniTask:
 
 | Class | Description |
 |-------|-------------|
@@ -99,7 +99,7 @@ Implement `IUniTaskCommand` for commands that use UniTask:
 
 ```csharp
 using Cysharp.Threading.Tasks;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -186,7 +186,7 @@ public interface IUniTaskTextReader
 
 ## Mixing Standard and UniTask Commands
 
-UniTerminal seamlessly handles both standard `ICommand` and `IUniTaskCommand`:
+XTerminal seamlessly handles both standard `ICommand` and `IUniTaskCommand`:
 
 ```csharp
 // Register both types

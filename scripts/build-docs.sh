@@ -1,6 +1,6 @@
 #!/bin/bash
 # ===========================================================================
-# UniTerminal Documentation Build
+# XTerminal Documentation Build
 #
 # Usage:
 #   ./build-docs.sh          # ドキュメントをビルド
@@ -45,7 +45,7 @@ ensure_docfx() {
 # ===========================================================================
 # メイン処理
 # ===========================================================================
-echo "=== UniTerminal Documentation Build ==="
+echo "=== XTerminal Documentation Build ==="
 echo ""
 
 ensure_docfx

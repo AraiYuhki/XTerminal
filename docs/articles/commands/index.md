@@ -1,6 +1,6 @@
 # Built-in Commands
 
-UniTerminal provides a comprehensive set of built-in commands organized into categories.
+XTerminal provides a comprehensive set of built-in commands organized into categories.
 
 ## Command Categories
 
