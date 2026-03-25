@@ -1,6 +1,6 @@
 # Pipeline & Redirects
 
-UniTerminal supports Linux-like pipelines and redirects for powerful command chaining.
+XTerminal supports Linux-like pipelines and redirects for powerful command chaining.
 
 ## Pipelines
 

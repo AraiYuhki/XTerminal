@@ -1,6 +1,6 @@
 # はじめに
 
-このガイドでは、UnityプロジェクトでUniTerminalをセットアップして実行する方法を説明します。
+このガイドでは、UnityプロジェクトでXTerminalをセットアップして実行する方法を説明します。
 
 ## 動作要件
 
@@ -13,7 +13,7 @@
 
 1. **Window > Package Manager** を開く
 2. **My Assets** タブを選択
-3. 「UniTerminal」を検索
+3. 「XTerminal」を検索
 4. **Import** をクリック
 
 ### 方法2: Git URL
@@ -23,7 +23,7 @@
 3. 以下を入力:
 
 ```
-https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
+https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
 ### 方法3: manifest.json
@@ -33,7 +33,7 @@ https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
 ```json
 {
   "dependencies": {
-    "jp.xeon.uni-terminal": "https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal"
+    "jp.xeon.x-terminal": "https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal"
   }
 }
 ```
@@ -43,7 +43,7 @@ https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
 ### 1. Terminalインスタンスの作成
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,7 +72,7 @@ async Task RunCommand(CancellationToken ct)
     var stderr = new StringWriter();
 
     var exitCode = await _terminal.ExecuteAsync(
-        "echo Hello, UniTerminal!",
+        "echo Hello, XTerminal!",
         stdout,
         stderr,
         ct

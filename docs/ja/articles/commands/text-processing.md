@@ -36,8 +36,8 @@ echo Hello, World!
 # 出力: Hello, World!
 
 # 複数の引数
-echo Hello World from UniTerminal
-# 出力: Hello World from UniTerminal
+echo Hello World from XTerminal
+# 出力: Hello World from XTerminal
 
 # 末尾の改行なしで出力
 echo -n "No newline here"

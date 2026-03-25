@@ -1,4 +1,4 @@
-# UniTerminal
+# XTerminal
 
 A string-based CLI execution framework for Unity with Linux-like behavior.
 
@@ -23,17 +23,17 @@ This documentation focuses on the built-in commands and how to use the `Terminal
 ### Via Package Manager (Git URL)
 
 ```
-https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
+https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
 ### Via Unity Asset Store
 
-Search for "UniTerminal" in the Asset Store window.
+Search for "XTerminal" in the Asset Store window.
 
 ## Basic Usage
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 
 var terminal = new Terminal(
     workingDirectory: Application.dataPath,
@@ -49,4 +49,4 @@ await terminal.ExecuteAsync("echo Hello, World!", stdout, stderr, ct);
 
 ## License
 
-MIT License - see [LICENSE](https://github.com/AraiYuhki/UniTerminal/blob/main/Packages/jp.xeon.uni-terminal/LICENSE.md)
+MIT License - see [LICENSE](https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.x-terminal/LICENSE.md)

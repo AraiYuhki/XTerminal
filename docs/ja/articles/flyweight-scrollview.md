@@ -128,7 +128,7 @@ public class TerminalDisplay : MonoBehaviour
 
 ```csharp
 using UnityEngine;
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using Xeon.Common.FlyweightScrollView;
 using Xeon.Common.FlyweightScrollView.Model;
 using System.Threading;
@@ -268,9 +268,9 @@ foreach (var line in lines)
 
 ## プレハブ
 
-UniTerminalには使用可能なプレハブが含まれています:
+XTerminalには使用可能なプレハブが含まれています:
 
 - `FlyweightVerticalScrollView.prefab`
 - `FlyweightHorizontalScrollView.prefab`
 
-場所: `Packages/jp.xeon.uni-terminal/Runtime/Prefabs/`
+場所: `Packages/jp.xeon.x-terminal/Runtime/Prefabs/`

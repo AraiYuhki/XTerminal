@@ -1,6 +1,6 @@
 # Getting Started
 
-This guide will help you get UniTerminal up and running in your Unity project.
+This guide will help you get XTerminal up and running in your Unity project.
 
 ## Requirements
 
@@ -13,7 +13,7 @@ This guide will help you get UniTerminal up and running in your Unity project.
 
 1. Open **Window > Package Manager**
 2. Select **My Assets** tab
-3. Search for "UniTerminal"
+3. Search for "XTerminal"
 4. Click **Import**
 
 ### Option 2: Git URL
@@ -23,7 +23,7 @@ This guide will help you get UniTerminal up and running in your Unity project.
 3. Enter:
 
 ```
-https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal
+https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
 ### Option 3: manifest.json
@@ -33,7 +33,7 @@ Add to your `Packages/manifest.json`:
 ```json
 {
   "dependencies": {
-    "jp.xeon.uni-terminal": "https://github.com/AraiYuhki/UniTerminal.git?path=Packages/jp.xeon.uni-terminal"
+    "jp.xeon.x-terminal": "https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal"
   }
 }
 ```
@@ -43,7 +43,7 @@ Add to your `Packages/manifest.json`:
 ### 1. Create a Terminal Instance
 
 ```csharp
-using Xeon.UniTerminal;
+using Xeon.XTerminal;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,7 +72,7 @@ async Task RunCommand(CancellationToken ct)
     var stderr = new StringWriter();
 
     var exitCode = await _terminal.ExecuteAsync(
-        "echo Hello, UniTerminal!",
+        "echo Hello, XTerminal!",
         stdout,
         stderr,
         ct

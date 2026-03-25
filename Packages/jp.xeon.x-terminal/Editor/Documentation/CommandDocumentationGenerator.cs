@@ -97,7 +97,7 @@ namespace Xeon.XTerminal.Editor
 
         private string GetConfigPath()
         {
-            return "Packages/jp.xeon.uni-terminal/Editor/Documentation/command_docs_config.json";
+            return "Packages/jp.xeon.x-terminal/Editor/Documentation/command_docs_config.json";
         }
 
         private void OpenConfigFile()

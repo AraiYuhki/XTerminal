@@ -1,6 +1,6 @@
 #!/bin/bash
 # ===========================================================================
-# UniTerminal Documentation Deploy
+# XTerminal Documentation Deploy
 #
 # ビルド済みの _site ディレクトリをデプロイします。
 # 先に build-docs.sh を実行してください。
@@ -24,7 +24,7 @@ DOCS_DIR="$PROJECT_ROOT/docs"
 SITE_DIR="$DOCS_DIR/_site"
 
 # GitHub Pages 設定
-EXTERNAL_REPO="git@github.com:AraiYuhki/UniTerminal_Reference.git"
+EXTERNAL_REPO="git@github.com:AraiYuhki/XTerminal_Reference.git"
 DEPLOY_BRANCH="gh-pages"
 
 SERVER_MODE=false
@@ -160,13 +160,13 @@ deploy_to_github_pages() {
 
     echo ""
     echo "=== GitHub Pages へのデプロイ完了 ==="
-    echo "URL: https://araiyuhki.github.io/UniTerminal_Reference"
+    echo "URL: https://araiyuhki.github.io/XTerminal_Reference"
 }
 
 # ===========================================================================
 # メイン処理
 # ===========================================================================
-echo "=== UniTerminal Documentation Deploy ==="
+echo "=== XTerminal Documentation Deploy ==="
 echo ""
 
 check_site_dir

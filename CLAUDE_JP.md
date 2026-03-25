@@ -146,12 +146,12 @@ foreach (var element in array)
 
 ## プロジェクト概要
 
-UniTerminalは、LinuxライクなCLI実行フレームワークを提供するUnityパッケージです。パイプ（`|`）やリダイレクト（`>`、`>>`、`<`）などのシェル機能を持つ文字列ベースのコマンドをパースして実行します。
+XTerminalは、LinuxライクなCLI実行フレームワークを提供するUnityパッケージです。パイプ（`|`）やリダイレクト（`>`、`>>`、`<`）などのシェル機能を持つ文字列ベースのコマンドをパースして実行します。
 
 - **Unityバージョン**: 6000.0以上が必要（プロジェクトは6000.3.2f1を使用）
 - **ターゲットフレームワーク**: .NET Standard 2.1、C# 9.0
-- **パッケージパス**: `Packages/jp.xeon.uni-terminal/`
-- **オプション**: UniTaskサポート（`UNI_TERMINAL_UNI_TASK_SUPPORT` defineで自動検出）
+- **パッケージパス**: `Packages/jp.xeon.x-terminal/`
+- **オプション**: UniTaskサポート（`X_TERMINAL_UNI_TASK_SUPPORT` defineで自動検出）
 
 ## ビルド＆テストコマンド
 
@@ -177,8 +177,8 @@ Unity -runTests -testPlatform playmode -projectPath .
 
 ### テスト構成
 
-- `Packages/jp.xeon.uni-terminal/Tests/Editor/` - ユニットテスト（Parser、Tokenizer、Binder、Commands）
-- `Packages/jp.xeon.uni-terminal/Tests/Runtime/` - Play Modeテスト（GameObject操作）
+- `Packages/jp.xeon.x-terminal/Tests/Editor/` - ユニットテスト（Parser、Tokenizer、Binder、Commands）
+- `Packages/jp.xeon.x-terminal/Tests/Runtime/` - Play Modeテスト（GameObject操作）
 
 ## アーキテクチャ
 
@@ -193,7 +193,7 @@ Terminal.ExecuteAsync(input)
     → ExitCode
 ```
 
-### `Packages/jp.xeon.uni-terminal/Runtime/Scripts/` の主要ディレクトリ
+### `Packages/jp.xeon.x-terminal/Runtime/Scripts/` の主要ディレクトリ
 
 | ディレクトリ           | 目的                                                                           |
 | ---------------------- | ------------------------------------------------------------------------------ |
@@ -204,7 +204,7 @@ Terminal.ExecuteAsync(input)
 | `Parsing/`             | Parser、Tokenizer、Token型、ParsedPipeline構造体                               |
 | `Binding/`             | Binder、BoundCommand、CommandBindingContext                                    |
 | `Execution/`           | PipelineExecutor、ExecutionResult                                              |
-| `UI/`                  | UniTerminal MonoBehaviour、OutputWriter                                        |
+| `UI/`                  | XTerminal MonoBehaviour、OutputWriter                                          |
 | `FlyweightScrollView/` | CircularBufferによる仮想スクロール（1000行リングバッファ）                     |
 | `UniTask/`             | UniTask非同期サポート（条件付きコンパイル）                                    |
 
@@ -255,7 +255,7 @@ return subCommand switch
 
 ### UIコンポーネント
 
-`UniTerminal.cs`（MonoBehaviour）の役割：
+`XTerminal.cs`（MonoBehaviour）の役割：
 
 - キーボード入力（Tab=補完、Up/Down=履歴、Enter=実行）
 - 仮想スクロール用のFlyweightVerticalScrollView
@@ -263,10 +263,10 @@ return subCommand switch
 
 ## アセンブリ定義
 
-- `jp.xeon.uni-terminal.runtime.asmdef` - メインライブラリ
-- `jp.xeon.uni-terminal.editor.asmdef` - エディタ専用コード
-- `jp.xeon.uni-terminal.tests.runtime.asmdef` - ランタイムテスト
-- `jp.xeon.uni-terminal.tests.editor.asmdef` - エディタテスト
+- `jp.xeon.x-terminal.runtime.asmdef` - メインライブラリ
+- `jp.xeon.x-terminal.editor.asmdef` - エディタ専用コード
+- `jp.xeon.x-terminal.tests.runtime.asmdef` - ランタイムテスト
+- `jp.xeon.x-terminal.tests.editor.asmdef` - エディタテスト
 
 ## ExitCode値
 

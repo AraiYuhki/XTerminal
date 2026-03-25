@@ -52,7 +52,7 @@ Unityのログを監視・出力するコマンドの実装計画書です。
 
 #### LogBuffer.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Core/LogBuffer.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Core/LogBuffer.cs`
 
 Unityログを蓄積するバッファクラス。既存の`CircularBuffer<T>`を使用して効率的なログ管理を行います。
 
@@ -63,7 +63,7 @@ using System.Linq;
 using UnityEngine;
 using Xeon.Common.FlyweightScrollView.Model;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// Unityログのエントリ
@@ -165,7 +165,7 @@ namespace Xeon.UniTerminal
 
 #### LogCommand.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/LogCommand.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/LogCommand.cs`
 
 ```csharp
 using System;
@@ -175,7 +175,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Xeon.UniTerminal
+namespace Xeon.XTerminal
 {
     /// <summary>
     /// Unityログを表示するコマンド
@@ -395,7 +395,7 @@ namespace Xeon.UniTerminal
 
 #### CommandContext.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Core/CommandContext.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Core/CommandContext.cs`
 
 **変更内容**: `LogBuffer`プロパティを追加
 
@@ -415,7 +415,7 @@ public CommandContext(
 
 #### Terminal.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Terminal.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Terminal.cs`
 
 **変更内容**:
 1. `LogBuffer`フィールドを追加
@@ -452,7 +452,7 @@ private void RegisterBuiltInCommands()
 
 #### PipelineExecutor.cs
 
-**パス**: `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Execution/PipelineExecutor.cs`
+**パス**: `Packages/jp.xeon.x-terminal/Runtime/Scripts/Execution/PipelineExecutor.cs`
 
 **変更内容**: `CommandContext`生成時に`LogBuffer`を渡す
 
@@ -512,7 +512,7 @@ TextMeshProとUnity UIの両方でサポートされる形式を使用。
 ```
 ユーザーがCtrl+Cを押す
     ↓
-UniTerminal.Update()でIsPressedCtrlC()を検出
+XTerminal.Update()でIsPressedCtrlC()を検出
     ↓
 commandCancellationTokenSource.Cancel()
     ↓
@@ -520,7 +520,7 @@ Task.Delay(Timeout.Infinite, ct)がOperationCanceledExceptionをスロー
     ↓
 FollowLogsAsync()が正常終了（ExitCode.Success）
     ↓
-UniTerminal.OnInputCommand()で"^C"を表示
+XTerminal.OnInputCommand()で"^C"を表示
 ```
 
 ## 実装順序
@@ -585,13 +585,13 @@ log -f -e
 ## ファイル一覧
 
 ### 新規作成
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Core/LogBuffer.cs`
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/BuiltInCommands/LogCommand.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Core/LogBuffer.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/BuiltInCommands/LogCommand.cs`
 
 ### 修正
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Core/CommandContext.cs`
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Terminal.cs`
-- `Packages/jp.xeon.uni-terminal/Runtime/Scripts/Execution/PipelineExecutor.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Core/CommandContext.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Terminal.cs`
+- `Packages/jp.xeon.x-terminal/Runtime/Scripts/Execution/PipelineExecutor.cs`
 
 ## 依存関係
 

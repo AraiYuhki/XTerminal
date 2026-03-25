@@ -339,7 +339,7 @@ less [-n lines] [-f line] [-N] [-S] [file]
 
 ### Description
 
-Displays file contents with pagination support. In UniTerminal's non-interactive environment, outputs a specified number of lines.
+Displays file contents with pagination support. In XTerminal's non-interactive environment, outputs a specified number of lines.
 
 ### Options
 
