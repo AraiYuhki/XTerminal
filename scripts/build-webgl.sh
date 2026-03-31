@@ -1,0 +1,158 @@
+#!/bin/bash
+# ===========================================================================
+# XTerminal WebGL Build
+#
+# Unity Editor を使用して WebGL ビルドを実行します。
+#
+# Usage:
+#   ./build-webgl.sh                    # デフォルト出力先にビルド
+#   ./build-webgl.sh -o /path/to/output # 出力先を指定
+#
+# Unity の実行ファイルパスを環境変数で指定できます:
+#   UNITY_PATH=/path/to/Unity ./build-webgl.sh
+#
+# Unity Hub 経由でインストールされている場合、バージョンを指定:
+#   UNITY_VERSION=6000.3.2f1 ./build-webgl.sh
+# ===========================================================================
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_PATH="$(cd "$SCRIPT_DIR/.." && pwd)"
+BUILD_OUTPUT="$PROJECT_PATH/WebGLBuild"
+EXECUTE_METHOD="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildFromCommandLine"
+LOG_FILE="$PROJECT_PATH/webgl-build.log"
+
+# ===========================================================================
+# 引数パース
+# ===========================================================================
+while getopts "o:h" opt; do
+    case "$opt" in
+        o) BUILD_OUTPUT="$OPTARG" ;;
+        h)
+            echo "使用方法: $0 [-o output_path]"
+            echo ""
+            echo "オプション:"
+            echo "  -o PATH  ビルド出力先ディレクトリ (デフォルト: $BUILD_OUTPUT)"
+            echo "  -h       このヘルプを表示"
+            exit 0
+            ;;
+        *)
+            echo "不明なオプション: -$OPTARG"
+            exit 1
+            ;;
+    esac
+done
+
+# ===========================================================================
+# Unity 実行ファイルの検索
+# ===========================================================================
+find_unity() {
+    if [ -n "${UNITY_PATH:-}" ]; then
+        echo "$UNITY_PATH"
+        return
+    fi
+
+    local version="${UNITY_VERSION:-}"
+
+    # macOS: Unity Hub のデフォルトインストールパス
+    local mac_hub_base="/Applications/Unity/Hub/Editor"
+    if [ -n "$version" ]; then
+        local mac_path="$mac_hub_base/$version/Unity.app/Contents/MacOS/Unity"
+        if [ -f "$mac_path" ]; then
+            echo "$mac_path"
+            return
+        fi
+    fi
+
+    if [ -d "$mac_hub_base" ]; then
+        local found
+        found=$(find "$mac_hub_base" -maxdepth 3 -name "Unity" -type f 2>/dev/null | sort -rV | head -1)
+        if [ -n "$found" ]; then
+            echo "$found"
+            return
+        fi
+    fi
+
+    # Linux: Unity Hub のデフォルトインストールパス
+    local linux_hub_base="$HOME/Unity/Hub/Editor"
+    if [ -n "$version" ] && [ -f "$linux_hub_base/$version/Editor/Unity" ]; then
+        echo "$linux_hub_base/$version/Editor/Unity"
+        return
+    fi
+
+    if [ -d "$linux_hub_base" ]; then
+        local found
+        found=$(find "$linux_hub_base" -maxdepth 2 -name "Unity" -type f 2>/dev/null | sort -rV | head -1)
+        if [ -n "$found" ]; then
+            echo "$found"
+            return
+        fi
+    fi
+
+    # PATH 上の Unity
+    if command -v Unity &>/dev/null; then
+        command -v Unity
+        return
+    fi
+
+    echo ""
+}
+
+# ===========================================================================
+# メイン処理
+# ===========================================================================
+echo "=== XTerminal WebGL Build ==="
+echo ""
+
+UNITY_BIN="$(find_unity)"
+
+if [ -z "$UNITY_BIN" ]; then
+    echo "エラー: Unity の実行ファイルが見つかりません。"
+    echo ""
+    echo "以下のいずれかの方法で指定してください:"
+    echo ""
+    echo "  1. 環境変数 UNITY_PATH:"
+    echo "       export UNITY_PATH=/path/to/Unity"
+    echo ""
+    echo "  2. 環境変数 UNITY_VERSION (Unity Hub 使用時):"
+    echo "       export UNITY_VERSION=6000.3.2f1"
+    exit 1
+fi
+
+echo "Unity          : $UNITY_BIN"
+echo "プロジェクト   : $PROJECT_PATH"
+echo "出力先         : $BUILD_OUTPUT"
+echo "ログファイル   : $LOG_FILE"
+echo ""
+
+echo "WebGL ビルドを開始しています..."
+echo "（完了まで数分かかる場合があります）"
+echo ""
+
+"$UNITY_BIN" \
+    -quit \
+    -batchmode \
+    -nographics \
+    -projectPath "$PROJECT_PATH" \
+    -executeMethod "$EXECUTE_METHOD" \
+    -buildOutput "$BUILD_OUTPUT" \
+    -logFile "$LOG_FILE"
+
+BUILD_EXIT=$?
+
+if [ $BUILD_EXIT -ne 0 ]; then
+    echo "エラー: WebGL ビルドに失敗しました (exit code: $BUILD_EXIT)"
+    echo "ログファイルを確認してください: $LOG_FILE"
+    exit $BUILD_EXIT
+fi
+
+echo ""
+echo "=== WebGL ビルド完了 ==="
+echo "出力先: $BUILD_OUTPUT"
+echo ""
+echo "ローカルで確認する場合:"
+echo "  python3 -m http.server 8080 -d \"$BUILD_OUTPUT\""
+echo "  ブラウザで http://localhost:8080 を開いてください"
+echo ""
+echo "XServer にデプロイする場合:"
+echo "  ./deploy-webgl.sh"

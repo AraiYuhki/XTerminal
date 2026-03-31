@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Sample/Scenes/XTerminalSample.unity
-    guid: 21c831685183d2c4897037cc41a9685b
+    path: Assets/WebGLSample/Scenes/WebGLSample.unity
+    guid: 4d1737d56ea00420b8b072b6badc7858
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

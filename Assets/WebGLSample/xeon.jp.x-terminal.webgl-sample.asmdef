@@ -1,0 +1,26 @@
+{
+    "name": "xeon.jp.x-terminal.webgl-sample",
+    "rootNamespace": "Xeon.XTerminal.WebGLSample",
+    "references": [
+        "UniTask",
+        "UniTask.Linq",
+        "Unity.TextMeshPro",
+        "jp.xeon.x-terminal.runtime",
+        "xeon.jp.x-terminal.sample"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "",
+            "define": "X_TERMINAL_UNI_TASK_SUPPORT"
+        }
+    ],
+    "noEngineReferences": false
+}

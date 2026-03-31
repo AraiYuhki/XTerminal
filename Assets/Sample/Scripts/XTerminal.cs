@@ -40,6 +40,11 @@ namespace Xeon.XTerminal.Sample
         [SerializeField]
         private ConfirmDialog confirmDialog;
 
+        /// <summary>
+        /// Terminalインスタンスへの参照
+        /// </summary>
+        public Terminal Terminal => terminal;
+
         private Terminal terminal;
         private FlyweightScrollViewController<OutputData, OutputItem> scrollViewController;
         private CircularBuffer<OutputData> buffer = new(BufferSize);
