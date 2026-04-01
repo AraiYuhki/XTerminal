@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Xeon.XTerminal
 {
@@ -51,7 +53,33 @@ namespace Xeon.XTerminal
             RegisterType(map, typeof(Animator));
             RegisterType(map, typeof(Animation));
             RegisterType(map, typeof(Canvas));
+            RegisterType(map, typeof(CanvasRenderer));
             RegisterType(map, typeof(RectTransform));
+
+            // UI
+            RegisterType(map, typeof(CanvasScaler));
+            RegisterType(map, typeof(GraphicRaycaster));
+            RegisterType(map, typeof(Image));
+            RegisterType(map, typeof(RawImage));
+            RegisterType(map, typeof(Text));
+            RegisterType(map, typeof(Button));
+            RegisterType(map, typeof(Toggle));
+            RegisterType(map, typeof(Slider));
+            RegisterType(map, typeof(Scrollbar));
+            RegisterType(map, typeof(Dropdown));
+            RegisterType(map, typeof(InputField));
+            RegisterType(map, typeof(ScrollRect));
+            RegisterType(map, typeof(Mask));
+            RegisterType(map, typeof(RectMask2D));
+            RegisterType(map, typeof(HorizontalLayoutGroup));
+            RegisterType(map, typeof(VerticalLayoutGroup));
+            RegisterType(map, typeof(GridLayoutGroup));
+            RegisterType(map, typeof(ContentSizeFitter));
+            RegisterType(map, typeof(AspectRatioFitter));
+
+            // EventSystem
+            RegisterType(map, typeof(EventSystem));
+            RegisterType(map, typeof(StandaloneInputModule));
             return map;
         }
 
@@ -144,40 +172,15 @@ namespace Xeon.XTerminal
 
         /// <summary>
         /// 一般的なコンポーネント型名のリストを取得します（補完用）
+        /// WellKnownComponentTypesと同期しており、補完で表示される型は確実に解決可能
         /// </summary>
         public static string[] GetCommonComponentNames()
         {
-            return new[]
-            {
-                // Physics
-                "Rigidbody", "Rigidbody2D",
-                "BoxCollider", "SphereCollider", "CapsuleCollider", "MeshCollider",
-                "BoxCollider2D", "CircleCollider2D", "PolygonCollider2D",
-                "CharacterController",
-
-                // Audio
-                "AudioSource", "AudioListener",
-
-                // Rendering
-                "Camera", "Light",
-                "MeshFilter", "MeshRenderer", "SkinnedMeshRenderer",
-                "SpriteRenderer", "LineRenderer", "TrailRenderer",
-                "ParticleSystem",
-
-                // Animation
-                "Animator", "Animation",
-
-                // UI
-                "Canvas", "CanvasScaler", "GraphicRaycaster",
-                "Image", "RawImage", "Text",
-                "Button", "Toggle", "Slider", "Scrollbar", "Dropdown", "InputField",
-                "ScrollRect", "Mask", "RectMask2D",
-                "LayoutGroup", "HorizontalLayoutGroup", "VerticalLayoutGroup", "GridLayoutGroup",
-                "ContentSizeFitter", "AspectRatioFitter",
-
-                // Misc
-                "EventSystem", "StandaloneInputModule"
-            };
+            return WellKnownComponentTypes
+                .Where(kv => !kv.Key.Contains("."))
+                .Select(kv => kv.Key)
+                .OrderBy(name => name)
+                .ToArray();
         }
 
         /// <summary>
