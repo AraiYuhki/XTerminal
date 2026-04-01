@@ -1,0 +1,17 @@
+{
+    "name": "xeon.jp.x-terminal.hacking-game",
+    "rootNamespace": "Xeon.XTerminal.HackingGame",
+    "references": [
+        "jp.xeon.x-terminal.runtime",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
