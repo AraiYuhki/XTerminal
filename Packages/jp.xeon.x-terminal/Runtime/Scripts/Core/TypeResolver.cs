@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Xeon.XTerminal
 {
@@ -18,6 +21,74 @@ namespace Xeon.XTerminal
             "TMPro"
         };
 
+        // IL2CPP環境（WebGL等）ではリフレクションによる型解決が失敗するため、
+        // よく使われるコンポーネント型を直接マッピングして確実に解決できるようにする
+        private static readonly Dictionary<string, Type> WellKnownComponentTypes =
+            BuildWellKnownComponentTypes();
+
+        private static Dictionary<string, Type> BuildWellKnownComponentTypes()
+        {
+            var map = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+            RegisterType(map, typeof(Rigidbody));
+            RegisterType(map, typeof(Rigidbody2D));
+            RegisterType(map, typeof(BoxCollider));
+            RegisterType(map, typeof(SphereCollider));
+            RegisterType(map, typeof(CapsuleCollider));
+            RegisterType(map, typeof(MeshCollider));
+            RegisterType(map, typeof(BoxCollider2D));
+            RegisterType(map, typeof(CircleCollider2D));
+            RegisterType(map, typeof(PolygonCollider2D));
+            RegisterType(map, typeof(CharacterController));
+            RegisterType(map, typeof(AudioSource));
+            RegisterType(map, typeof(AudioListener));
+            RegisterType(map, typeof(Camera));
+            RegisterType(map, typeof(Light));
+            RegisterType(map, typeof(MeshFilter));
+            RegisterType(map, typeof(MeshRenderer));
+            RegisterType(map, typeof(SkinnedMeshRenderer));
+            RegisterType(map, typeof(SpriteRenderer));
+            RegisterType(map, typeof(LineRenderer));
+            RegisterType(map, typeof(TrailRenderer));
+            RegisterType(map, typeof(ParticleSystem));
+            RegisterType(map, typeof(Animator));
+            RegisterType(map, typeof(Animation));
+            RegisterType(map, typeof(Canvas));
+            RegisterType(map, typeof(CanvasRenderer));
+            RegisterType(map, typeof(RectTransform));
+
+            // UI
+            RegisterType(map, typeof(CanvasScaler));
+            RegisterType(map, typeof(GraphicRaycaster));
+            RegisterType(map, typeof(Image));
+            RegisterType(map, typeof(RawImage));
+            RegisterType(map, typeof(Text));
+            RegisterType(map, typeof(Button));
+            RegisterType(map, typeof(Toggle));
+            RegisterType(map, typeof(Slider));
+            RegisterType(map, typeof(Scrollbar));
+            RegisterType(map, typeof(Dropdown));
+            RegisterType(map, typeof(InputField));
+            RegisterType(map, typeof(ScrollRect));
+            RegisterType(map, typeof(Mask));
+            RegisterType(map, typeof(RectMask2D));
+            RegisterType(map, typeof(HorizontalLayoutGroup));
+            RegisterType(map, typeof(VerticalLayoutGroup));
+            RegisterType(map, typeof(GridLayoutGroup));
+            RegisterType(map, typeof(ContentSizeFitter));
+            RegisterType(map, typeof(AspectRatioFitter));
+
+            // EventSystem
+            RegisterType(map, typeof(EventSystem));
+            RegisterType(map, typeof(StandaloneInputModule));
+            return map;
+        }
+
+        private static void RegisterType(Dictionary<string, Type> map, Type type)
+        {
+            map[type.Name] = type;
+            map[type.FullName] = type;
+        }
+
         /// <summary>
         /// 型名からComponent型を解決します
         /// </summary>
@@ -29,24 +100,28 @@ namespace Xeon.XTerminal
             if (string.IsNullOrEmpty(typeName))
                 return null;
 
+            // 直接マッピングから検索（IL2CPP環境でも確実に動作する）
+            if (WellKnownComponentTypes.TryGetValue(typeName, out var wellKnownType))
+                return wellKnownType;
+
             // フルネームで指定された場合
             if (typeName.Contains("."))
-            {
                 return FindTypeInAllAssemblies(typeName);
-            }
 
             // カスタム名前空間が指定された場合
             if (!string.IsNullOrEmpty(customNamespace))
             {
                 var type = FindTypeInAllAssemblies($"{customNamespace}.{typeName}");
-                if (type != null) return type;
+                if (type != null)
+                    return type;
             }
 
             // デフォルト名前空間を検索
             foreach (var ns in DefaultNamespaces)
             {
                 var type = FindTypeInAllAssemblies($"{ns}.{typeName}");
-                if (type != null) return type;
+                if (type != null)
+                    return type;
             }
 
             // 名前空間なしで全アセンブリ検索（名前のみマッチ）
@@ -57,16 +132,15 @@ namespace Xeon.XTerminal
                     var type = assembly.GetTypes()
                         .FirstOrDefault(t => t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase) &&
                                        typeof(Component).IsAssignableFrom(t));
-                    if (type != null) return type;
+                    if (type != null)
+                        return type;
                 }
                 catch (ReflectionTypeLoadException)
                 {
-                    // 一部のアセンブリはロードに失敗する可能性
                     continue;
                 }
                 catch
                 {
-                    // その他のエラーも無視
                     continue;
                 }
             }
@@ -98,40 +172,15 @@ namespace Xeon.XTerminal
 
         /// <summary>
         /// 一般的なコンポーネント型名のリストを取得します（補完用）
+        /// WellKnownComponentTypesと同期しており、補完で表示される型は確実に解決可能
         /// </summary>
         public static string[] GetCommonComponentNames()
         {
-            return new[]
-            {
-                // Physics
-                "Rigidbody", "Rigidbody2D",
-                "BoxCollider", "SphereCollider", "CapsuleCollider", "MeshCollider",
-                "BoxCollider2D", "CircleCollider2D", "PolygonCollider2D",
-                "CharacterController",
-
-                // Audio
-                "AudioSource", "AudioListener",
-
-                // Rendering
-                "Camera", "Light",
-                "MeshFilter", "MeshRenderer", "SkinnedMeshRenderer",
-                "SpriteRenderer", "LineRenderer", "TrailRenderer",
-                "ParticleSystem",
-
-                // Animation
-                "Animator", "Animation",
-
-                // UI
-                "Canvas", "CanvasScaler", "GraphicRaycaster",
-                "Image", "RawImage", "Text",
-                "Button", "Toggle", "Slider", "Scrollbar", "Dropdown", "InputField",
-                "ScrollRect", "Mask", "RectMask2D",
-                "LayoutGroup", "HorizontalLayoutGroup", "VerticalLayoutGroup", "GridLayoutGroup",
-                "ContentSizeFitter", "AspectRatioFitter",
-
-                // Misc
-                "EventSystem", "StandaloneInputModule"
-            };
+            return WellKnownComponentTypes
+                .Where(kv => !kv.Key.Contains("."))
+                .Select(kv => kv.Key)
+                .OrderBy(name => name)
+                .ToArray();
         }
 
         /// <summary>

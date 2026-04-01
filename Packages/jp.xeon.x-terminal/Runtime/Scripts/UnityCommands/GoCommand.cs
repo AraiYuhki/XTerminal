@@ -344,10 +344,41 @@ namespace Xeon.XTerminal.UnityCommands
 
                 var go = GameObject.CreatePrimitive(primitiveType);
                 go.name = name;
+                AssignDefaultMaterial(go);
                 return go;
             }
 
             return new GameObject(name);
+        }
+
+        // RenderPipelineに適合したデフォルトマテリアルを設定する
+        // URP環境ではCreatePrimitiveのデフォルトマテリアル(Standard shader)が正しく描画されない
+        private static void AssignDefaultMaterial(GameObject go)
+        {
+            var renderer = go.GetComponent<Renderer>();
+            if (renderer == null)
+                return;
+
+            var material = CreateRenderPipelineCompatibleMaterial();
+            if (material == null)
+                return;
+
+            renderer.material = material;
+        }
+
+        private static Material CreateRenderPipelineCompatibleMaterial()
+        {
+            // URP Lit shaderを優先的に使用
+            var shader = Shader.Find("Universal Render Pipeline/Lit");
+
+            // 見つからない場合はStandard shaderにフォールバック
+            if (shader == null)
+                shader = Shader.Find("Standard");
+
+            if (shader == null)
+                return null;
+
+            return new Material(shader);
         }
 
         private async Task<ExitCode> SetParentForNewObject(CommandContext context, GameObject go, CancellationToken ct)
