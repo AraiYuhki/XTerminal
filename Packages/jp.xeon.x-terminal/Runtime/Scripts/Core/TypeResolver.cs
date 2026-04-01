@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -18,6 +19,48 @@ namespace Xeon.XTerminal
             "TMPro"
         };
 
+        // IL2CPP環境（WebGL等）ではリフレクションによる型解決が失敗するため、
+        // よく使われるコンポーネント型を直接マッピングして確実に解決できるようにする
+        private static readonly Dictionary<string, Type> WellKnownComponentTypes =
+            BuildWellKnownComponentTypes();
+
+        private static Dictionary<string, Type> BuildWellKnownComponentTypes()
+        {
+            var map = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+            RegisterType(map, typeof(Rigidbody));
+            RegisterType(map, typeof(Rigidbody2D));
+            RegisterType(map, typeof(BoxCollider));
+            RegisterType(map, typeof(SphereCollider));
+            RegisterType(map, typeof(CapsuleCollider));
+            RegisterType(map, typeof(MeshCollider));
+            RegisterType(map, typeof(BoxCollider2D));
+            RegisterType(map, typeof(CircleCollider2D));
+            RegisterType(map, typeof(PolygonCollider2D));
+            RegisterType(map, typeof(CharacterController));
+            RegisterType(map, typeof(AudioSource));
+            RegisterType(map, typeof(AudioListener));
+            RegisterType(map, typeof(Camera));
+            RegisterType(map, typeof(Light));
+            RegisterType(map, typeof(MeshFilter));
+            RegisterType(map, typeof(MeshRenderer));
+            RegisterType(map, typeof(SkinnedMeshRenderer));
+            RegisterType(map, typeof(SpriteRenderer));
+            RegisterType(map, typeof(LineRenderer));
+            RegisterType(map, typeof(TrailRenderer));
+            RegisterType(map, typeof(ParticleSystem));
+            RegisterType(map, typeof(Animator));
+            RegisterType(map, typeof(Animation));
+            RegisterType(map, typeof(Canvas));
+            RegisterType(map, typeof(RectTransform));
+            return map;
+        }
+
+        private static void RegisterType(Dictionary<string, Type> map, Type type)
+        {
+            map[type.Name] = type;
+            map[type.FullName] = type;
+        }
+
         /// <summary>
         /// 型名からComponent型を解決します
         /// </summary>
@@ -29,24 +72,28 @@ namespace Xeon.XTerminal
             if (string.IsNullOrEmpty(typeName))
                 return null;
 
+            // 直接マッピングから検索（IL2CPP環境でも確実に動作する）
+            if (WellKnownComponentTypes.TryGetValue(typeName, out var wellKnownType))
+                return wellKnownType;
+
             // フルネームで指定された場合
             if (typeName.Contains("."))
-            {
                 return FindTypeInAllAssemblies(typeName);
-            }
 
             // カスタム名前空間が指定された場合
             if (!string.IsNullOrEmpty(customNamespace))
             {
                 var type = FindTypeInAllAssemblies($"{customNamespace}.{typeName}");
-                if (type != null) return type;
+                if (type != null)
+                    return type;
             }
 
             // デフォルト名前空間を検索
             foreach (var ns in DefaultNamespaces)
             {
                 var type = FindTypeInAllAssemblies($"{ns}.{typeName}");
-                if (type != null) return type;
+                if (type != null)
+                    return type;
             }
 
             // 名前空間なしで全アセンブリ検索（名前のみマッチ）
@@ -57,16 +104,15 @@ namespace Xeon.XTerminal
                     var type = assembly.GetTypes()
                         .FirstOrDefault(t => t.Name.Equals(typeName, StringComparison.OrdinalIgnoreCase) &&
                                        typeof(Component).IsAssignableFrom(t));
-                    if (type != null) return type;
+                    if (type != null)
+                        return type;
                 }
                 catch (ReflectionTypeLoadException)
                 {
-                    // 一部のアセンブリはロードに失敗する可能性
                     continue;
                 }
                 catch
                 {
-                    // その他のエラーも無視
                     continue;
                 }
             }
