@@ -11,6 +11,7 @@
 #   ./deploy-webgl.sh --dry-run         # 実際にはアップロードしない（確認用）
 #
 # サーバー設定（環境変数 or ~/.xterminal-webgl-deploy.conf で指定）:
+# サーバー設定（環境変数 or scripts/.xterminal-webgl-deploy.conf で指定）:
 #   WEBGL_SERVER_HOST   - サーバーホスト名 (例: example.xsrv.jp)
 #   WEBGL_SERVER_USER   - SSHユーザー名 (例: example)
 #   WEBGL_SERVER_PATH   - デプロイ先ディレクトリ (例: /home/example/example.xsrv.jp/public_html/xterminal)
@@ -81,7 +82,7 @@ check_build_dir() {
 # サーバー設定の読み込み
 # ===========================================================================
 load_server_config() {
-    local conf_file="$HOME/.xterminal-webgl-deploy.conf"
+    local conf_file="$SCRIPT_DIR/.xterminal-webgl-deploy.conf"
     if [ -f "$conf_file" ]; then
         echo "サーバー設定を読み込んでいます: $conf_file"
         # shellcheck source=/dev/null
@@ -172,7 +173,17 @@ HTACCESS_EOF
 }
 
 # ===========================================================================
-# rsync でサーバーにデプロイ
+# SSH オプションの構築
+# ===========================================================================
+build_ssh_opts() {
+    SSH_OPTS=(-p "${WEBGL_SERVER_PORT}" -o StrictHostKeyChecking=no)
+    if [ -n "${WEBGL_SERVER_KEY}" ]; then
+        SSH_OPTS+=(-i "${WEBGL_SERVER_KEY}")
+    fi
+}
+
+# ===========================================================================
+# scp でサーバーにデプロイ
 # ===========================================================================
 deploy_to_server() {
     echo "XServer にデプロイしています..."
@@ -180,44 +191,41 @@ deploy_to_server() {
     echo "  ポート: ${WEBGL_SERVER_PORT}"
     echo ""
 
-    local rsync_opts=(-avz --delete --progress --checksum)
-    local ssh_opts="-p ${WEBGL_SERVER_PORT} -o StrictHostKeyChecking=no"
-
-    if [ -n "${WEBGL_SERVER_KEY}" ]; then
-        ssh_opts="$ssh_opts -i ${WEBGL_SERVER_KEY}"
-    fi
-
-    rsync_opts+=(-e "ssh $ssh_opts")
+    build_ssh_opts
 
     if $DRY_RUN; then
-        rsync_opts+=(--dry-run)
         echo "[DRY RUN] 以下のファイルがアップロードされます:"
+        find "$BUILD_DIR" -type f | while read -r f; do
+            echo "  ${f#"$BUILD_DIR/"}"
+        done
         echo ""
+        echo "=== DRY RUN 完了 ==="
+        echo "実際にデプロイするには --dry-run を外して実行してください。"
+        return
     fi
 
     # リモートディレクトリを作成
-    if ! $DRY_RUN; then
-        ssh -p "${WEBGL_SERVER_PORT}" \
-            ${WEBGL_SERVER_KEY:+-i "${WEBGL_SERVER_KEY}"} \
-            -o StrictHostKeyChecking=no \
-            "${WEBGL_SERVER_USER}@${WEBGL_SERVER_HOST}" \
-            "mkdir -p '${WEBGL_SERVER_PATH}'"
-    fi
+    echo "リモートディレクトリを作成しています..."
+    ssh "${SSH_OPTS[@]}" \
+        "${WEBGL_SERVER_USER}@${WEBGL_SERVER_HOST}" \
+        "mkdir -p '${WEBGL_SERVER_PATH}/Build'"
 
-    # rsync でアップロード（trailing slash で中身のみ転送）
-    rsync "${rsync_opts[@]}" \
-        "$BUILD_DIR/" \
+    # scp でアップロード（-r で再帰的に転送）
+    echo "ファイルをアップロードしています..."
+    scp -r "${SSH_OPTS[@]}" \
+        "$BUILD_DIR/"* \
         "${WEBGL_SERVER_USER}@${WEBGL_SERVER_HOST}:${WEBGL_SERVER_PATH}/"
 
-    echo ""
-
-    if $DRY_RUN; then
-        echo "=== DRY RUN 完了 ==="
-        echo "実際にデプロイするには --dry-run を外して実行してください。"
-    else
-        echo "=== XServer へのデプロイ完了 ==="
-        echo "URL: https://${WEBGL_SERVER_HOST}${WEBGL_SERVER_PATH#*public_html}"
+    # .htaccess は隠しファイルなので個別に転送
+    if [ -f "$BUILD_DIR/.htaccess" ]; then
+        scp "${SSH_OPTS[@]}" \
+            "$BUILD_DIR/.htaccess" \
+            "${WEBGL_SERVER_USER}@${WEBGL_SERVER_HOST}:${WEBGL_SERVER_PATH}/"
     fi
+
+    echo ""
+    echo "=== XServer へのデプロイ完了 ==="
+    echo "URL: https://${WEBGL_SERVER_HOST}${WEBGL_SERVER_PATH#*public_html}"
 }
 
 # ===========================================================================

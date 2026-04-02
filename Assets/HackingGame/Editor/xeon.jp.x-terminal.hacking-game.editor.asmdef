@@ -1,12 +1,16 @@
 {
-    "name": "xeon.jp.x-terminal.hacking-game",
-    "rootNamespace": "Xeon.XTerminal.HackingGame",
+    "name": "xeon.jp.x-terminal.hacking-game.editor",
+    "rootNamespace": "Xeon.XTerminal.HackingGame.Editor",
     "references": [
         "jp.xeon.x-terminal.runtime",
         "Unity.TextMeshPro",
-        "xeon.jp.x-terminal.sample"
+        "Unity.InputSystem",
+        "xeon.jp.x-terminal.sample",
+        "xeon.jp.x-terminal.hacking-game"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

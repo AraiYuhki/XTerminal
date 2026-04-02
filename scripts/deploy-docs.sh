@@ -9,7 +9,7 @@
 #   ./deploy-docs.sh           # GitHub Pages にデプロイ
 #   ./deploy-docs.sh --server  # レンタルサーバーにデプロイ
 #
-# レンタルサーバー設定（環境変数 or ~/.xterminal-deploy.conf で指定）:
+# レンタルサーバー設定（環境変数 or scripts/.xterminal-deploy.conf で指定）:
 #   DEPLOY_SERVER_HOST   - サーバーホスト名 (例: example.com)
 #   DEPLOY_SERVER_USER   - SSHユーザー名
 #   DEPLOY_SERVER_PATH   - デプロイ先ディレクトリ (例: /var/www/html/docs)
@@ -55,7 +55,7 @@ check_site_dir() {
 # レンタルサーバー設定の読み込み
 # ===========================================================================
 load_server_config() {
-    local conf_file="$HOME/.xterminal-deploy.conf"
+    local conf_file="$SCRIPT_DIR/.xterminal-deploy.conf"
     if [ -f "$conf_file" ]; then
         echo "サーバー設定を読み込んでいます: $conf_file"
         # shellcheck source=/dev/null
@@ -88,7 +88,7 @@ load_server_config() {
 }
 
 # ===========================================================================
-# rsync でレンタルサーバーにデプロイ
+# scp でレンタルサーバーにデプロイ
 # ===========================================================================
 deploy_to_server() {
     echo "レンタルサーバーにデプロイしています..."
@@ -96,24 +96,20 @@ deploy_to_server() {
     echo "  ポート: ${DEPLOY_SERVER_PORT}"
     echo ""
 
-    local rsync_opts=(-avz --delete --progress)
-    local ssh_opts="-p ${DEPLOY_SERVER_PORT} -o StrictHostKeyChecking=no"
-
+    local ssh_opts=(-p "${DEPLOY_SERVER_PORT}" -o StrictHostKeyChecking=no)
     if [ -n "${DEPLOY_SERVER_KEY}" ]; then
-        ssh_opts="$ssh_opts -i ${DEPLOY_SERVER_KEY}"
+        ssh_opts+=(-i "${DEPLOY_SERVER_KEY}")
     fi
 
-    rsync_opts+=(-e "ssh $ssh_opts")
-
     # リモートディレクトリを作成
-    ssh -p "${DEPLOY_SERVER_PORT}" \
-        ${DEPLOY_SERVER_KEY:+-i "${DEPLOY_SERVER_KEY}"} \
+    ssh "${ssh_opts[@]}" \
         "${DEPLOY_SERVER_USER}@${DEPLOY_SERVER_HOST}" \
         "mkdir -p '${DEPLOY_SERVER_PATH}'"
 
-    # rsync でアップロード（trailing slash で中身のみ転送）
-    rsync "${rsync_opts[@]}" \
-        "$SITE_DIR/" \
+    # scp でアップロード
+    echo "ファイルをアップロードしています..."
+    scp -r "${ssh_opts[@]}" \
+        "$SITE_DIR/"* \
         "${DEPLOY_SERVER_USER}@${DEPLOY_SERVER_HOST}:${DEPLOY_SERVER_PATH}/"
 
     echo ""

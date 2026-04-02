@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 namespace Xeon.XTerminal.HackingGame
@@ -18,7 +19,7 @@ namespace Xeon.XTerminal.HackingGame
     {
         [SerializeField] private Sample.XTerminal terminal;
 
-        private void Start()
+        private async void Start()
         {
             if (terminal == null)
             {
@@ -32,6 +33,7 @@ namespace Xeon.XTerminal.HackingGame
 
             InitializeGame();
             RegisterCommands();
+            await PlayIntro();
         }
 
         private void InitializeGame()
@@ -58,6 +60,18 @@ namespace Xeon.XTerminal.HackingGame
             registry.RegisterCommand<VirtualGrepCommand>();
 
             Debug.Log("[HackingGameBootstrap] Commands registered.");
+        }
+
+        private async Awaitable PlayIntro()
+        {
+            try
+            {
+                await IntroSequence.PlayAsync(terminal.WriteOutputLine, destroyCancellationToken);
+            }
+            catch (System.OperationCanceledException)
+            {
+                // シーン破棄時のキャンセルは無視
+            }
         }
     }
 }

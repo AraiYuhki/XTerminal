@@ -77,7 +77,7 @@ namespace Xeon.XTerminal.HackingGame
                 return Enumerable.Empty<string>();
 
             // 引数が1つ以上あればファイル名補完、なければ空
-            if (context.CurrentTokenIndex >= 1)
+            if (context.TokenIndex >= 1)
                 return state.FileSystem.ListFiles(state.ConnectedNode.IpAddress);
 
             return Enumerable.Empty<string>();

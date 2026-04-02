@@ -5,35 +5,62 @@
 # Unity Editor を使用して WebGL ビルドを実行します。
 #
 # Usage:
-#   ./build-webgl.sh                    # デフォルト出力先にビルド
-#   ./build-webgl.sh -o /path/to/output # 出力先を指定
+#   ./build-webgl.sh sample         # WebGLサンプルをビルド
+#   ./build-webgl.sh hacking        # ハッキングゲームをビルド
+#   ./build-webgl.sh all            # すべてビルド
+#   ./build-webgl.sh sample -o /out # 出力先を指定
 #
 # Unity の実行ファイルパスを環境変数で指定できます:
-#   UNITY_PATH=/path/to/Unity ./build-webgl.sh
-#
-# Unity Hub 経由でインストールされている場合、バージョンを指定:
-#   UNITY_VERSION=6000.3.2f1 ./build-webgl.sh
+#   UNITY_PATH=/path/to/Unity ./build-webgl.sh sample
+#   UNITY_VERSION=6000.3.2f1 ./build-webgl.sh sample
 # ===========================================================================
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_PATH="$(cd "$SCRIPT_DIR/.." && pwd)"
-BUILD_OUTPUT="$PROJECT_PATH/WebGLBuild"
-EXECUTE_METHOD="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildFromCommandLine"
 LOG_FILE="$PROJECT_PATH/webgl-build.log"
+
+# ビルドターゲット → executeMethod のマッピング
+declare -A TARGETS=(
+    ["sample"]="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildSampleFromCLI"
+    ["hacking"]="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildHackingGameFromCLI"
+    ["all"]="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildAllFromCLI"
+)
+
+# ===========================================================================
+# 使い方の表示
+# ===========================================================================
+show_usage() {
+    echo "使用方法: $0 <target> [-o output_path]"
+    echo ""
+    echo "ターゲット:"
+    echo "  sample    WebGLサンプルをビルド   (→ WebGLBuild/Sample)"
+    echo "  hacking   ハッキングゲームをビルド (→ WebGLBuild/HackingGame)"
+    echo "  all       すべてビルド"
+    echo ""
+    echo "オプション:"
+    echo "  -o PATH   ビルド出力先ディレクトリ (デフォルトを上書き)"
+    echo "  -h        このヘルプを表示"
+}
 
 # ===========================================================================
 # 引数パース
 # ===========================================================================
+if [ $# -eq 0 ]; then
+    show_usage
+    exit 1
+fi
+
+TARGET="$1"
+shift
+
+BUILD_OUTPUT=""
+
 while getopts "o:h" opt; do
     case "$opt" in
         o) BUILD_OUTPUT="$OPTARG" ;;
         h)
-            echo "使用方法: $0 [-o output_path]"
-            echo ""
-            echo "オプション:"
-            echo "  -o PATH  ビルド出力先ディレクトリ (デフォルト: $BUILD_OUTPUT)"
-            echo "  -h       このヘルプを表示"
+            show_usage
             exit 0
             ;;
         *)
@@ -42,6 +69,14 @@ while getopts "o:h" opt; do
             ;;
     esac
 done
+
+EXECUTE_METHOD="${TARGETS[$TARGET]:-}"
+if [ -z "$EXECUTE_METHOD" ]; then
+    echo "エラー: 不明なターゲット '$TARGET'"
+    echo ""
+    show_usage
+    exit 1
+fi
 
 # ===========================================================================
 # Unity 実行ファイルの検索
@@ -89,7 +124,6 @@ find_unity() {
         fi
     fi
 
-    # PATH 上の Unity
     if command -v Unity &>/dev/null; then
         command -v Unity
         return
@@ -110,33 +144,37 @@ if [ -z "$UNITY_BIN" ]; then
     echo "エラー: Unity の実行ファイルが見つかりません。"
     echo ""
     echo "以下のいずれかの方法で指定してください:"
-    echo ""
-    echo "  1. 環境変数 UNITY_PATH:"
-    echo "       export UNITY_PATH=/path/to/Unity"
-    echo ""
-    echo "  2. 環境変数 UNITY_VERSION (Unity Hub 使用時):"
-    echo "       export UNITY_VERSION=6000.3.2f1"
+    echo "  export UNITY_PATH=/path/to/Unity"
+    echo "  export UNITY_VERSION=6000.3.2f1"
     exit 1
 fi
 
 echo "Unity          : $UNITY_BIN"
 echo "プロジェクト   : $PROJECT_PATH"
-echo "出力先         : $BUILD_OUTPUT"
+echo "ターゲット     : $TARGET"
 echo "ログファイル   : $LOG_FILE"
 echo ""
 
+BUILD_ARGS=(
+    -quit
+    -batchmode
+    -nographics
+    -projectPath "$PROJECT_PATH"
+    -executeMethod "$EXECUTE_METHOD"
+    -logFile "$LOG_FILE"
+)
+
+if [ -n "$BUILD_OUTPUT" ]; then
+    echo "出力先         : $BUILD_OUTPUT"
+    BUILD_ARGS+=(-buildOutput "$BUILD_OUTPUT")
+fi
+
+echo ""
 echo "WebGL ビルドを開始しています..."
 echo "（完了まで数分かかる場合があります）"
 echo ""
 
-"$UNITY_BIN" \
-    -quit \
-    -batchmode \
-    -nographics \
-    -projectPath "$PROJECT_PATH" \
-    -executeMethod "$EXECUTE_METHOD" \
-    -buildOutput "$BUILD_OUTPUT" \
-    -logFile "$LOG_FILE"
+"$UNITY_BIN" "${BUILD_ARGS[@]}"
 
 BUILD_EXIT=$?
 
@@ -148,11 +186,10 @@ fi
 
 echo ""
 echo "=== WebGL ビルド完了 ==="
-echo "出力先: $BUILD_OUTPUT"
 echo ""
 echo "ローカルで確認する場合:"
-echo "  python3 -m http.server 8080 -d \"$BUILD_OUTPUT\""
+echo "  python3 -m http.server 8080 -d WebGLBuild/<target>"
 echo "  ブラウザで http://localhost:8080 を開いてください"
 echo ""
 echo "XServer にデプロイする場合:"
-echo "  ./deploy-webgl.sh"
+echo "  ./deploy-webgl.sh -b WebGLBuild/<target>"

@@ -1,110 +1,114 @@
 using System.IO;
-using System.Linq;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 
 namespace Xeon.XTerminal.WebGLSample.Editor
 {
     /// <summary>
     /// WebGLビルド用のEditorツール
-    /// メニューからWebGLビルドを実行できる
+    /// ビルドターゲットごとにシーンと出力先を切り替えてビルドする
     /// </summary>
     public static class WebGLBuildTool
     {
-        private const string DefaultOutputDir = "WebGLBuild";
         private const string WebGLTemplateName = "XTerminal";
 
-        [MenuItem("Tools/XTerminal/Build WebGL", priority = 200)]
-        public static void BuildWebGL()
+        private static readonly BuildTarget[] targets =
         {
-            var outputPath = EditorUtility.SaveFolderPanel(
-                "WebGL Build Output",
-                Path.GetDirectoryName(Application.dataPath),
-                DefaultOutputDir);
+            new("WebGL Sample", "Assets/WebGLSample/Scenes/WebGLSample.unity", "WebGLBuild/Sample"),
+            new("Hacking Game", "Assets/HackingGame/Scenes/HackingGame.unity", "WebGLBuild/HackingGame"),
+        };
 
-            if (string.IsNullOrEmpty(outputPath))
-                return;
+        // -- Menu Items --
 
-            ExecuteBuild(outputPath);
+        [MenuItem("Tools/XTerminal/Build WebGL/Sample", priority = 200)]
+        public static void BuildSample() => ExecuteBuild(targets[0]);
+
+        [MenuItem("Tools/XTerminal/Build WebGL/Hacking Game", priority = 201)]
+        public static void BuildHackingGame() => ExecuteBuild(targets[1]);
+
+        [MenuItem("Tools/XTerminal/Build WebGL/All", priority = 210)]
+        public static void BuildAll()
+        {
+            foreach (var target in targets)
+                ExecuteBuild(target);
         }
 
-        [MenuItem("Tools/XTerminal/Build WebGL (Default Path)", priority = 201)]
-        public static void BuildWebGLDefault()
-        {
-            var outputPath = Path.Combine(Path.GetDirectoryName(Application.dataPath), DefaultOutputDir);
-            ExecuteBuild(outputPath);
-        }
+        // -- CLI Entry Points --
 
         /// <summary>
-        /// コマンドラインからのビルド実行用エントリポイント
-        /// -executeMethod Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildFromCommandLine
+        /// -executeMethod Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildSampleFromCLI
         /// </summary>
-        public static void BuildFromCommandLine()
-        {
-            var args = System.Environment.GetCommandLineArgs();
-            var outputPath = GetCommandLineArg(args, "-buildOutput")
-                ?? Path.Combine(Path.GetDirectoryName(Application.dataPath), DefaultOutputDir);
+        public static void BuildSampleFromCLI() => BuildFromCommandLine(targets[0]);
 
-            ExecuteBuild(outputPath);
+        /// <summary>
+        /// -executeMethod Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildHackingGameFromCLI
+        /// </summary>
+        public static void BuildHackingGameFromCLI() => BuildFromCommandLine(targets[1]);
+
+        /// <summary>
+        /// -executeMethod Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildAllFromCLI
+        /// </summary>
+        public static void BuildAllFromCLI()
+        {
+            foreach (var target in targets)
+                BuildFromCommandLine(target);
         }
 
-        private static void ExecuteBuild(string outputPath)
+        private static void BuildFromCommandLine(BuildTarget target)
         {
-            Debug.Log($"[WebGLBuildTool] Build output: {outputPath}");
+            var args = System.Environment.GetCommandLineArgs();
+            var outputOverride = GetCommandLineArg(args, "-buildOutput");
+            var outputPath = outputOverride ?? GetAbsoluteOutputPath(target.DefaultOutputDir);
+            ExecuteBuild(target, outputPath);
+        }
 
-            ConfigureWebGLSettings();
+        private static void ExecuteBuild(BuildTarget target)
+        {
+            ExecuteBuild(target, GetAbsoluteOutputPath(target.DefaultOutputDir));
+        }
 
-            var scenes = GetBuildScenes();
-            if (scenes.Length == 0)
+        private static void ExecuteBuild(BuildTarget target, string outputPath)
+        {
+            Debug.Log($"[WebGLBuildTool] === Building: {target.Name} ===");
+            Debug.Log($"[WebGLBuildTool] Scene:  {target.ScenePath}");
+            Debug.Log($"[WebGLBuildTool] Output: {outputPath}");
+
+            if (!File.Exists(target.ScenePath))
             {
-                Debug.LogError("[WebGLBuildTool] No scenes found in Build Settings.");
+                Debug.LogError($"[WebGLBuildTool] Scene not found: {target.ScenePath}");
                 return;
             }
 
-            Debug.Log($"[WebGLBuildTool] Building {scenes.Length} scene(s)...");
-            foreach (var scene in scenes)
-                Debug.Log($"  - {scene}");
+            ConfigureWebGLSettings();
 
             var options = new BuildPlayerOptions
             {
-                scenes = scenes,
+                scenes = new[] { target.ScenePath },
                 locationPathName = outputPath,
-                target = BuildTarget.WebGL,
+                target = UnityEditor.BuildTarget.WebGL,
                 options = BuildOptions.None
             };
 
             var report = BuildPipeline.BuildPlayer(options);
 
-            if (report.summary.result == UnityEditor.Build.Reporting.BuildResult.Succeeded)
-                Debug.Log($"[WebGLBuildTool] Build succeeded: {outputPath}");
+            if (report.summary.result == BuildResult.Succeeded)
+                Debug.Log($"[WebGLBuildTool] Build succeeded: {target.Name} → {outputPath}");
             else
-                Debug.LogError($"[WebGLBuildTool] Build failed: {report.summary.result}");
+                Debug.LogError($"[WebGLBuildTool] Build failed: {target.Name} ({report.summary.result})");
         }
 
         private static void ConfigureWebGLSettings()
         {
-            // WebGLテンプレートの設定
-            var templatePath = $"PROJECT:{WebGLTemplateName}";
-            PlayerSettings.WebGL.template = templatePath;
-
-            // 圧縮設定: gzip（多くのサーバーで対応）
+            PlayerSettings.WebGL.template = $"PROJECT:{WebGLTemplateName}";
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
-
-            // デバッグシンボルを除外して軽量化
             PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.Off;
-
-            // 例外処理: 明示的にスローされた例外のみ（パフォーマンス重視）
             PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
-
-            Debug.Log($"[WebGLBuildTool] WebGL template: {templatePath}");
         }
 
-        private static string[] GetBuildScenes()
+        private static string GetAbsoluteOutputPath(string relativePath)
         {
-            return EditorBuildSettings.scenes
-                .Where(s => s.enabled)
-                .Select(s => s.path)
-                .ToArray();
+            return Path.Combine(Path.GetDirectoryName(Application.dataPath), relativePath);
         }
 
         private static string GetCommandLineArg(string[] args, string name)
@@ -115,6 +119,23 @@ namespace Xeon.XTerminal.WebGLSample.Editor
                     return args[i + 1];
             }
             return null;
+        }
+
+        /// <summary>
+        /// ビルドターゲットの定義
+        /// </summary>
+        private readonly struct BuildTarget
+        {
+            public string Name { get; }
+            public string ScenePath { get; }
+            public string DefaultOutputDir { get; }
+
+            public BuildTarget(string name, string scenePath, string defaultOutputDir)
+            {
+                Name = name;
+                ScenePath = scenePath;
+                DefaultOutputDir = defaultOutputDir;
+            }
         }
     }
 }

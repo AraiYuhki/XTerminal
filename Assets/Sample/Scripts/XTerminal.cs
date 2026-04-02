@@ -45,6 +45,15 @@ namespace Xeon.XTerminal.Sample
         /// </summary>
         public Terminal Terminal => terminal;
 
+        /// <summary>
+        /// ターミナルに1行出力する（外部からの出力書き込み用）
+        /// バッファへの書き込みは同期的に完了する
+        /// </summary>
+        public void WriteOutputLine(string line)
+        {
+            normalOutput.WriteLineAsync(line);
+        }
+
         private Terminal terminal;
         private FlyweightScrollViewController<OutputData, OutputItem> scrollViewController;
         private CircularBuffer<OutputData> buffer = new(BufferSize);
