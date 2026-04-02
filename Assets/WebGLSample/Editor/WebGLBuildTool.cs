@@ -101,7 +101,7 @@ namespace Xeon.XTerminal.WebGLSample.Editor
         private static void ConfigureWebGLSettings()
         {
             PlayerSettings.WebGL.template = $"PROJECT:{WebGLTemplateName}";
-            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
             PlayerSettings.WebGL.debugSymbolMode = WebGLDebugSymbolMode.Off;
             PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
         }

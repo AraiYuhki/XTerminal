@@ -147,6 +147,16 @@ namespace Xeon.XTerminal
         }
 
         /// <summary>
+        /// 指定した名前のコマンドを登録解除します
+        /// </summary>
+        /// <param name="commandName">解除するコマンド名</param>
+        /// <returns>登録が存在して解除できた場合はtrue</returns>
+        public bool UnregisterCommand(string commandName)
+        {
+            return commands.Remove(commandName);
+        }
+
+        /// <summary>
         /// 名前でコマンドを取得しようとします
         /// </summary>
         public bool TryGetCommand(string commandName, out CommandMetadata metadata)

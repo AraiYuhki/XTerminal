@@ -177,8 +177,10 @@ HTACCESS_EOF
 # ===========================================================================
 build_ssh_opts() {
     SSH_OPTS=(-p "${WEBGL_SERVER_PORT}" -o StrictHostKeyChecking=no)
+    SCP_OPTS=(-P "${WEBGL_SERVER_PORT}" -o StrictHostKeyChecking=no)
     if [ -n "${WEBGL_SERVER_KEY}" ]; then
         SSH_OPTS+=(-i "${WEBGL_SERVER_KEY}")
+        SCP_OPTS+=(-i "${WEBGL_SERVER_KEY}")
     fi
 }
 
@@ -212,13 +214,13 @@ deploy_to_server() {
 
     # scp でアップロード（-r で再帰的に転送）
     echo "ファイルをアップロードしています..."
-    scp -r "${SSH_OPTS[@]}" \
+    scp -r "${SCP_OPTS[@]}" \
         "$BUILD_DIR/"* \
         "${WEBGL_SERVER_USER}@${WEBGL_SERVER_HOST}:${WEBGL_SERVER_PATH}/"
 
     # .htaccess は隠しファイルなので個別に転送
     if [ -f "$BUILD_DIR/.htaccess" ]; then
-        scp "${SSH_OPTS[@]}" \
+        scp "${SCP_OPTS[@]}" \
             "$BUILD_DIR/.htaccess" \
             "${WEBGL_SERVER_USER}@${WEBGL_SERVER_HOST}:${WEBGL_SERVER_PATH}/"
     fi

@@ -54,7 +54,10 @@ namespace Xeon.XTerminal.HackingGame
             registry.RegisterCommand<ExtractCommand>();
             registry.RegisterCommand<StatusCommand>();
 
-            // 組み込みの ls/cat/grep を仮想FS版で上書き
+            // 組み込みの ls/cat/grep を仮想FS版で差し替え
+            registry.UnregisterCommand("ls");
+            registry.UnregisterCommand("cat");
+            registry.UnregisterCommand("grep");
             registry.RegisterCommand<VirtualLsCommand>();
             registry.RegisterCommand<VirtualCatCommand>();
             registry.RegisterCommand<VirtualGrepCommand>();

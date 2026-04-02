@@ -20,12 +20,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_PATH="$(cd "$SCRIPT_DIR/.." && pwd)"
 LOG_FILE="$PROJECT_PATH/webgl-build.log"
 
-# ビルドターゲット → executeMethod のマッピング
-declare -A TARGETS=(
-    ["sample"]="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildSampleFromCLI"
-    ["hacking"]="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildHackingGameFromCLI"
-    ["all"]="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool.BuildAllFromCLI"
-)
+BASE_METHOD="Xeon.XTerminal.WebGLSample.Editor.WebGLBuildTool"
 
 # ===========================================================================
 # 使い方の表示
@@ -70,7 +65,13 @@ while getopts "o:h" opt; do
     esac
 done
 
-EXECUTE_METHOD="${TARGETS[$TARGET]:-}"
+case "$TARGET" in
+    sample)  EXECUTE_METHOD="${BASE_METHOD}.BuildSampleFromCLI" ;;
+    hacking) EXECUTE_METHOD="${BASE_METHOD}.BuildHackingGameFromCLI" ;;
+    all)     EXECUTE_METHOD="${BASE_METHOD}.BuildAllFromCLI" ;;
+    *)       EXECUTE_METHOD="" ;;
+esac
+
 if [ -z "$EXECUTE_METHOD" ]; then
     echo "エラー: 不明なターゲット '$TARGET'"
     echo ""

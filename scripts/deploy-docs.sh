@@ -97,8 +97,10 @@ deploy_to_server() {
     echo ""
 
     local ssh_opts=(-p "${DEPLOY_SERVER_PORT}" -o StrictHostKeyChecking=no)
+    local scp_opts=(-P "${DEPLOY_SERVER_PORT}" -o StrictHostKeyChecking=no)
     if [ -n "${DEPLOY_SERVER_KEY}" ]; then
         ssh_opts+=(-i "${DEPLOY_SERVER_KEY}")
+        scp_opts+=(-i "${DEPLOY_SERVER_KEY}")
     fi
 
     # リモートディレクトリを作成
@@ -108,7 +110,7 @@ deploy_to_server() {
 
     # scp でアップロード
     echo "ファイルをアップロードしています..."
-    scp -r "${ssh_opts[@]}" \
+    scp -r "${scp_opts[@]}" \
         "$SITE_DIR/"* \
         "${DEPLOY_SERVER_USER}@${DEPLOY_SERVER_HOST}:${DEPLOY_SERVER_PATH}/"
 
