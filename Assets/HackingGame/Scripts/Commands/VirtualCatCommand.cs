@@ -9,11 +9,11 @@ namespace Xeon.XTerminal.HackingGame
     /// 現在接続中のノード上の仮想ファイル内容を表示するコマンド
     /// センシティブファイルを読んだ場合はARIAが反応する
     /// </summary>
-    [Command("cat", "Display file contents on the connected node")]
+    [Command("cat", "接続中のノードのファイル内容を表示する")]
     public class VirtualCatCommand : ICommand
     {
         public string CommandName => "cat";
-        public string Description => "Display file contents on the connected node";
+        public string Description => "接続中のノードのファイル内容を表示する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

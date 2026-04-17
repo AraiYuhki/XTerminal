@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 namespace Xeon.XTerminal.Samples
 {
     /// <summary>
-    /// Example of creating a custom command for XTerminal
+    /// XTerminal用カスタムコマンドの作成例
     /// </summary>
-    [Command("greet", "A sample greeting command")]
+    [Command("greet", "サンプル挨拶コマンド")]
     public class GreetCommand : ICommand
     {
-        [Option("name", "n", Description = "Name to greet")]
+        [Option("name", "n", Description = "挨拶する名前")]
         public string Name;
 
-        [Option("times", "t", Description = "Number of times to greet")]
+        [Option("times", "t", Description = "挨拶を繰り返す回数")]
         public int Times = 1;
 
-        [Option("uppercase", "u", Description = "Output in uppercase")]
+        [Option("uppercase", "u", Description = "大文字で出力する")]
         public bool Uppercase;
 
         public string CommandName => "greet";
-        public string Description => "A sample greeting command that demonstrates custom command creation";
+        public string Description => "カスタムコマンド作成を示すサンプル挨拶コマンド";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {
@@ -42,7 +42,7 @@ namespace Xeon.XTerminal.Samples
 
         public IEnumerable<string> GetCompletions(CompletionContext context)
         {
-            // Provide completion suggestions for the --name option
+            // --nameオプションの補完候補を提供する
             if (context.CurrentToken == "name" || context.CurrentToken == "n")
             {
                 yield return "Alice";
@@ -53,19 +53,19 @@ namespace Xeon.XTerminal.Samples
     }
 
     /// <summary>
-    /// Example of a command that reads from stdin (for pipeline usage)
+    /// 標準入力から読み込むコマンドの例（パイプライン使用例）
     /// </summary>
-    [Command("count", "Count lines from input")]
+    [Command("count", "入力から行数を数える")]
     public class CountCommand : ICommand
     {
-        [Option("words", "w", Description = "Count words instead of lines")]
+        [Option("words", "w", Description = "行数の代わりに単語数を数える")]
         public bool CountWords;
 
-        [Option("chars", "c", Description = "Count characters instead of lines")]
+        [Option("chars", "c", Description = "行数の代わりに文字数を数える")]
         public bool CountChars;
 
         public string CommandName => "count";
-        public string Description => "Count lines, words, or characters from input";
+        public string Description => "入力から行数・単語数・文字数を数える";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

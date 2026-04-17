@@ -9,17 +9,17 @@ namespace Xeon.XTerminal.HackingGame
     /// 指定IPのノード認証を突破するコマンド
     /// --target でIPを指定。省略時は最後にconnect試行したノードが対象
     /// </summary>
-    [Command("crack", "Crack the authentication of a target node")]
+    [Command("crack", "対象ノードの認証を突破する")]
     public class CrackCommand : ICommand
     {
-        [Option("method", "m", Description = "Attack method: dictionary | bruteforce (default: dictionary)")]
+        [Option("method", "m", Description = "攻撃方法: dictionary | bruteforce（デフォルト: dictionary）")]
         public string Method;
 
-        [Option("target", "t", Description = "Target IP address")]
+        [Option("target", "t", Description = "対象IPアドレス")]
         public string Target;
 
         public string CommandName => "crack";
-        public string Description => "Crack the authentication of a target node";
+        public string Description => "対象ノードの認証を突破する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

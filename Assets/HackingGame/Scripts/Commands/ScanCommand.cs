@@ -8,14 +8,14 @@ namespace Xeon.XTerminal.HackingGame
     /// <summary>
     /// ネットワークをスキャンして接続可能なノード一覧を表示するコマンド
     /// </summary>
-    [Command("scan", "Scan the network for available nodes")]
+    [Command("scan", "ネットワークをスキャンして利用可能なノードを検索する")]
     public class ScanCommand : ICommand
     {
-        [Option("network", "n", Description = "Target network (e.g. 10.0.0.0/24)")]
+        [Option("network", "n", Description = "対象ネットワーク（例: 10.0.0.0/24）")]
         public string Network;
 
         public string CommandName => "scan";
-        public string Description => "Scan the network for available nodes";
+        public string Description => "ネットワークをスキャンして利用可能なノードを検索する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

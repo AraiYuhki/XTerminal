@@ -8,11 +8,11 @@ namespace Xeon.XTerminal.HackingGame
     /// <summary>
     /// 現在接続中のノードから切断するコマンド
     /// </summary>
-    [Command("disconnect", "Disconnect from the current node")]
+    [Command("disconnect", "現在のノードから切断する")]
     public class DisconnectCommand : ICommand
     {
         public string CommandName => "disconnect";
-        public string Description => "Disconnect from the current node";
+        public string Description => "現在のノードから切断する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {
