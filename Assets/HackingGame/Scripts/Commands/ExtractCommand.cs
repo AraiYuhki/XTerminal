@@ -9,14 +9,14 @@ namespace Xeon.XTerminal.HackingGame
     /// 暗号化されたファイルをマスターキーで復号して抽出するコマンド
     /// これがゲームのクリア条件
     /// </summary>
-    [Command("extract", "Decrypt and extract a file using a master key")]
+    [Command("extract", "マスターキーを使ってファイルを復号・抽出する")]
     public class ExtractCommand : ICommand
     {
-        [Option("key", "k", Description = "Master key for decryption")]
+        [Option("key", "k", Description = "復号用マスターキー")]
         public string Key;
 
         public string CommandName => "extract";
-        public string Description => "Decrypt and extract a file using a master key";
+        public string Description => "マスターキーを使ってファイルを復号・抽出する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

@@ -9,11 +9,11 @@ namespace Xeon.XTerminal.HackingGame
     /// 現在接続中のノード上の仮想ファイル一覧を表示するコマンド
     /// 実ファイルシステムではなくVirtualFileSystemを参照する
     /// </summary>
-    [Command("ls", "List files on the connected node")]
+    [Command("ls", "接続中のノードのファイル一覧を表示する")]
     public class VirtualLsCommand : ICommand
     {
         public string CommandName => "ls";
-        public string Description => "List files on the connected node";
+        public string Description => "接続中のノードのファイル一覧を表示する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

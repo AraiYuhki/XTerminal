@@ -8,11 +8,11 @@ namespace Xeon.XTerminal.HackingGame
     /// <summary>
     /// 現在のゲーム状態（接続状況・スコア・ノード状態）を表示するコマンド
     /// </summary>
-    [Command("status", "Show current game state")]
+    [Command("status", "現在のゲーム状態を表示する")]
     public class StatusCommand : ICommand
     {
         public string CommandName => "status";
-        public string Description => "Show current game state";
+        public string Description => "現在のゲーム状態を表示する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

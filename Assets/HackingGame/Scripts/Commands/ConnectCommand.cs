@@ -9,11 +9,11 @@ namespace Xeon.XTerminal.HackingGame
     /// 指定したIPアドレスのノードに接続するコマンド
     /// クラックされていないノードには接続できない
     /// </summary>
-    [Command("connect", "Connect to a network node")]
+    [Command("connect", "ネットワークノードに接続する")]
     public class ConnectCommand : ICommand
     {
         public string CommandName => "connect";
-        public string Description => "Connect to a network node";
+        public string Description => "ネットワークノードに接続する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

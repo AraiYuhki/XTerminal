@@ -9,14 +9,14 @@ namespace Xeon.XTerminal.HackingGame
     /// 現在接続中のノードの仮想ファイルをパターン検索するコマンド
     /// vault.keyでmaster_keyを検索することがゲームの重要なステップになる
     /// </summary>
-    [Command("grep", "Search for a pattern in a file on the connected node")]
+    [Command("grep", "接続中のノードのファイルをパターン検索する")]
     public class VirtualGrepCommand : ICommand
     {
-        [Option("ignore-case", "i", Description = "Case insensitive matching")]
+        [Option("ignore-case", "i", Description = "大文字小文字を区別しない")]
         public bool IgnoreCase;
 
         public string CommandName => "grep";
-        public string Description => "Search for a pattern in a file on the connected node";
+        public string Description => "接続中のノードのファイルをパターン検索する";
 
         public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
         {

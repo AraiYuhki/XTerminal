@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Xeon.XTerminal.Samples
 {
     /// <summary>
-    /// Basic example demonstrating how to use XTerminal
+    /// XTerminalの基本的な使用例
     /// </summary>
     public class TerminalExample : MonoBehaviour
     {
@@ -57,7 +57,7 @@ namespace Xeon.XTerminal.Samples
 
         private async void Start()
         {
-            // Initialize Terminal with default settings
+            // デフォルト設定でTerminalを初期化する
             terminal = new Terminal(
                 workingDirectory: Application.dataPath,
                 homeDirectory: Application.dataPath,
@@ -67,26 +67,26 @@ namespace Xeon.XTerminal.Samples
             stdout = new LogWriter(true);
             stderr = new LogWriter(false);
 
-            // Execute initial command
+            // 初期コマンドを実行する
             ExecuteCommand(initialCommand);
         }
 
         /// <summary>
-        /// Execute a command and log the results
+        /// コマンドを実行し、結果をログに出力する
         /// </summary>
         public async void ExecuteCommand(string command)
         {
             if (terminal == null || string.IsNullOrEmpty(command))
                 return;
 
-            // Clear previous output
+            // 前回の出力をクリアする
             stdout.Clear();
             stderr.Clear();
 
-            // Execute command
+            // コマンドを実行する
             var exitCode = await terminal.ExecuteAsync(command, stdout, stderr);
 
-            // Log results
+            // 結果をログに出力する
             var output = stdout.ToString();
             var error = stderr.ToString();
 
@@ -104,7 +104,7 @@ namespace Xeon.XTerminal.Samples
         }
 
         /// <summary>
-        /// Example: List files in current directory
+        /// 使用例：現在のディレクトリのファイル一覧を表示する
         /// </summary>
         [ContextMenu("Run: ls -la")]
         public void RunListCommand()
@@ -113,7 +113,7 @@ namespace Xeon.XTerminal.Samples
         }
 
         /// <summary>
-        /// Example: Show scene hierarchy
+        /// 使用例：シーン階層を表示する
         /// </summary>
         [ContextMenu("Run: hierarchy -r")]
         public void RunHierarchyCommand()
@@ -122,7 +122,7 @@ namespace Xeon.XTerminal.Samples
         }
 
         /// <summary>
-        /// Example: Find GameObjects with specific tag
+        /// 使用例：特定のタグを持つGameObjectを検索する
         /// </summary>
         [ContextMenu("Run: go find -t MainCamera")]
         public void RunFindCommand()
@@ -131,7 +131,7 @@ namespace Xeon.XTerminal.Samples
         }
 
         /// <summary>
-        /// Example: Pipeline command
+        /// 使用例：パイプラインコマンド
         /// </summary>
         [ContextMenu("Run: hierarchy -r | grep Camera")]
         public void RunPipelineCommand()
