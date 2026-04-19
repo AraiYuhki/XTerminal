@@ -52,6 +52,7 @@ namespace Xeon.XTerminal.Sample
         public void WriteOutputLine(string line)
         {
             normalOutput.WriteLineAsync(line);
+            ScrollToBottom();
         }
 
         private Terminal terminal;

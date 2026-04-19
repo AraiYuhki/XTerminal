@@ -4,7 +4,9 @@
     "references": [
         "jp.xeon.x-terminal.runtime",
         "Unity.TextMeshPro",
-        "xeon.jp.x-terminal.sample"
+        "xeon.jp.x-terminal.sample",
+        "UniTask",
+        "UniTask.DOTween"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

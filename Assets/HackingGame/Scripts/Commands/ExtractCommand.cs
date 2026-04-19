@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Xeon.XTerminal.HackingGame
 {
+    using UniTask = Cysharp.Threading.Tasks.UniTask;
     /// <summary>
     /// 暗号化されたファイルをマスターキーで復号して抽出するコマンド
     /// これがゲームのクリア条件
@@ -55,7 +56,7 @@ namespace Xeon.XTerminal.HackingGame
             }
 
             await context.Stdout.WriteLineAsync($"[*] Verifying key...", ct);
-            await Task.Delay(700, ct);
+            await UniTask.Delay(700, cancellationToken: ct);
 
             if (Key != StageLoader.MasterKey)
             {
@@ -65,7 +66,7 @@ namespace Xeon.XTerminal.HackingGame
             }
 
             await context.Stdout.WriteLineAsync("[*] Decrypting vault.enc ...", ct);
-            await Task.Delay(1000, ct);
+            await UniTask.Delay(1000, cancellationToken: ct);
             await context.Stdout.WriteLineAsync("[+] Decryption successful.", ct);
             await context.Stdout.WriteLineAsync("", ct);
             await context.Stdout.WriteLineAsync("====================================", ct);

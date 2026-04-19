@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Xeon.XTerminal.HackingGame
 {
+    using UniTask = Cysharp.Threading.Tasks.UniTask;
     /// <summary>
     /// 指定IPのノード認証を突破するコマンド
     /// --target でIPを指定。省略時は最後にconnect試行したノードが対象
@@ -70,14 +71,14 @@ namespace Xeon.XTerminal.HackingGame
             CommandContext context, NetworkNode node, string method, CancellationToken ct)
         {
             await context.Stdout.WriteLineAsync($"[*] Starting {method} attack on {node.IpAddress} ...", ct);
-            await Task.Delay(500, ct);
+            await UniTask.Delay(500, cancellationToken: ct);
 
             var steps = GetStepCount(node.Difficulty);
             for (var i = 1; i <= steps; i++)
             {
                 var bar = BuildProgressBar(i, steps);
                 await context.Stdout.WriteLineAsync($"    {bar} {i * 100 / steps}%", ct);
-                await Task.Delay(300, ct);
+                await UniTask.Delay(300, cancellationToken: ct);
             }
         }
 

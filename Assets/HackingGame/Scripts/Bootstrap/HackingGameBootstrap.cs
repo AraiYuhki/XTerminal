@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 namespace Xeon.XTerminal.HackingGame
@@ -65,7 +64,7 @@ namespace Xeon.XTerminal.HackingGame
             Debug.Log("[HackingGameBootstrap] Commands registered.");
         }
 
-        private async Awaitable PlayIntro()
+        private async Cysharp.Threading.Tasks.UniTask PlayIntro()
         {
             try
             {

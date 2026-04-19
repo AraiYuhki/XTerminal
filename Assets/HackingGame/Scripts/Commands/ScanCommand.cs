@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace Xeon.XTerminal.HackingGame
 {
+    using UniTask = Cysharp.Threading.Tasks.UniTask;
     /// <summary>
     /// ネットワークをスキャンして接続可能なノード一覧を表示するコマンド
     /// </summary>
@@ -28,7 +29,7 @@ namespace Xeon.XTerminal.HackingGame
 
             var target = Network ?? "10.0.0.0/24";
             await context.Stdout.WriteLineAsync($"[*] Scanning {target} ...", ct);
-            await Task.Delay(800, ct);
+            await UniTask.Delay(800, cancellationToken: ct);
             await context.Stdout.WriteLineAsync("", ct);
             await context.Stdout.WriteLineAsync("IP            TYPE       STATUS     CRACKED", ct);
             await context.Stdout.WriteLineAsync("--------------------------------------------", ct);

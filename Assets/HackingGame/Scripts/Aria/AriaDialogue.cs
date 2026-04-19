@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Xeon.XTerminal.HackingGame
 {
+    using UniTask = Cysharp.Threading.Tasks.UniTask;
     /// <summary>
     /// ARIAのセリフ反応システム
     /// プレイヤーのアクションに応じて対応するセリフをターミナルに出力する
@@ -74,7 +75,7 @@ namespace Xeon.XTerminal.HackingGame
             if (!ResponseBank.TryGetValue(action, out var lines))
                 return;
 
-            await Task.Delay(ThinkDelayMs, ct);
+            await UniTask.Delay(ThinkDelayMs, cancellationToken: ct);
 
             var line = lines[Random.Next(lines.Length)];
             await stdout.WriteLineAsync($"ARIA> {line}", ct);

@@ -320,13 +320,13 @@
       "url": "https://packages.unity.com"
     },
     "jp.xeon.unity-mcp-server": {
-      "version": "git@private-git:AraiYuhki/UnityMcpServer.git?path=Packages/jp.xeon.unity-mcp-server",
+      "version": "git@github.com:AraiYuhki/UnityMcpServer.git?path=Packages/jp.xeon.unity-mcp-server",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "026110ecbe809327f2df1bdc9c3ae84c0acd7bc4"
+      "hash": "4fd777725d3c9ce518517ff2dd30a5234a343705"
     },
     "jp.xeon.x-terminal": {
       "version": "file:jp.xeon.x-terminal",
