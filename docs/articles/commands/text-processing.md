@@ -1,243 +1,243 @@
-# Text Processing
+# テキスト処理
 
-Commands for processing and filtering text output.
+テキスト出力の処理とフィルタリングを行うためのコマンドです。
 
 ## echo
 
-Output text to standard output.
+テキストを標準出力に出力します。
 
-### Synopsis
+### 書式
 
 ```bash
 echo [-n] [string...]
 ```
 
-### Description
+### 説明
 
-Outputs the specified strings to standard output, separated by spaces, followed by a newline (unless `-n` is specified).
+指定された文字列をスペースで区切って標準出力に出力し、（`-n` が指定されていない限り）末尾に改行を追加します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-n` | `--newline` | Do not output the trailing newline |
+| `-n` | `--newline` | 末尾の改行を出力しない |
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `string` | One or more strings to output. Multiple strings are joined with spaces. |
+| `string` | 出力する1つ以上の文字列。複数の文字列はスペースで結合されます。 |
 
-### Examples
+### 使用例
 
 ```bash
-# Simple output
+# シンプルな出力
 echo Hello, World!
-# Output: Hello, World!
+# 出力: Hello, World!
 
-# Multiple arguments
+# 複数の引数
 echo Hello World from XTerminal
-# Output: Hello World from XTerminal
+# 出力: Hello World from XTerminal
 
-# Output without trailing newline
+# 末尾の改行なしで出力
 echo -n "No newline here"
 
-# Create files with content
+# 内容を含むファイルを作成
 echo "Configuration data" > config.txt
 
-# Append to file
+# ファイルに追記
 echo "Additional line" >> log.txt
 
-# Use in pipeline
+# パイプラインで使用
 echo "Hello" | grep -p "ell"
-# Output: Hello
+# 出力: Hello
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Always succeeds |
+| 0 | 常に成功します |
 
 ---
 
 ## grep
 
-Search for lines matching a pattern.
+パターンに一致する行を検索します。
 
-### Synopsis
+### 書式
 
 ```bash
 grep -p <pattern> [-i] [-v] [-c]
 ```
 
-### Description
+### 説明
 
-Filters input lines, outputting only those that match (or don't match with `-v`) the specified regular expression pattern. Reads from standard input.
+入力行をフィルタリングし、指定された正規表現パターンに一致する行（`-v` の場合は一致しない行）のみを出力します。標準入力から読み取ります。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-p` | `--pattern` | **Required.** Regular expression pattern to search for |
-| `-i` | `--ignorecase` | Ignore case distinctions in pattern matching |
-| `-v` | `--invert` | Invert the match; select non-matching lines |
-| `-c` | `--count` | Only print a count of matching lines |
+| `-p` | `--pattern` | **必須。** 検索する正規表現パターン |
+| `-i` | `--ignorecase` | パターンマッチング時に大文字小文字を区別しない |
+| `-v` | `--invert` | 一致を反転し、一致しない行を選択する |
+| `-c` | `--count` | 一致した行数のみを表示する |
 
-### Pattern Syntax
+### パターンの構文
 
-grep uses .NET regular expressions. Common patterns:
+grep は .NET 正規表現を使用します。一般的なパターンは以下の通りです。
 
-| Pattern | Description |
+| パターン | 説明 |
 |---------|-------------|
-| `.` | Matches any single character |
-| `*` | Matches zero or more of the preceding element |
-| `+` | Matches one or more of the preceding element |
-| `?` | Matches zero or one of the preceding element |
-| `^` | Matches start of line |
-| `$` | Matches end of line |
-| `[abc]` | Matches any character in the set |
-| `[^abc]` | Matches any character not in the set |
-| `\d` | Matches any digit |
-| `\w` | Matches any word character |
-| `\s` | Matches any whitespace |
-| `(a\|b)` | Matches a or b |
+| `.` | 任意の1文字に一致 |
+| `*` | 直前の要素の0回以上の繰り返しに一致 |
+| `+` | 直前の要素の1回以上の繰り返しに一致 |
+| `?` | 直前の要素の0回または1回に一致 |
+| `^` | 行の先頭に一致 |
+| `$` | 行の末尾に一致 |
+| `[abc]` | セット内の任意の文字に一致 |
+| `[^abc]` | セットに含まれない任意の文字に一致 |
+| `\d` | 任意の数字に一致 |
+| `\w` | 任意の単語構成文字に一致 |
+| `\s` | 任意の空白文字に一致 |
+| `(a\|b)` | a または b に一致 |
 
-### Examples
+### 使用例
 
 ```bash
-# Basic pattern search
+# 基本的なパターン検索
 cat file.txt | grep -p "error"
 
-# Case-insensitive search
+# 大文字小文字を区別せずに検索
 cat log.txt | grep -p "warning" -i
 
-# Invert match (exclude lines)
-ls -la | grep -p ".meta" -v
+# 一致を反転（特定の行を除外）
+ls -la | grep -p "\.meta" -v
 
-# Count matches only
+# 一致した行数のみカウント
 hierarchy -r | grep -p "Enemy" -c
-# Output: 15
+# 出力: 15
 
-# Regular expression patterns
+# 正規表現パターン
 cat code.cs | grep -p "public class \w+"
 cat log.txt | grep -p "^\[ERROR\]"
 cat data.txt | grep -p "id: \d+"
 
-# Find lines starting with specific text
+# 特定のテキストで始まる行を検索
 cat file.txt | grep -p "^TODO"
 
-# Find lines ending with specific text
+# 特定のテキストで終わる行を検索
 cat file.txt | grep -p "\.cs$"
 
-# Use OR pattern
+# OR パターンを使用
 cat log.txt | grep -p "(error|warning|critical)" -i
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | One or more lines matched |
-| 2 | No lines matched |
-| 1 | Invalid pattern or other error |
+| 0 | 1行以上一致した |
+| 2 | 一致する行がなかった |
+| 1 | 無効なパターンまたはその他のエラー |
 
 ---
 
-## Pipeline Examples
+## パイプラインの使用例
 
-### Working with Text Files
+### テキストファイルの操作
 
 ```bash
-# Search for errors in log file
+# ログファイルからエラーを検索
 cat application.log | grep -p "Exception"
 
-# Find TODO comments in code
+# コード内の TODO コメントを検索
 cat script.cs | grep -p "// TODO"
 
-# Extract lines with numbers
+# 数字を含む行を抽出
 cat data.txt | grep -p "\d+"
 
-# Find empty lines
+# 空行を検索
 cat file.txt | grep -p "^$"
 
-# Find non-empty lines
+# 空行以外を検索
 cat file.txt | grep -p "^$" -v
 ```
 
-### Filtering Unity Hierarchy
+### Unity ヒエラルキーのフィルタリング
 
 ```bash
-# Find all objects with "Player" in name
+# 名前に "Player" を含むすべてのオブジェクトを検索
 hierarchy -r | grep -p "Player"
 
-# Find objects by pattern
+# パターンでオブジェクトを検索
 hierarchy -r | grep -p "Enemy_\d+"
 
-# Find objects NOT tagged as "Untagged"
+# "Untagged" 以外のタグを持つオブジェクトを検索
 hierarchy -r -l | grep -p "Untagged" -v
 
-# Count enemies in scene
+# シーン内の敵の数をカウント
 hierarchy -r | grep -p "Enemy" -c
 ```
 
-### Filtering File Lists
+### ファイルリストのフィルタリング
 
 ```bash
-# Find C# files
+# C# ファイルを検索
 ls -R | grep -p "\.cs$"
 
-# Exclude meta files
+# meta ファイルを除外
 ls -la | grep -p "\.meta$" -v
 
-# Find files with specific prefix
+# 特定の接頭辞を持つファイルを検索
 ls | grep -p "^Player"
 
-# Find files by size pattern
+# サイズパターンでファイルを検索
 ls -lh | grep -p "MB"
 ```
 
-### Chaining Multiple Filters
+### 複数のフィルタのチェイン
 
 ```bash
-# Find active players
+# アクティブなプレイヤーを検索
 hierarchy -r -l | grep -p "Player" | grep -p "Active"
 
-# Find error messages excluding warnings
+# 警告を除外してエラーメッセージを検索
 cat log.txt | grep -p "error" -i | grep -p "warning" -v
 
-# Complex filtering
+# 複雑なフィルタリング
 ls -la | grep -p "\.cs$" | grep -p "Test" -v
 ```
 
-### Combining with Other Commands
+### 他のコマンドとの組み合わせ
 
 ```bash
-# Find files and search content
+# ファイルを検索して内容を検索
 find -n "*.cs" | cat | grep -p "class"
 
-# Count specific items
+# 特定のアイテムをカウント
 hierarchy -c Rigidbody | grep -p "/" -c
 
-# Search and save results
+# 検索結果を保存
 hierarchy -r | grep -p "Enemy" > enemies.txt
 
-# Multi-stage filtering
+# 多段階フィルタリング
 cat config.json | grep -p "\"enabled\"" | grep -p "true" -c
 ```
 
-### Practical Use Cases
+### 実用的なユースケース
 
 ```bash
-# Find all GameObjects with missing scripts
+# スクリプトが欠落しているすべての GameObject を検索
 component list /Root -v | grep -p "Missing"
 
-# Find objects with specific components
+# 特定のコンポーネントを持つオブジェクトを検索
 hierarchy -r -l | grep -p "Rigidbody"
 
-# Debug output filtering
+# デバッグ出力のフィルタリング
 property list /Player Rigidbody | grep -p "mass\|drag\|velocity"
 
-# Search for patterns in hierarchy paths
+# ヒエラルキーパス内のパターン検索
 hierarchy -r | grep -p "UI/.*Button"
 ```

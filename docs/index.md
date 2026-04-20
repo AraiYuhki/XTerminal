@@ -1,36 +1,36 @@
 # XTerminal
 
-A string-based CLI execution framework for Unity with Linux-like behavior.
+Unity向けのLinuxライクな動作を持つ文字列ベースのCLI実行フレームワークです。
 
-This documentation focuses on the built-in commands and how to use the `Terminal` class in Unity projects.
+このドキュメントでは、組み込みコマンドの詳細と、Unityプロジェクトでの `Terminal` クラスの使用方法について説明します。
 
-## Features
+## 特徴
 
-- **Linux-like Syntax** - Pipes (`|`), redirects (`>`, `>>`, `<`)
-- **Built-in Commands** - File operations, text processing, Unity-specific commands
-- **Extensible** - Easy custom command creation
-- **Async Support** - async/await and UniTask integration
-- **Tab Completion** - Context-aware command completion
+- **Linuxライクな構文** - パイプ (`|`)、リダイレクト (`>`, `>>`, `<`)
+- **組み込みコマンド** - ファイル操作、テキスト処理、Unity固有のコマンド
+- **拡張性** - カスタムコマンドを簡単に追加可能
+- **非同期サポート** - async/await および UniTask との統合
+- **タブ補完** - コンテキストに応じたコマンド補完
 
-## Quick Links
+## クイックリンク
 
-- [Getting Started](articles/getting-started.md)
-- [Built-in Commands](articles/commands/index.md)
+- [はじめに](articles/getting-started.md)
+- [組み込みコマンド](articles/commands/index.md)
 - [日本語ドキュメント](ja/index.md)
 
-## Installation
+## インストール
 
-### Via Package Manager (Git URL)
+### Package Manager経由 (Git URL)
 
 ```
 https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
-### Via Unity Asset Store
+### Unity Asset Store経由
 
-Search for "XTerminal" in the Asset Store window.
+Asset Store ウィンドウで "XTerminal" を検索してください。
 
-## Basic Usage
+## 基本的な使い方
 
 ```csharp
 using Xeon.XTerminal;
@@ -47,6 +47,6 @@ var stderr = new StringWriter();
 await terminal.ExecuteAsync("echo Hello, World!", stdout, stderr, ct);
 ```
 
-## License
+## ライセンス
 
-MIT License - see [LICENSE](https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.x-terminal/LICENSE.md)
+MITライセンス - [LICENSE](https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.x-terminal/LICENSE.md) を参照してください。

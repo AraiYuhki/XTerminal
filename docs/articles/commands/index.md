@@ -1,85 +1,85 @@
-# Built-in Commands
+# 組み込みコマンド
 
-XTerminal provides a comprehensive set of built-in commands organized into categories.
+XTerminalは、カテゴリ別に整理された包括的な組み込みコマンドセットを提供します。
 
-## Command Categories
+## コマンドカテゴリ
 
-| Category | Commands | Description |
+| カテゴリ | コマンド | 説明 |
 |----------|----------|-------------|
-| [File Operations](file-operations.md) | `pwd`, `cd`, `ls`, `cat`, `find`, `less`, `diff` | Navigate and manipulate files |
-| [Text Processing](text-processing.md) | `echo`, `grep` | Process and filter text |
-| [Utilities](#utilities) | `help`, `history` | General utilities |
-| [Unity Commands](unity-commands.md) | `hierarchy`, `go`, `transform`, `component`, `property` | Unity-specific operations |
+| [ファイル操作](file-operations.md) | `pwd`, `cd`, `ls`, `cat`, `find`, `less`, `diff` | ファイルやディレクトリの移動・操作 |
+| [テキスト処理](text-processing.md) | `echo`, `grep` | テキストの処理とフィルタリング |
+| [ユーティリティ](#utilities) | `help`, `history` | 一般的なユーティリティ |
+| [Unityコマンド](unity-commands.md) | `hierarchy`, `go`, `transform`, `component`, `property` | Unity固有の操作 |
 
-## Utilities
+## ユーティリティ
 
 ### help
 
-Display help information for commands.
+コマンドのヘルプ情報を表示します。
 
 ```bash
-# List all commands
+# すべてのコマンドを一覧表示
 help
 
-# Get help for specific command
+# 特定のコマンドのヘルプを表示
 help ls
 help hierarchy
 ```
 
 ### history
 
-Manage command history.
+コマンド履歴を管理します。
 
 ```bash
-# Show command history
+# コマンド履歴を表示
 history
 
-# Show last N commands
+# 最後の N 件を表示
 history -n 10
 
-# Clear history
+# 履歴をクリア
 history -c
 
-# Delete specific entry
+# 指定したインデックスのエントリを削除
 history -d 5
 
-# Read history from file
+# ファイルから履歴を読み込む
 history -r ~/.terminal_history
 ```
 
-**Options:**
+**オプション:**
 
-| Option | Description |
+| オプション | 説明 |
 |--------|-------------|
-| `-c` | Clear history |
-| `-d <index>` | Delete entry at index |
-| `-n <count>` | Show last N entries |
-| `-r <file>` | Read history from file |
+| `-c` | 履歴をクリアする |
+| `-d <index>` | 指定したインデックスのエントリを削除する |
+| `-n <count>` | 最後の N 件を表示する |
+| `-r <file>` | ファイルから履歴を読み込む |
 
-## Common Patterns
+## 共通パターン
 
-### Combining Commands
+### コマンドの組み合わせ
 
 ```bash
-# Find GameObjects and filter
+# GameObjectを検索してフィルタリング
 hierarchy -r | grep Enemy
 
-# List files and filter
+# ファイルを一覧表示してフィルタリング
 ls -la | grep .cs
 
-# Export hierarchy to file
+# ヒエラルキーをファイルにエクスポート
 hierarchy -r > hierarchy_dump.txt
 ```
 
-### Working with Unity Objects
+### Unityオブジェクトの操作
 
 ```bash
-# Find all Rigidbody objects
+# すべての Rigidbody オブジェクトを検索
 hierarchy -c Rigidbody
 
-# Get transform info
+# Transform 情報を取得
 transform /Player -p
 
-# Modify component property
+# コンポーネントのプロパティを変更
 property set /Player Rigidbody mass 10
 ```

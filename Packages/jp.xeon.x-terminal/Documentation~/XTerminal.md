@@ -1,48 +1,48 @@
-# XTerminal Documentation
+# XTerminal ドキュメント
 
 <p align="center">
-  <img src="Images/key-image.jpg" alt="XTerminal Key Image" width="800">
+  <img src="Images/key-image.jpg" alt="XTerminal キーイメージ" width="800">
 </p>
 
-XTerminal is a string-based CLI execution framework for Unity with Linux-like behavior. It allows you to execute commands with support for pipelines, redirects, and extensible custom commands.
+XTerminalは、Unity向けのLinuxライクな動作を持つ文字列ベースのCLI実行フレームワークです。パイプライン、リダイレクト、拡張可能なカスタムコマンドをサポートしており、コマンドの実行が可能です。
 
-## Table of Contents
+## 目次
 
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Built-in Commands](#built-in-commands)
-- [Creating Custom Commands](#creating-custom-commands)
-- [UniTask Support](#unitask-support)
+- [インストール](#インストール)
+- [クイックスタート](#クイックスタート)
+- [組み込みコマンド](#組み込みコマンド)
+- [カスタムコマンドの作成](#カスタムコマンドの作成)
+- [UniTaskサポート](#unitaskサポート)
 - [FlyweightScrollView](#flyweightscrollview)
-- [API Reference](#api-reference)
+- [APIリファレンス](#apiリファレンス)
 
-## Installation
+## インストール
 
-### Via Package Manager
+### Package Manager経由
 
-1. Open Window > Package Manager
-2. Click the "+" button > "Add package from git URL..."
-3. Enter the following URL:
+1. Window > Package Manager を開く
+2. 「+」ボタン > 「Add package from git URL...」を選択
+3. 以下のURLを入力:
 
 ```
-https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.uni-terminal
+https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
-### Via manifest.json
+### manifest.json経由
 
-Add the following to your `Packages/manifest.json`:
+`Packages/manifest.json` に以下を追加:
 
 ```json
 {
   "dependencies": {
-    "jp.xeon.uni-terminal": "https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.uni-terminal"
+    "jp.xeon.x-terminal": "https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal"
   }
 }
 ```
 
-## Quick Start
+## クイックスタート
 
-### Initialize Terminal
+### Terminalの初期化
 
 ```csharp
 using Xeon.XTerminal;
@@ -54,7 +54,7 @@ var terminal = new Terminal(
 );
 ```
 
-### Execute Commands
+### コマンドの実行
 
 ```csharp
 using System.IO;
@@ -62,217 +62,217 @@ using System.IO;
 var stdout = new StringWriter();
 var stderr = new StringWriter();
 
-// Execute a command
+// コマンドを実行
 var exitCode = await terminal.ExecuteAsync("echo Hello, World!", stdout, stderr, ct);
 
-// Get output
+// 出力を取得
 Debug.Log(stdout.ToString());  // "Hello, World!"
 ```
 
-### Use Pipelines
+### パイプラインの使用
 
 ```csharp
-// Chain commands with pipes
+// パイプでコマンドをつなげる
 await terminal.ExecuteAsync("cat myfile.txt | grep --pattern=error | less", stdout, stderr, ct);
 ```
 
-### Use Redirects
+### リダイレクトの使用
 
 ```csharp
-// Output to file
+// ファイルへの出力
 await terminal.ExecuteAsync("echo Hello > output.txt", stdout, stderr, ct);
 
-// Append to file
+// ファイルへの追記
 await terminal.ExecuteAsync("echo World >> output.txt", stdout, stderr, ct);
 
-// Input from file
+// ファイルからの入力
 await terminal.ExecuteAsync("grep --pattern=pattern < input.txt", stdout, stderr, ct);
 ```
 
-## Built-in Commands
+## 組み込みコマンド
 
-### File Operations
+### ファイル操作
 
-| Command | Description | Options |
+| コマンド | 説明 | オプション |
 |---------|-------------|---------|
-| `pwd` | Print working directory | `-L`, `-P` |
-| `cd` | Change directory | `-L`, `-P` |
-| `ls` | List directory contents | `-a`, `-l`, `-h`, `-r`, `-R`, `-S` |
-| `cat` | Display file contents | - |
-| `find` | Search for files | `-n`, `-i`, `-t`, `-d` |
-| `less` | View files page by page | `-n`, `-f`, `-N`, `-S` |
-| `diff` | Compare files | `-u`, `-i`, `-b`, `-w`, `-q` |
+| `pwd` | 現在の作業ディレクトリを表示 | `-L`, `-P` |
+| `cd` | ディレクトリを変更 | `-L`, `-P` |
+| `ls` | ディレクトリの内容を一覧表示 | `-a`, `-l`, `-h`, `-r`, `-R`, `-S` |
+| `cat` | ファイルの内容を表示 | - |
+| `find` | ファイルを検索 | `-n`, `-i`, `-t`, `-d` |
+| `less` | ファイルをページごとに表示 | `-n`, `-f`, `-N`, `-S` |
+| `diff` | ファイルを比較 | `-u`, `-i`, `-b`, `-w`, `-q` |
 
-### Text Processing
+### テキスト処理
 
-| Command | Description | Options |
+| コマンド | 説明 | オプション |
 |---------|-------------|---------|
-| `echo` | Output text | `-n` |
-| `grep` | Pattern matching search | `--pattern`, `-i`, `-v`, `-c` |
+| `echo` | テキストを出力 | `-n` |
+| `grep` | パターンマッチング検索 | `--pattern`, `-i`, `-v`, `-c` |
 
-### Utilities
+### ユーティリティ
 
-| Command | Description | Options |
+| コマンド | 説明 | オプション |
 |---------|-------------|---------|
-| `help` | Display help | - |
-| `history` | Command history | `-c`, `-d`, `-n`, `-r` |
-| `pbcopy` | Copy to clipboard | - |
+| `help` | ヘルプを表示 | - |
+| `history` | コマンド履歴を表示 | `-c`, `-d`, `-n`, `-r` |
+| `pbcopy` | クリップボードにコピー | - |
 
-### Unity-Specific Commands
+### Unity固有コマンド
 
-| Command | Description | Options |
+| コマンド | 説明 | オプション |
 |---------|-------------|---------|
-| `hierarchy` | Display scene hierarchy | `-r`, `-d`, `-a`, `-l`, `-s`, `-n`, `-c`, `-t`, `-y` |
-| `go` | GameObject operations | `--primitive`, `-P`, `-t`, `-n`, `-c`, `-i`, `-s` |
-| `transform` | Transform manipulation | `set`, `add`, `sub` subcommands; `-p`, `-P`, `-r`, `-R`, `-s`, `--parent`, `-w` |
-| `component` | Component management | `-a`, `-v`, `-i`, `-n` |
-| `property` | Property operations | `list`, `get`, `set`, `add`, `sub`, `mul`, `div` subcommands; `-a`, `-s`, `-n` |
+| `hierarchy` | シーン階層を表示 | `-r`, `-d`, `-a`, `-l`, `-s`, `-n`, `-c`, `-t`, `-y` |
+| `go` | GameObjectの操作 | `--primitive`, `-P`, `-t`, `-n`, `-c`, `-i`, `-s` |
+| `transform` | Transformの操作 | `set`, `add`, `sub` サブコマンド; `-p`, `-P`, `-r`, `-R`, `-s`, `--parent`, `-w` |
+| `component` | コンポーネント管理 | `-a`, `-v`, `-i`, `-n` |
+| `property` | プロパティ操作 | `list`, `get`, `set`, `add`, `sub`, `mul`, `div` サブコマンド; `-a`, `-s`, `-n` |
 
-### Command Examples
+### コマンドの使用例
 
-#### hierarchy - Scene Hierarchy
+#### hierarchy - シーン階層
 
 ```bash
-# Show root objects
+# ルートオブジェクトを表示
 hierarchy
 
-# Recursive display
+# 再帰的に表示
 hierarchy -r
 
-# With details
+# 詳細情報を表示
 hierarchy -l
 
-# Filter by name (wildcards supported)
+# 名前でフィルタリング（ワイルドカード対応）
 hierarchy -n "Player*"
 
-# Filter by component
+# コンポーネントでフィルタリング
 hierarchy -c Rigidbody
 
-# Filter by tag
+# タグでフィルタリング
 hierarchy -t Player
 ```
 
-#### go - GameObject Operations
+#### go - GameObject操作
 
 ```bash
-# Create new GameObject
+# 新しいGameObjectを作成
 go create MyObject
 
-# Create primitive
+# プリミティブを作成
 go create Cube --primitive=Cube
 
-# Delete
+# 削除
 go delete /MyObject
 
-# Find by name, tag, or component
+# 名前、タグ、コンポーネントで検索
 go find -n "Enemy*"
 go find -t Player
 go find -c Rigidbody
 
-# Clone
+# 複製
 go clone /Original -n Clone --count 5
 
-# Toggle active state
+# アクティブ状態の切り替え
 go active /MyObject --toggle
 ```
 
-#### transform - Transform Operations
+#### transform - Transform操作
 
 ```bash
-# Display transform info
+# Transform情報を表示
 transform /MyObject
 
-# Set position (world) - both syntaxes work for backward compatibility
+# 位置を設定 (ワールド) - 後方互換性のために両方の構文が動作します
 transform /MyObject -p 1,2,3
 transform set /MyObject -p 1,2,3
 
-# Set position (local)
+# 位置を設定 (ローカル)
 transform /MyObject -P 0,1,0
 
-# Set rotation
+# 回転を設定
 transform /MyObject -r 0,90,0
 
-# Set scale
+# スケールを設定
 transform /MyObject -s 2,2,2
 
-# Set parent
+# 親を設定
 transform /Child --parent /Parent
 
-# Add to position (increment)
-transform add /MyObject -p 1,0,0      # Move +1 on X axis
-transform add /MyObject -r 0,45,0     # Rotate +45 degrees on Y axis
-transform add /MyObject -s 0.5        # Increase scale by 0.5
+# 位置を加算 (インクリメント)
+transform add /MyObject -p 1,0,0      # X軸方向に+1移動
+transform add /MyObject -r 0,45,0     # Y軸を中心に+45度回転
+transform add /MyObject -s 0.5        # スケールを0.5増加
 
-# Subtract from position (decrement)
-transform sub /MyObject -p 0,1,0      # Move -1 on Y axis
-transform sub /MyObject -r 0,90,0     # Rotate -90 degrees on Y axis
+# 位置を減算 (デクリメント)
+transform sub /MyObject -p 0,1,0      # Y軸方向に-1移動
+transform sub /MyObject -r 0,90,0     # Y軸を中心に-90度回転
 ```
 
-#### component - Component Management
+#### component - コンポーネント管理
 
 ```bash
-# List components
+# コンポーネントを一覧表示
 component list /MyObject
 
-# Add component
+# コンポーネントを追加
 component add /MyObject Rigidbody
 
-# Remove component
+# コンポーネントを削除
 component remove /MyObject Rigidbody
 
-# Enable/disable
+# 有効化/無効化
 component enable /MyObject BoxCollider
 component disable /MyObject BoxCollider
 ```
 
-#### property - Property Operations
+#### property - プロパティ操作
 
 ```bash
-# List properties
+# プロパティを一覧表示
 property list /MyObject Rigidbody
 
-# Get property value
+# プロパティ値を取得
 property get /MyObject Rigidbody mass
 
-# Set property value
+# プロパティ値を設定
 property set /MyObject Rigidbody mass 10
 property set /MyObject Transform position 1,2,3
 
-# Arithmetic operations (add, sub, mul, div)
-property add /MyObject Rigidbody mass 5       # Add 5 to mass
-property sub /MyObject Rigidbody drag 0.1     # Subtract 0.1 from drag
-property mul /MyObject Rigidbody mass 2       # Multiply mass by 2
-property div /MyObject Rigidbody mass 2       # Divide mass by 2
+# 算術演算 (add, sub, mul, div)
+property add /MyObject Rigidbody mass 5       # massに5を加算
+property sub /MyObject Rigidbody drag 0.1     # dragから0.1を減算
+property mul /MyObject Rigidbody mass 2       # massを2倍にする
+property div /MyObject Rigidbody mass 2       # massを2で割る
 
-# Supported types for arithmetic:
-# - Numeric: int, float, double, long, byte, short (add, sub, mul, div)
-# - Vector: Vector2, Vector3, Vector4, Vector2Int, Vector3Int (add, sub only)
+# 算術演算がサポートされている型:
+# - 数値型: int, float, double, long, byte, short (add, sub, mul, div)
+# - Vector型: Vector2, Vector3, Vector4, Vector2Int, Vector3Int (add, sub のみ)
 
-# Vector arithmetic examples
-property add /MyObject Transform localScale 1,1,1    # Increase scale
-property sub /MyObject Transform position 0,1,0      # Move down by 1
+# Vector演算の例
+property add /MyObject Transform localScale 1,1,1    # スケールを増加
+property sub /MyObject Transform position 0,1,0      # 下に1移動
 ```
 
-## Creating Custom Commands
+## カスタムコマンドの作成
 
-### Basic Command
+### 基本的なコマンド
 
 ```csharp
 using Xeon.XTerminal;
 using System.Threading;
 using System.Threading.Tasks;
 
-[Command("mycommand", "My custom command")]
+[Command("mycommand", "マイカスタムコマンド")]
 public class MyCommand : ICommand
 {
-    [Option("message", "m", Description = "Message to display")]
+    [Option("message", "m", Description = "表示するメッセージ")]
     public string Message;
 
-    [Option("count", "c", Description = "Repeat count")]
+    [Option("count", "c", Description = "繰り返す回数")]
     public int Count = 1;
 
     public string CommandName => "mycommand";
-    public string Description => "My custom command";
+    public string Description => "マイカスタムコマンド";
 
     public async Task<ExitCode> ExecuteAsync(CommandContext context, CancellationToken ct)
     {
@@ -290,44 +290,44 @@ public class MyCommand : ICommand
 }
 ```
 
-### Register Commands
+### コマンドの登録
 
 ```csharp
-// Manual registration
+// 手動登録
 terminal.Registry.Register<MyCommand>();
 
-// Auto-register from assembly
+// アセンブリから自動登録
 terminal.Registry.RegisterFromAssembly(typeof(MyCommand).Assembly);
 ```
 
-## UniTask Support
+## UniTaskサポート
 
-UniTask support is automatically enabled when UniTask is installed in your project.
+プロジェクトにUniTaskがインストールされている場合、UniTaskサポートが自動的に有効になります。
 
-### Using UniTask Commands
+### UniTaskコマンドの使用
 
 ```csharp
 using Cysharp.Threading.Tasks;
 using Xeon.XTerminal;
 
-// Execute with UniTask
+// UniTaskで実行
 var exitCode = await terminal.ExecuteUniTaskAsync("echo Hello!", stdout, stderr);
 ```
 
-### Creating UniTask Commands
+### UniTaskコマンドの作成
 
 ```csharp
-[Command("myasync", "UniTask-based async command")]
+[Command("myasync", "UniTaskベースの非同期コマンド")]
 public class MyUniTaskCommand : IUniTaskCommand
 {
     public string CommandName => "myasync";
-    public string Description => "UniTask-based async command";
+    public string Description => "UniTaskベースの非同期コマンド";
 
     public async UniTask<ExitCode> ExecuteAsync(UniTaskCommandContext context, CancellationToken ct)
     {
-        await context.Stdout.WriteLineAsync("Processing...", ct);
+        await context.Stdout.WriteLineAsync("処理中...", ct);
         await UniTask.Delay(1000, cancellationToken: ct);
-        await context.Stdout.WriteLineAsync("Done!", ct);
+        await context.Stdout.WriteLineAsync("完了!", ct);
         return ExitCode.Success;
     }
 
@@ -340,60 +340,60 @@ public class MyUniTaskCommand : IUniTaskCommand
 
 ## FlyweightScrollView
 
-A virtual scrolling component for efficient display of large amounts of data.
+大量のデータを効率的に表示するための仮想スクロールコンポーネントです。
 
-### Features
+### 特徴
 
-- Efficient display of large data (handles tens of thousands of lines)
-- Vertical and horizontal scroll support
-- CircularBuffer for fixed-size log buffering
-- ObservableCollection integration
+- 大量データの効率的な表示（数万行にも対応）
+- 垂直および水平スクロールのサポート
+- 固定サイズのログバッファリング用 CircularBuffer
+- ObservableCollection との統合
 
-### Usage
+### 使い方
 
 ```csharp
 using Xeon.Common.FlyweightScrollView;
 using Xeon.Common.FlyweightScrollView.Model;
 
-// Create buffer (max 1000 lines)
+// バッファの作成 (最大1000行)
 var logBuffer = new CircularBuffer<string>(1000);
 
-// Bind to scroll view
+// スクロールビューへのバインド
 scrollView.Initialize<string, LogItemView>(logItemPrefab, logBuffer);
 
-// Add logs (old entries auto-removed when full)
-logBuffer.Add("New log entry");
+// ログの追加 (バッファがいっぱいになると古いエントリから自動削除)
+logBuffer.Add("新しいログエントリ");
 ```
 
-## API Reference
+## APIリファレンス
 
-### Terminal Class
+### Terminal クラス
 
-| Method | Description |
+| メソッド | 説明 |
 |--------|-------------|
-| `ExecuteAsync(command, stdout, stderr, ct)` | Execute a command asynchronously |
-| `ExecuteUniTaskAsync(command, stdout, stderr)` | Execute using UniTask (requires UniTask) |
+| `ExecuteAsync(command, stdout, stderr, ct)` | コマンドを非同期で実行 |
+| `ExecuteUniTaskAsync(command, stdout, stderr)` | UniTaskを使用して実行 (UniTaskが必要) |
 
-### Exit Codes
+### 終了コード
 
-| Code | Constant | Description |
+| コード | 定数 | 説明 |
 |------|----------|-------------|
-| 0 | `ExitCode.Success` | Command succeeded |
-| 1 | `ExitCode.UsageError` | Usage error |
-| 2 | `ExitCode.RuntimeError` | Runtime error |
+| 0 | `ExitCode.Success` | コマンド成功 |
+| 1 | `ExitCode.UsageError` | 使用方法エラー |
+| 2 | `ExitCode.RuntimeError` | 実行時エラー |
 
-### Attributes
+### 属性
 
-| Attribute | Description |
+| 属性 | 説明 |
 |-----------|-------------|
-| `[Command(name, description)]` | Mark class as a command |
-| `[Option(name, shortName)]` | Mark field as command option |
+| `[Command(name, description)]` | クラスをコマンドとしてマーク |
+| `[Option(name, shortName)]` | フィールドをコマンドオプションとしてマーク |
 
-## Requirements
+## 動作要件
 
-- Unity 6000.0 or later
-- (Optional) UniTask 2.0 or later
+- Unity 6000.0 以降
+- (オプション) UniTask 2.0 以降
 
-## License
+## ライセンス
 
-MIT License - see [LICENSE.md](../LICENSE.md) for details.
+MITライセンス - 詳細は [LICENSE.md](../LICENSE.md) を参照してください。

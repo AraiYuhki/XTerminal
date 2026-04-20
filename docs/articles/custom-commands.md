@@ -1,10 +1,10 @@
-# Custom Commands
+# カスタムコマンド
 
-Learn how to create and register your own commands in XTerminal.
+XTerminalで独自のコマンドを作成し、登録する方法について説明します。
 
-## Basic Command Structure
+## 基本的なコマンド構造
 
-Every command must implement the `ICommand` interface:
+すべてのコマンドは `ICommand` インターフェースを実装する必要があります。
 
 ```csharp
 using Xeon.XTerminal;
@@ -12,17 +12,17 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-[Command("mycommand", "Description of my command")]
+[Command("mycommand", "マイコマンドの説明")]
 public class MyCommand : ICommand
 {
     public string CommandName => "mycommand";
-    public string Description => "Description of my command";
+    public string Description => "マイコマンドの説明";
 
     public async Task<ExitCode> ExecuteAsync(
         CommandContext context,
         CancellationToken ct)
     {
-        await context.Stdout.WriteLineAsync("Hello from MyCommand!", ct);
+        await context.Stdout.WriteLineAsync("MyCommand からの挨拶です！", ct);
         return ExitCode.Success;
     }
 
@@ -33,25 +33,25 @@ public class MyCommand : ICommand
 }
 ```
 
-## Adding Options
+## オプションの追加
 
-Use the `[Option]` attribute to define command-line options:
+`[Option]` 属性を使用して、コマンドラインオプションを定義します。
 
 ```csharp
-[Command("greet", "Greet a user")]
+[Command("greet", "ユーザーに挨拶する")]
 public class GreetCommand : ICommand
 {
-    [Option("name", "n", Description = "Name to greet")]
+    [Option("name", "n", Description = "挨拶する相手の名前")]
     public string Name;
 
-    [Option("times", "t", Description = "Number of times to greet")]
+    [Option("times", "t", Description = "挨拶する回数")]
     public int Times = 1;
 
-    [Option("uppercase", "u", Description = "Output in uppercase")]
+    [Option("uppercase", "u", Description = "大文字で出力する")]
     public bool Uppercase;
 
     public string CommandName => "greet";
-    public string Description => "Greet a user";
+    public string Description => "ユーザーに挨拶する";
 
     public async Task<ExitCode> ExecuteAsync(
         CommandContext context,
@@ -77,39 +77,39 @@ public class GreetCommand : ICommand
 }
 ```
 
-**Usage:**
+**使用例:**
 
 ```bash
 greet                          # Hello, World!
 greet -n Alice                 # Hello, Alice!
-greet --name=Bob --times=3     # Hello, Bob! (3 times)
-greet -n Unity -t 2 -u         # HELLO, UNITY! (2 times)
+greet --name=Bob --times=3     # Hello, Bob! (3回)
+greet -n Unity -t 2 -u         # HELLO, UNITY! (2回)
 ```
 
-## Option Types
+## オプションの型
 
-### Supported Types
+### サポートされている型
 
-| Type | Example | Usage |
+| 型 | 例 | 使い方 |
 |------|---------|-------|
 | `string` | `"hello"` | `--option=value` |
 | `int` | `42` | `--count=42` |
 | `float` | `3.14` | `--value=3.14` |
-| `bool` | `true/false` | `--flag` (presence = true) |
+| `bool` | `true/false` | `--flag` (存在すれば true) |
 | `Vector2` | `1,2` | `--pos=1,2` |
 | `Vector3` | `1,2,3` | `--pos=1,2,3` |
 | `Color` | `1,0,0,1` | `--color=1,0,0,1` |
 
-### Positional Arguments
+### 位置引数
 
-Arguments without option flags are passed as positional arguments in `context.Arguments`:
+オプションフラグのない引数は、位置引数として `context.Arguments` に渡されます。
 
 ```csharp
-[Command("move", "Move to position")]
+[Command("move", "位置に移動する")]
 public class MoveCommand : ICommand
 {
     public string CommandName => "move";
-    public string Description => "Move to position";
+    public string Description => "位置に移動する";
 
     public async Task<ExitCode> ExecuteAsync(
         CommandContext context,
@@ -129,8 +129,8 @@ public class MoveCommand : ICommand
         var objectPath = context.Arguments[0];
         var position = context.Arguments[1];
 
-        // ... implementation
-
+        // ... 実装
+        
         return ExitCode.Success;
     }
 
@@ -141,19 +141,19 @@ public class MoveCommand : ICommand
 }
 ```
 
-## Reading from Stdin
+## 標準入力（Stdin）からの読み取り
 
-Process input from previous commands in a pipeline:
+パイプライン内の前のコマンドからの入力を処理します。
 
 ```csharp
-[Command("count", "Count lines or words")]
+[Command("count", "行数または単語数をカウントする")]
 public class CountCommand : ICommand
 {
-    [Option("words", "w", Description = "Count words instead of lines")]
+    [Option("words", "w", Description = "行数の代わりに単語数をカウントする")]
     public bool CountWords;
 
     public string CommandName => "count";
-    public string Description => "Count lines or words";
+    public string Description => "行数または単語数をカウントする";
 
     public async Task<ExitCode> ExecuteAsync(
         CommandContext context,
@@ -188,43 +188,43 @@ public class CountCommand : ICommand
 }
 ```
 
-**Usage:**
+**使用例:**
 
 ```bash
-hierarchy -r | count           # Count objects
-echo "Hello World" | count -w  # Count words (2)
-cat file.txt | count           # Count lines in file
+hierarchy -r | count           # オブジェクト数をカウント
+echo "Hello World" | count -w  # 単語数をカウント (2)
+cat file.txt | count           # ファイルの行数をカウント
 ```
 
-## Tab Completion
+## タブ補完
 
-Implement `GetCompletions` to provide context-aware suggestions:
+`GetCompletions` を実装して、コンテキストに応じたサジェストを提供します。
 
 ```csharp
-[Command("load", "Load a scene")]
+[Command("load", "シーンをロードする")]
 public class LoadSceneCommand : ICommand
 {
-    [Option("scene", "s", Description = "Scene name")]
+    [Option("scene", "s", Description = "シーン名")]
     public string SceneName;
 
     public string CommandName => "load";
-    public string Description => "Load a scene";
+    public string Description => "シーンをロードする";
 
     public async Task<ExitCode> ExecuteAsync(
         CommandContext context,
         CancellationToken ct)
     {
-        // ... implementation
+        // ... 実装
         return ExitCode.Success;
     }
 
     public IEnumerable<string> GetCompletions(CompletionContext context)
     {
-        // Check if completing the --scene option
+        // --scene オプションを補完中かどうかをチェック
         if (context.CurrentOption == "scene" ||
             context.CurrentOption == "s")
         {
-            // Return available scene names
+            // 利用可能なシーン名を返す
             var sceneCount = SceneManager.sceneCountInBuildSettings;
             for (int i = 0; i < sceneCount; i++)
             {
@@ -242,9 +242,9 @@ public class LoadSceneCommand : ICommand
 }
 ```
 
-## Registering Commands
+## コマンドの登録
 
-### Manual Registration
+### 手動登録
 
 ```csharp
 var terminal = new Terminal(
@@ -253,23 +253,23 @@ var terminal = new Terminal(
     registerBuiltInCommands: true
 );
 
-// Register individual commands
+// 個別のコマンドを登録
 terminal.Registry.Register<GreetCommand>();
 terminal.Registry.Register<CountCommand>();
 terminal.Registry.Register<LoadSceneCommand>();
 ```
 
-### Assembly Registration
+### アセンブリ登録
 
-Register all commands from an assembly:
+アセンブリ内のすべてのコマンドを一括で登録します。
 
 ```csharp
-// Register all commands in current assembly
+// 現在のアセンブリ内のすべてのコマンドを登録
 terminal.Registry.RegisterFromAssembly(
     typeof(MyCommand).Assembly
 );
 
-// Register from multiple assemblies
+// 複数のアセンブリから登録
 terminal.Registry.RegisterFromAssembly(
     typeof(GameCommands).Assembly
 );
@@ -278,15 +278,15 @@ terminal.Registry.RegisterFromAssembly(
 );
 ```
 
-## Exit Codes
+## 終了コード
 
-Return appropriate exit codes:
+適切な終了コードを返します。
 
-| Code | Constant | When to Use |
+| コード | 定数 | 使用場面 |
 |------|----------|-------------|
-| 0 | `ExitCode.Success` | Command completed successfully |
-| 1 | `ExitCode.UsageError` | Invalid arguments or usage |
-| 2 | `ExitCode.RuntimeError` | Runtime error occurred |
+| 0 | `ExitCode.Success` | コマンドが正常に完了したとき |
+| 1 | `ExitCode.UsageError` | 引数が無効または使い方が間違っているとき |
+| 2 | `ExitCode.RuntimeError` | 実行時にエラーが発生したとき |
 
 ```csharp
 public async Task<ExitCode> ExecuteAsync(
@@ -296,13 +296,13 @@ public async Task<ExitCode> ExecuteAsync(
     if (context.Arguments.Count == 0)
     {
         await context.Stderr.WriteLineAsync(
-            "Error: Missing required argument", ct);
+            "Error: 必須引数が不足しています", ct);
         return ExitCode.UsageError;
     }
 
     try
     {
-        // ... do work
+        // ... 処理の実行
         return ExitCode.Success;
     }
     catch (Exception ex)
@@ -314,23 +314,23 @@ public async Task<ExitCode> ExecuteAsync(
 }
 ```
 
-## CommandContext Properties
+## CommandContext のプロパティ
 
-| Property | Type | Description |
+| プロパティ | 型 | 説明 |
 |----------|------|-------------|
-| `Stdin` | `IAsyncTextReader` | Input stream |
-| `Stdout` | `IAsyncTextWriter` | Output stream |
-| `Stderr` | `IAsyncTextWriter` | Error stream |
-| `Arguments` | `IReadOnlyList<string>` | Positional arguments |
-| `WorkingDirectory` | `string` | Current working directory |
-| `HomeDirectory` | `string` | Home directory |
-| `Terminal` | `Terminal` | Terminal instance |
+| `Stdin` | `IAsyncTextReader` | 入力ストリーム |
+| `Stdout` | `IAsyncTextWriter` | 出力ストリーム |
+| `Stderr` | `IAsyncTextWriter` | エラー出力ストリーム |
+| `Arguments` | `IReadOnlyList<string>` | 位置引数 |
+| `WorkingDirectory` | `string` | 現在の作業ディレクトリ |
+| `HomeDirectory` | `string` | ホームディレクトリ |
+| `Terminal` | `Terminal` | Terminal インスタンス |
 
-## Best Practices
+## ベストプラクティス
 
-1. **Use async/await properly** - Don't block the main thread
-2. **Support cancellation** - Check `ct.IsCancellationRequested`
-3. **Write errors to Stderr** - Keep Stdout for data output
-4. **Return correct exit codes** - For proper pipeline handling
-5. **Implement completions** - Better user experience
-6. **Keep commands focused** - One command, one purpose
+1. **async/await を適切に使う** - メインスレッドをブロックしない
+2. **キャンセルをサポートする** - `ct.IsCancellationRequested` をチェックする
+3. **エラーは Stderr に書き出す** - Stdout はデータ出力用に残す
+4. **正しい終了コードを返す** - 適切なパイプライン処理のため
+5. **補完を実装する** - ユーザーエクスペリエンスの向上のため
+6. **コマンドの責務を絞る** - 1つのコマンドに1つの目的

@@ -1,13 +1,21 @@
-- name: Getting Started
+- name: はじめに
   href: getting-started.md
-- name: Commands
+- name: コマンド
   href: commands/
   items:
-    - name: Overview
+    - name: 概要
       href: commands/index.md
-    - name: File Operations
+    - name: ファイル操作
       href: commands/file-operations.md
-    - name: Text Processing
+    - name: テキスト処理
       href: commands/text-processing.md
-    - name: Unity Commands
+    - name: Unityコマンド
       href: commands/unity-commands.md
+- name: カスタムコマンド
+  href: custom-commands.md
+- name: パイプとリダイレクト
+  href: pipeline-redirects.md
+- name: UniTaskサポート
+  href: unitask-support.md
+- name: FlyweightScrollView
+  href: flyweight-scrollview.md

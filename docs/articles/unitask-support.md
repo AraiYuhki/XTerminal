@@ -1,24 +1,24 @@
-# UniTask Support
+# UniTask サポート
 
-XTerminal provides optional integration with [UniTask](https://github.com/Cysharp/UniTask) for high-performance async operations.
+XTerminalは、高パフォーマンスな非同期操作のために [UniTask](https://github.com/Cysharp/UniTask) とのオプションの統合を提供しています。
 
-## Overview
+## 概要
 
-UniTask support is **automatically enabled** when UniTask is installed in your project. No additional configuration is required.
+UniTask サポートは、プロジェクトに UniTask がインストールされている場合に**自動的に有効**になります。追加の設定は必要ありません。
 
-When UniTask is detected, the `UNI_TERMINAL_UNI_TASK_SUPPORT` symbol is defined automatically.
+UniTask が検出されると、`UNI_TERMINAL_UNI_TASK_SUPPORT` シンボルが自動的に定義されます。
 
-## Installation
+## インストール
 
-### Install UniTask
+### UniTask のインストール
 
-Add UniTask to your project via Package Manager:
+Package Manager を介してプロジェクトに UniTask を追加します。
 
 ```
 https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask
 ```
 
-Or via manifest.json:
+または `manifest.json` を介して追加します。
 
 ```json
 {
@@ -28,11 +28,11 @@ Or via manifest.json:
 }
 ```
 
-XTerminal will automatically detect UniTask and enable support.
+XTerminal は自動的に UniTask を検出し、サポートを有効にします。
 
-## Using UniTask Execution
+## UniTask による実行
 
-### Basic Usage
+### 基本的な使い方
 
 ```csharp
 using Cysharp.Threading.Tasks;
@@ -69,22 +69,22 @@ public class UniTaskExample : MonoBehaviour
 }
 ```
 
-### UniTask Text Writers
+### UniTask テキストライター
 
-XTerminal provides specialized text writers for UniTask:
+XTerminal は UniTask 専用のテキストライターを提供しています。
 
-| Class | Description |
+| クラス | 説明 |
 |-------|-------------|
-| `UniTaskStringBuilderTextWriter` | Writes to StringBuilder |
-| `UniTaskListTextWriter` | Writes to List<string> |
+| `UniTaskStringBuilderTextWriter` | StringBuilder に書き込みます |
+| `UniTaskListTextWriter` | List<string> に書き込みます |
 
 ```csharp
-// StringBuilder output
+// StringBuilder への出力
 var stdout = new UniTaskStringBuilderTextWriter();
 await terminal.ExecuteUniTaskAsync("echo Hello", stdout, stderr);
 string result = stdout.ToString();
 
-// List output (line by line)
+// リストへの出力 (行単位)
 var listWriter = new UniTaskListTextWriter();
 await terminal.ExecuteUniTaskAsync("hierarchy -r", listWriter, stderr);
 foreach (var line in listWriter.Lines)
@@ -93,9 +93,9 @@ foreach (var line in listWriter.Lines)
 }
 ```
 
-## Creating UniTask Commands
+## UniTask コマンドの作成
 
-Implement `IUniTaskCommand` for commands that use UniTask:
+UniTask を使用するコマンドには `IUniTaskCommand` を実装します。
 
 ```csharp
 using Cysharp.Threading.Tasks;
@@ -103,14 +103,14 @@ using Xeon.XTerminal;
 using System.Collections.Generic;
 using System.Threading;
 
-[Command("download", "Download a resource")]
+[Command("download", "リソースをダウンロードする")]
 public class DownloadCommand : IUniTaskCommand
 {
-    [Option("url", "u", Description = "URL to download")]
+    [Option("url", "u", Description = "ダウンロードするURL")]
     public string Url;
 
     public string CommandName => "download";
-    public string Description => "Download a resource";
+    public string Description => "リソースをダウンロードする";
 
     public async UniTask<ExitCode> ExecuteAsync(
         UniTaskCommandContext context,
@@ -118,13 +118,13 @@ public class DownloadCommand : IUniTaskCommand
     {
         if (string.IsNullOrEmpty(Url))
         {
-            await context.Stderr.WriteLineAsync("Error: URL required", ct);
+            await context.Stderr.WriteLineAsync("Error: URLが必要です", ct);
             return ExitCode.UsageError;
         }
 
-        await context.Stdout.WriteLineAsync($"Downloading: {Url}", ct);
+        await context.Stdout.WriteLineAsync($"ダウンロード中: {Url}", ct);
 
-        // Use UniTask's async operations
+        // UniTask の非同期操作を使用
         using var request = UnityWebRequest.Get(Url);
         await request.SendWebRequest().ToUniTask(cancellationToken: ct);
 
@@ -149,19 +149,19 @@ public class DownloadCommand : IUniTaskCommand
 
 ## UniTaskCommandContext
 
-The `UniTaskCommandContext` provides UniTask-compatible I/O:
+`UniTaskCommandContext` は、UniTask 互換の I/O を提供します。
 
-| Property | Type | Description |
+| プロパティ | 型 | 説明 |
 |----------|------|-------------|
-| `Stdin` | `IUniTaskTextReader` | Input stream |
-| `Stdout` | `IUniTaskTextWriter` | Output stream |
-| `Stderr` | `IUniTaskTextWriter` | Error stream |
-| `Arguments` | `IReadOnlyList<string>` | Positional arguments |
-| `WorkingDirectory` | `string` | Current working directory |
-| `HomeDirectory` | `string` | Home directory |
-| `Terminal` | `Terminal` | Terminal instance |
+| `Stdin` | `IUniTaskTextReader` | 入力ストリーム |
+| `Stdout` | `IUniTaskTextWriter` | 出力ストリーム |
+| `Stderr` | `IUniTaskTextWriter` | エラー出力ストリーム |
+| `Arguments` | `IReadOnlyList<string>` | 位置引数 |
+| `WorkingDirectory` | `string` | 現在の作業ディレクトリ |
+| `HomeDirectory` | `string` | ホームディレクトリ |
+| `Terminal` | `Terminal` | Terminal インスタンス |
 
-## Interface Reference
+## インターフェースリファレンス
 
 ### IUniTaskTextWriter
 
@@ -184,31 +184,31 @@ public interface IUniTaskTextReader
 }
 ```
 
-## Mixing Standard and UniTask Commands
+## 標準コマンドと UniTask コマンドの混在
 
-XTerminal seamlessly handles both standard `ICommand` and `IUniTaskCommand`:
+XTerminal は、標準の `ICommand` と `IUniTaskCommand` の両方をシームレスに処理します。
 
 ```csharp
-// Register both types
+// 両方のタイプを登録
 terminal.Registry.Register<StandardCommand>();  // ICommand
 terminal.Registry.Register<UniTaskCommand>();   // IUniTaskCommand
 
-// Execute with UniTask - both work
+// UniTask で実行 - 両方のコマンドが動作します
 await terminal.ExecuteUniTaskAsync("standard-cmd | unitask-cmd", stdout, stderr);
 ```
 
-## Performance Benefits
+## パフォーマンスの利点
 
-UniTask provides:
+UniTask は以下のメリットを提供します。
 
-- **Zero allocation** async/await
-- **Better performance** than Task-based async
-- **Unity-optimized** timing and scheduling
-- **Cancellation support** integrated with Unity lifecycle
+- **ゼロアロケーション**な async/await
+- Task ベースの非同期処理よりも**優れたパフォーマンス**
+- **Unity に最適化**されたタイミングとスケジューリング
+- Unity のライフサイクルと統合された**キャンセルサポート**
 
-## Conditional Compilation
+## 条件付きコンパイル
 
-If you need to write code that works with or without UniTask:
+UniTask の有無に関わらず動作するコードを書く必要がある場合:
 
 ```csharp
 #if UNI_TERMINAL_UNI_TASK_SUPPORT
@@ -235,9 +235,9 @@ public class ConditionalExample : MonoBehaviour
 }
 ```
 
-## Best Practices
+## ベストプラクティス
 
-1. **Use UniTask for UI** - Better performance for terminal output display
-2. **Leverage cancellation** - Pass CancellationToken properly
-3. **Use appropriate writers** - `UniTaskListTextWriter` for line-by-line processing
-4. **Don't block** - Use `await` instead of `.Result` or `.Wait()`
+1. **UI には UniTask を使う** - ターミナル出力表示のパフォーマンスが向上します。
+2. **キャンセルを活用する** - CancellationToken を適切に渡します。
+3. **適切なライターを使う** - 行単位の処理には `UniTaskListTextWriter` を使用します。
+4. **ブロックしない** - `.Result` や `.Wait()` の代わりに `await` を使用します。

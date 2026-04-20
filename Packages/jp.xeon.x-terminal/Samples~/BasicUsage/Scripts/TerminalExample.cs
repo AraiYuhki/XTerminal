@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Xeon.XTerminal.Samples
 {
     /// <summary>
-    /// Basic example demonstrating how to use XTerminal
+    /// XTerminalの使用方法を示す基本的な例
     /// </summary>
     public class TerminalExample : MonoBehaviour
     {
@@ -57,7 +57,7 @@ namespace Xeon.XTerminal.Samples
 
         private async void Start()
         {
-            // Initialize Terminal with default settings
+            // デフォルト設定でTerminalを初期化
             terminal = new Terminal(
                 workingDirectory: Application.dataPath,
                 homeDirectory: Application.dataPath,
@@ -67,73 +67,73 @@ namespace Xeon.XTerminal.Samples
             stdout = new LogWriter(true);
             stderr = new LogWriter(false);
 
-            // Execute initial command
+            // 初期コマンドを実行
             ExecuteCommand(initialCommand);
         }
 
         /// <summary>
-        /// Execute a command and log the results
+        /// コマンドを実行して結果をログ出力する
         /// </summary>
         public async void ExecuteCommand(string command)
         {
             if (terminal == null || string.IsNullOrEmpty(command))
                 return;
 
-            // Clear previous output
+            // 前回の出力をクリア
             stdout.Clear();
             stderr.Clear();
 
-            // Execute command
+            // コマンドを実行
             var exitCode = await terminal.ExecuteAsync(command, stdout, stderr);
 
-            // Log results
+            // 結果をログ出力
             var output = stdout.ToString();
             var error = stderr.ToString();
 
             if (!string.IsNullOrEmpty(output))
             {
-                Debug.Log($"[XTerminal] Output:\n{output}");
+                Debug.Log($"[XTerminal] 出力:\n{output}");
             }
 
             if (!string.IsNullOrEmpty(error))
             {
-                Debug.LogError($"[XTerminal] Error:\n{error}");
+                Debug.LogError($"[XTerminal] エラー:\n{error}");
             }
 
-            Debug.Log($"[XTerminal] Exit Code: {exitCode}");
+            Debug.Log($"[XTerminal] 終了コード: {exitCode}");
         }
 
         /// <summary>
-        /// Example: List files in current directory
+        /// 使用例：現在のディレクトリのファイルを一覧表示する
         /// </summary>
-        [ContextMenu("Run: ls -la")]
+        [ContextMenu("実行: ls -la")]
         public void RunListCommand()
         {
             ExecuteCommand("ls -la");
         }
 
         /// <summary>
-        /// Example: Show scene hierarchy
+        /// 使用例：シーンヒエラルキーを表示する
         /// </summary>
-        [ContextMenu("Run: hierarchy -r")]
+        [ContextMenu("実行: hierarchy -r")]
         public void RunHierarchyCommand()
         {
             ExecuteCommand("hierarchy -r");
         }
 
         /// <summary>
-        /// Example: Find GameObjects with specific tag
+        /// 使用例：特定のタグを持つGameObjectを検索する
         /// </summary>
-        [ContextMenu("Run: go find -t MainCamera")]
+        [ContextMenu("実行: go find -t MainCamera")]
         public void RunFindCommand()
         {
             ExecuteCommand("go find -t MainCamera");
         }
 
         /// <summary>
-        /// Example: Pipeline command
+        /// 使用例：パイプラインコマンド
         /// </summary>
-        [ContextMenu("Run: hierarchy -r | grep Camera")]
+        [ContextMenu("実行: hierarchy -r | grep Camera")]
         public void RunPipelineCommand()
         {
             ExecuteCommand("hierarchy -r | grep --pattern=Camera");

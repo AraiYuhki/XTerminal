@@ -1,220 +1,220 @@
-# Pipeline & Redirects
+# パイプラインとリダイレクト
 
-XTerminal supports Linux-like pipelines and redirects for powerful command chaining.
+XTerminalは、強力なコマンド連携を可能にするLinuxライクなパイプラインとリダイレクトをサポートしています。
 
-## Pipelines
+## パイプライン
 
-Connect commands using the pipe operator (`|`). The output of one command becomes the input of the next.
+パイプ演算子 (`|`) を使用してコマンドをつなげます。あるコマンドの出力が次のコマンドの入力になります。
 
-### Basic Syntax
+### 基本構文
 
 ```bash
 command1 | command2 | command3
 ```
 
-### Examples
+### 例
 
 ```bash
-# Find objects and filter
+# オブジェクトを検索してフィルタリング
 hierarchy -r | grep -p "Player"
 
-# Chain multiple filters
+# 複数のフィルタをつなげる
 hierarchy -r -l | grep -p "Enemy" | grep -p "Active: True"
 
-# Count results
+# 結果をカウント
 hierarchy -r | grep -p "Collider" | count
 
-# Process file content
+# ファイル内容を処理
 cat config.json | grep -p "setting"
 ```
 
-### How It Works
+### 動作の仕組み
 
 ```
 ┌─────────┐    stdout    ┌─────────┐    stdout    ┌─────────┐
 │ Command1 │────────────▶│ Command2 │────────────▶│ Command3 │
 └─────────┘              └─────────┘              └─────────┘
-                              ▲                        │
-                           stdin                    stdout
+                               ▲                        │
+                            stdin                    stdout
                                                        ▼
-                                                   [output]
+                                                    [出力]
 ```
 
-1. Command1 writes to stdout
-2. Command2 reads from stdin (Command1's output)
-3. Command3 reads from stdin (Command2's output)
-4. Final output goes to the terminal
+1. Command1 が stdout に書き込みます
+2. Command2 が stdin (Command1 の出力) から読み取ります
+3. Command3 が stdin (Command2 の出力) から読み取ります
+4. 最終的な出力がターミナルに表示されます
 
-## Redirects
+## リダイレクト
 
-### Output Redirect (`>`)
+### 出力リダイレクト (`>`)
 
-Write command output to a file, **overwriting** existing content:
+コマンドの出力をファイルに書き込みます。既存の内容は**上書き**されます。
 
 ```bash
-# Save hierarchy to file
+# シーン階層をファイルに保存
 hierarchy -r > hierarchy.txt
 
-# Save filtered results
+# フィルタリング結果を保存
 hierarchy -r | grep -p "Player" > players.txt
 
-# Export configuration
+# 設定をエクスポート
 property list /Settings GameConfig > config_dump.txt
 ```
 
-### Append Redirect (`>>`)
+### 追記リダイレクト (`>>`)
 
-Append command output to a file, **preserving** existing content:
+コマンドの出力をファイルに追記します。既存の内容は**保持**されます。
 
 ```bash
-# Add to log file
+# ログファイルに追加
 echo "Session started" >> session.log
 
-# Append hierarchy snapshot
+# シーン階層のスナップショットを追記
 hierarchy -r >> snapshots.txt
 
-# Build up a report
+# レポートを作成
 echo "=== Players ===" >> report.txt
 hierarchy -n "Player*" >> report.txt
 echo "=== Enemies ===" >> report.txt
 hierarchy -n "Enemy*" >> report.txt
 ```
 
-### Input Redirect (`<`)
+### 入力リダイレクト (`<`)
 
-Read file content as command input:
+ファイルの内容をコマンドの入力として読み取ります。
 
 ```bash
-# Search in file
+# ファイル内を検索
 grep -p "error" < log.txt
 
-# Process file content
+# ファイル内容を処理
 count < data.txt
 
-# Count words in file
+# ファイルの単語数をカウント
 count -w < document.txt
 ```
 
-## Combined Usage
+## 組み合わせた使用例
 
-### Pipeline + Output Redirect
+### パイプライン + 出力リダイレクト
 
 ```bash
-# Filter and save
+# フィルタリングして保存
 hierarchy -r | grep -p "UI" > ui_objects.txt
 
-# Process and save
+# 処理して保存
 cat data.txt | grep -p "important" | count > result.txt
 ```
 
-### Input Redirect + Pipeline
+### 入力リダイレクト + パイプライン
 
 ```bash
-# Read file and filter
+# ファイルを読み取ってフィルタリング
 grep -p "error" < log.txt | count
 
-# Process file through pipeline
+# パイプラインを通じてファイルを処理
 count -w < document.txt
 ```
 
-### Complex Chains
+### 複雑なチェイン
 
 ```bash
-# Full analysis pipeline
+# 全体分析パイプライン
 hierarchy -r -l | grep -p "Enemy" | grep -v "Disabled" > active_enemies.txt
 
-# Multi-step processing
+# 多段階処理
 cat input.txt | grep -p "data" | count > analysis.txt
 ```
 
-## Practical Examples
+## 実用的な例
 
-### Scene Analysis
+### シーン分析
 
 ```bash
-# Export full hierarchy
+# 全階層をエクスポート
 hierarchy -r -l > scene_dump.txt
 
-# Count objects by type
+# タイプ別にオブジェクトをカウント
 echo "Rigidbody count:" > physics_report.txt
 hierarchy -c Rigidbody | count >> physics_report.txt
 echo "Collider count:" >> physics_report.txt
 hierarchy -c Collider | count >> physics_report.txt
 ```
 
-### Debug Logging
+### デバッグログ
 
 ```bash
-# Create debug snapshot
+# デバックスナップショットの作成
 echo "=== Debug Snapshot $(date) ===" >> debug.log
 hierarchy -r -l >> debug.log
 echo "" >> debug.log
 ```
 
-### Configuration Export
+### 設定のエクスポート
 
 ```bash
-# Export all settings
+# すべての設定をエクスポート
 property list /GameManager Settings > settings.txt
 property list /AudioManager AudioSettings >> settings.txt
 property list /GraphicsManager GraphicsSettings >> settings.txt
 ```
 
-### Batch Processing
+### バッチ処理
 
 ```bash
-# Find and document all UI elements
+# すべてのUI要素を検索して文書化
 hierarchy -c "UnityEngine.UI.Image" > ui_images.txt
 hierarchy -c "UnityEngine.UI.Text" > ui_texts.txt
 hierarchy -c "UnityEngine.UI.Button" > ui_buttons.txt
 ```
 
-## Error Handling
+## エラーハンドリング
 
-### Stderr vs Stdout
+### Stderr と Stdout
 
-- **Stdout**: Normal output (goes through pipeline)
-- **Stderr**: Error messages (displayed directly)
+- **Stdout**: 通常の出力（パイプラインを流れます）
+- **Stderr**: エラーメッセージ（直接表示されます）
 
 ```bash
-# Errors don't go through pipe
+# エラーはパイプを通りません
 nonexistent_command | grep -p "test"
 # Error: Command 'nonexistent_command' not found
-# (grep receives nothing)
+# (grep には何も渡されません)
 ```
 
-### Exit Codes in Pipelines
+### パイプライン内の終了コード
 
-The exit code of a pipeline is the exit code of the last command:
+パイプライン全体の終了コードは、最後のコマンドの終了コードになります。
 
 ```bash
-# If grep finds nothing, exit code is still Success
-# (grep outputs nothing, but doesn't error)
+# grep が何も見つけられなくても、終了コードは Success です
+# (grep は何も出力しませんが、エラーにはなりません)
 hierarchy | grep -p "NonExistent"
 ```
 
-## Tips
+## ヒント
 
-1. **Use pipelines for filtering** - Avoid loading everything into memory
-2. **Redirect large outputs** - Save to file instead of displaying
-3. **Chain incrementally** - Build up complex pipelines step by step
-4. **Check intermediate results** - Remove final redirect to debug
+1. **フィルタリングにパイプラインを使う** - すべてをメモリにロードするのを避けます
+2. **大きな出力はリダイレクトする** - 表示する代わりにファイルに保存します
+3. **段階的にチェインをつなぐ** - 複雑なパイプラインを一歩ずつ構築します
+4. **中間結果を確認する** - デバッグ時には最後のリダイレクトを外して確認します
 
-### Debugging Pipelines
+### パイプラインのデバッグ
 
 ```bash
-# Full pipeline
+# 完全なパイプライン
 hierarchy -r | grep -p "Player" | grep -p "Active" > result.txt
 
-# Debug step 1
+# ステップ 1 のデバッグ
 hierarchy -r
 
-# Debug step 2
+# ステップ 2 のデバッグ
 hierarchy -r | grep -p "Player"
 
-# Debug step 3
+# ステップ 3 のデバッグ
 hierarchy -r | grep -p "Player" | grep -p "Active"
 
-# Final with redirect
+# リダイレクトを含めた最終形
 hierarchy -r | grep -p "Player" | grep -p "Active" > result.txt
 ```

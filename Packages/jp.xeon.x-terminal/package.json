@@ -2,7 +2,7 @@
   "name": "jp.xeon.x-terminal",
   "version": "1.0.1",
   "displayName": "XTerminal",
-  "description": "A string-based CLI execution framework for Unity with Linux-like behavior. Supports pipelines, redirects, and extensible custom commands.",
+  "description": "Unity向けのLinuxライクなCLI実行フレームワークです。文字列ベースのコマンド、パイプライン、リダイレクト、拡張可能なカスタムコマンドをサポートします。",
   "unity": "6000.0",
   "documentationUrl": "https://github.com/AraiYuhki/XTerminal#readme",
   "changelogUrl": "https://github.com/AraiYuhki/XTerminal/blob/main/Packages/jp.xeon.x-terminal/CHANGELOG.md",
@@ -25,8 +25,8 @@
   },
   "samples": [
     {
-      "displayName": "Basic Usage",
-      "description": "Basic terminal usage and custom command examples",
+      "displayName": "基本の使用方法",
+      "description": "基本的なターミナルの使用方法とカスタムコマンドのサンプル",
       "path": "Samples~/BasicUsage"
     }
   ],

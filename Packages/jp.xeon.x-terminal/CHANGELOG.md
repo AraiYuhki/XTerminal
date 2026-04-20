@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `-1,2,3` のような負の数値を含む引数がオプションとして誤認識される問題を修正
   - Vector形式の引数（カンマ区切り）を正しく値として認識
 
-### Changed
+### 変更
 
 - **コードの整理**
   - 不要な空行の削除
@@ -99,12 +99,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `CircularBuffer` for fixed-size log buffering
   - `ObservableCollection` integration
 
-### Technical Details
+### 技術詳細
 
-- Minimum Unity version: 6000.0
-- Supports custom command registration via `ICommand` interface
-- Assembly definition files for proper code separation
-- Comprehensive unit tests and PlayMode tests
+- 最低Unityバージョン: 6000.0
+- `ICommand` インターフェースによるカスタムコマンド登録をサポート
+- 適切なコード分離のための Assembly Definition ファイル
+- 包括的な単体テストと PlayMode テスト
 
 [1.0.0]: https://github.com/AraiYuhki/XTerminal/releases/tag/v1.0.0
 [0.1.1]: https://github.com/AraiYuhki/XTerminal/releases/tag/v0.1.1

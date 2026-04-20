@@ -1,34 +1,34 @@
-# Getting Started
+# はじめに
 
-This guide will help you get XTerminal up and running in your Unity project.
+このガイドでは、UnityプロジェクトでXTerminalをセットアップして実行する方法について説明します。
 
-## Requirements
+## 動作要件
 
-- Unity 6000.0 or later
-- (Optional) UniTask 2.0+ for enhanced async support
+- Unity 6000.0 以降
+- (オプション) UniTask 2.0+ (高度な非同期サポートのため)
 
-## Installation
+## インストール
 
-### Option 1: Unity Asset Store
+### オプション 1: Unity Asset Store
 
-1. Open **Window > Package Manager**
-2. Select **My Assets** tab
-3. Search for "XTerminal"
-4. Click **Import**
+1. **Window > Package Manager** を開く
+2. **My Assets** タブを選択
+3. "XTerminal" を検索
+4. **Import** をクリック
 
-### Option 2: Git URL
+### オプション 2: Git URL
 
-1. Open **Window > Package Manager**
-2. Click **+** > **Add package from git URL...**
-3. Enter:
+1. **Window > Package Manager** を開く
+2. **+** > **Add package from git URL...** をクリック
+3. 以下を入力:
 
 ```
 https://github.com/AraiYuhki/XTerminal.git?path=Packages/jp.xeon.x-terminal
 ```
 
-### Option 3: manifest.json
+### オプション 3: manifest.json
 
-Add to your `Packages/manifest.json`:
+`Packages/manifest.json` に以下を追加:
 
 ```json
 {
@@ -38,9 +38,9 @@ Add to your `Packages/manifest.json`:
 }
 ```
 
-## Quick Start
+## クイックスタート
 
-### 1. Create a Terminal Instance
+### 1. Terminalインスタンスの作成
 
 ```csharp
 using Xeon.XTerminal;
@@ -63,7 +63,7 @@ public class TerminalExample : MonoBehaviour
 }
 ```
 
-### 2. Execute Commands
+### 2. コマンドの実行
 
 ```csharp
 async Task RunCommand(CancellationToken ct)
@@ -89,35 +89,35 @@ async Task RunCommand(CancellationToken ct)
 }
 ```
 
-### 3. Use Pipelines
+### 3. パイプラインの使用
 
 ```csharp
-// Chain multiple commands
+// 複数のコマンドをつなげる
 await _terminal.ExecuteAsync(
     "hierarchy -r | grep Player",
     stdout, stderr, ct
 );
 ```
 
-### 4. Use Redirects
+### 4. リダイレクトの使用
 
 ```csharp
-// Output to file
+// ファイルへの出力
 await _terminal.ExecuteAsync(
     "hierarchy -r > hierarchy.txt",
     stdout, stderr, ct
 );
 
-// Append to file
+// ファイルへの追記
 await _terminal.ExecuteAsync(
     "echo NewLine >> output.txt",
     stdout, stderr, ct
 );
 ```
 
-## What's Next?
+## 次のステップ
 
-- [Built-in Commands](commands/index.md) - Learn available commands
-- [Custom Commands](custom-commands.md) - Create your own commands
-- [Pipeline & Redirects](pipeline-redirects.md) - Advanced usage
-- [UniTask Support](unitask-support.md) - High-performance async
+- [組み込みコマンド](commands/index.md) - 使用可能なコマンドについて学ぶ
+- [カスタムコマンド](custom-commands.md) - 独自のコマンドを作成する
+- [パイプラインとリダイレクト](pipeline-redirects.md) - 高度な使い方
+- [UniTaskサポート](unitask-support.md) - 高パフォーマンスな非同期処理

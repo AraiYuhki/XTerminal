@@ -1,65 +1,65 @@
 # FlyweightScrollView
 
-A high-performance virtual scrolling component for displaying large amounts of data efficiently.
+大量のデータを効率的に表示するための高パフォーマンスな仮想スクロールコンポーネントです。
 
-## Overview
+## 概要
 
-FlyweightScrollView uses the **flyweight pattern** to render only visible items, making it ideal for:
+FlyweightScrollViewは**フライウェイトパターン**を使用しており、表示されているアイテムのみをレンダリングします。そのため、以下の用途に最適です。
 
-- Terminal output with thousands of lines
-- Log viewers
-- Large lists and tables
-- Any scrollable content with many items
+- 数千行に及ぶターミナル出力
+- ログビューアー
+- 大規模なリストやテーブル
+- 多数のアイテムを持つあらゆるスクロール可能なコンテンツ
 
-## Features
+## 特徴
 
-- **Virtual scrolling** - Only renders visible items
-- **Efficient memory usage** - Reuses UI elements
-- **CircularBuffer** - Fixed-size buffer with automatic old entry removal
-- **Vertical & Horizontal** - Supports both scroll directions
-- **Data binding** - Works with ObservableCollection
+- **仮想スクロール** - 表示されているアイテムのみをレンダリングします。
+- **効率的なメモリ使用** - UI要素を再利用します。
+- **CircularBuffer** - 古いエントリを自動的に削除する固定サイズバッファです。
+- **垂直・水平サポート** - 両方のスクロール方向をサポートしています。
+- **データバインディング** - ObservableCollection と連携して動作します。
 
-## Components
+## コンポーネント
 
 ### FlyweightScrollView
 
-The main scroll view component.
+メインのスクロールビューコンポーネントです。
 
-| Component | Description |
+| コンポーネント | 説明 |
 |-----------|-------------|
-| `FlyweightVerticalScrollView` | Vertical scrolling |
-| `FlyweightHorizontalScrollView` | Horizontal scrolling |
+| `FlyweightVerticalScrollView` | 垂直スクロール |
+| `FlyweightHorizontalScrollView` | 水平スクロール |
 
 ### CircularBuffer
 
-A fixed-size buffer that automatically removes old entries when full.
+いっぱいになると古いエントリを自動的に削除する固定サイズバッファです。
 
 ```csharp
 using Xeon.Common.FlyweightScrollView.Model;
 
-// Create buffer with max 1000 items
+// 最大1000アイテムのバッファを作成
 var buffer = new CircularBuffer<string>(1000);
 
-// Add items
+// アイテムの追加
 buffer.Add("Line 1");
 buffer.Add("Line 2");
 
-// When full, oldest items are automatically removed
+// いっぱいになると、古いアイテムから自動的に削除されます
 for (int i = 0; i < 2000; i++)
 {
-    buffer.Add($"Line {i}");  // Only last 1000 remain
+    buffer.Add($"Line {i}");  // 最後の1000個だけが残ります
 }
 
-// Access items
+// アイテムへのアクセス
 string first = buffer[0];
-int count = buffer.Count;  // Max 1000
+int count = buffer.Count;  // 最大 1000
 ```
 
-## Setup
+## セットアップ
 
-### 1. Create Item View
+### 1. アイテムビューの作成
 
-Create a script that inherits from `FlyweightScrollViewItemBase`:
+`FlyweightScrollViewItemBase` を継承したスクリプトを作成します。
 
 ```csharp
 using UnityEngine;
@@ -82,14 +82,14 @@ public class LogItemView : FlyweightScrollViewItemBase<string>
 }
 ```
 
-### 2. Create Item Prefab
+### 2. アイテムプレハブの作成
 
-1. Create a UI element (e.g., Panel with Text)
-2. Add your item view script
-3. Set the RectTransform size (this determines item height/width)
-4. Save as prefab
+1. UI要素（例：Textを持つPanel）を作成します。
+2. アイテムビュースクリプトを追加します。
+3. RectTransformのサイズを設定します（これがアイテムの高さ/幅になります）。
+4. プレハブとして保存します。
 
-### 3. Setup ScrollView
+### 3. ScrollView のセットアップ
 
 ```csharp
 using UnityEngine;
@@ -105,10 +105,10 @@ public class TerminalDisplay : MonoBehaviour
 
     void Start()
     {
-        // Create buffer (max 1000 lines)
+        // バッファの作成 (最大1000行)
         _logBuffer = new CircularBuffer<string>(1000);
 
-        // Initialize scroll view
+        // スクロールビューの初期化
         _scrollView.Initialize<string, LogItemView>(_itemPrefab, _logBuffer);
     }
 
@@ -116,15 +116,15 @@ public class TerminalDisplay : MonoBehaviour
     {
         _logBuffer.Add(message);
 
-        // Scroll to bottom (optional)
+        // 下端までスクロール (オプション)
         _scrollView.ScrollToEnd();
     }
 }
 ```
 
-## Integration with Terminal
+## Terminal との統合
 
-### Basic Terminal Display
+### 基本的なターミナル表示
 
 ```csharp
 using UnityEngine;
@@ -173,13 +173,13 @@ public class TerminalUI : MonoBehaviour
             destroyCancellationToken
         );
 
-        // Add output lines
+        // 出力行を追加
         foreach (var line in stdout.Lines)
         {
             _outputBuffer.Add(line);
         }
 
-        // Add error lines
+        // エラー行を追加
         foreach (var line in stderr.Lines)
         {
             _outputBuffer.Add($"[Error] {line}");
@@ -191,7 +191,7 @@ public class TerminalUI : MonoBehaviour
 }
 ```
 
-### With UniTask
+### UniTask を使用する場合
 
 ```csharp
 #if UNI_TERMINAL_UNI_TASK_SUPPORT
@@ -214,63 +214,63 @@ async UniTaskVoid ExecuteCommand(string command)
 #endif
 ```
 
-## API Reference
+## API リファレンス
 
 ### FlyweightScrollViewBase
 
-| Method | Description |
+| メソッド | 説明 |
 |--------|-------------|
-| `Initialize<TData, TView>(prefab, collection)` | Initialize with data source |
-| `ScrollToEnd()` | Scroll to the last item |
-| `ScrollToStart()` | Scroll to the first item |
-| `ScrollToIndex(int index)` | Scroll to specific index |
-| `Refresh()` | Force refresh visible items |
+| `Initialize<TData, TView>(prefab, collection)` | データソースを使用して初期化 |
+| `ScrollToEnd()` | 最後のアイテムまでスクロール |
+| `ScrollToStart()` | 最初のアイテムまでスクロール |
+| `ScrollToIndex(int index)` | 指定したインデックスまでスクロール |
+| `Refresh()` | 表示されているアイテムを強制リフレッシュ |
 
 ### CircularBuffer<T>
 
-| Property/Method | Description |
+| プロパティ/メソッド | 説明 |
 |-----------------|-------------|
-| `Capacity` | Maximum number of items |
-| `Count` | Current number of items |
-| `Add(T item)` | Add item (removes oldest if full) |
-| `Clear()` | Remove all items |
-| `this[int index]` | Get item at index |
+| `Capacity` | 最大アイテム数 |
+| `Count` | 現在のアイテム数 |
+| `Add(T item)` | アイテムを追加 (いっぱいの場合、最も古いものを削除) |
+| `Clear()` | すべてのアイテムを削除 |
+| `this[int index]` | 指定インデックスのアイテムを取得 |
 
 ### FlyweightScrollViewItemBase<T>
 
-| Method | Description |
+| メソッド | 説明 |
 |--------|-------------|
-| `Bind(T data)` | Called when item becomes visible |
-| `Unbind()` | Called when item becomes hidden |
+| `Bind(T data)` | アイテムが表示されたときに呼び出されます |
+| `Unbind()` | アイテムが非表示になったときに呼び出されます |
 
-## Performance Tips
+## パフォーマンスのヒント
 
-1. **Set appropriate buffer size** - Balance memory vs history length
-2. **Keep item views simple** - Minimize components per item
-3. **Use object pooling** - FlyweightScrollView handles this automatically
-4. **Batch additions** - Add multiple items, then call Refresh once
+1. **適切なバッファサイズを設定する** - メモリと履歴の長さのバランスを考えます。
+2. **アイテムビューをシンプルに保つ** - アイテムあたりのコンポーネント数を最小限にします。
+3. **オブジェクトプールを使用する** - FlyweightScrollView はこれを自動的に処理します。
+4. **追加をバッチ化する** - 複数のアイテムを追加してから、Refresh を一度だけ呼び出します。
 
 ```csharp
-// Good: Batch additions
+// 良い例: まとめて追加
 foreach (var line in lines)
 {
     _buffer.Add(line);
 }
-_scrollView.ScrollToEnd();  // Single refresh
+_scrollView.ScrollToEnd();  // 1回のリフレッシュ
 
-// Avoid: Refresh after each addition
+// 避けるべき例: 追加のたびにリフレッシュ
 foreach (var line in lines)
 {
     _buffer.Add(line);
-    _scrollView.ScrollToEnd();  // Multiple refreshes
+    _scrollView.ScrollToEnd();  // 複数回のリフレッシュが発生
 }
 ```
 
-## Prefabs
+## プレハブ
 
-XTerminal includes ready-to-use prefabs:
+XTerminal には、すぐに使用できるプレハブが含まれています。
 
 - `FlyweightVerticalScrollView.prefab`
 - `FlyweightHorizontalScrollView.prefab`
 
-Located in: `Packages/jp.xeon.x-terminal/Runtime/Prefabs/`
+場所: `Packages/jp.xeon.x-terminal/Runtime/Prefabs/`

@@ -1,387 +1,387 @@
-# File Operations
+# ファイル操作
 
-Commands for navigating and manipulating files and directories.
+ファイルやディレクトリの移動・操作を行うためのコマンドです。
 
 ## pwd
 
-Print the current working directory.
+現在の作業ディレクトリを表示します。
 
-### Synopsis
+### 書式
 
 ```bash
 pwd [-L|-P]
 ```
 
-### Description
+### 説明
 
-Displays the absolute path of the current working directory.
+現在の作業ディレクトリの絶対パスを表示します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-L` | `--logical` | Print logical path (default). Uses the path as set, including any symbolic link names. |
-| `-P` | `--physical` | Print physical path with symbolic links resolved. |
+| `-L` | `--logical` | 論理パスを表示します（デフォルト）。シンボリックリンク名を含む設定されたパスを使用します。 |
+| `-P` | `--physical` | シンボリックリンクを解決した物理パスを表示します。 |
 
-### Examples
+### 使用例
 
 ```bash
-# Print current directory
+# 現在のディレクトリを表示
 pwd
-# Output: /Users/player/Projects/MyGame
+# 出力: /Users/player/Projects/MyGame
 
-# Print physical path (resolve symlinks)
+# 物理パスを表示（シンボリックリンクを解決）
 pwd -P
-# Output: /Users/player/Projects/MyGame
+# 出力: /Users/player/Projects/MyGame
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 2 | Current directory does not exist or permission denied |
+| 0 | 成功 |
+| 2 | 現在のディレクトリが存在しないか、アクセス権限がありません |
 
 ---
 
 ## cd
 
-Change the working directory.
+作業ディレクトリを変更します。
 
-### Synopsis
+### 書式
 
 ```bash
 cd [-L|-P] [directory]
 cd -
 ```
 
-### Description
+### 説明
 
-Changes the current working directory to the specified path. Without arguments, changes to the home directory.
+現在の作業ディレクトリを指定されたパスに変更します。引数なしの場合、ホームディレクトリに移動します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-L` | `--logical` | Follow symbolic links (default) |
-| `-P` | `--physical` | Use physical directory structure, resolving symbolic links |
+| `-L` | `--logical` | シンボリックリンクを辿ります（デフォルト） |
+| `-P` | `--physical` | 物理的なディレクトリ構造を使用し、シンボリックリンクを解決します |
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `directory` | Target directory path. Supports `~` for home directory. |
-| `-` | Change to previous directory (equivalent to `cd $OLDPWD`) |
+| `directory` | 移動先のディレクトリパス。ホームディレクトリとして `~` をサポートしています。 |
+| `-` | 直前のディレクトリに変更します（`cd $OLDPWD` と同等） |
 
-### Examples
+### 使用例
 
 ```bash
-# Change to home directory
+# ホームディレクトリに移動
 cd
 
-# Change to specific directory
+# 特定のディレクトリに移動
 cd /Users/player/Projects
 
-# Change to parent directory
+# 親ディレクトリに移動
 cd ..
 
-# Change using home shorthand
+# ホームの短縮表記を使用して移動
 cd ~/Documents
 
-# Change to previous directory
+# 直前のディレクトリに戻る
 cd -
-# Output: /previous/path
+# 出力: /previous/path
 
-# Use physical path
+# 物理パスを使用して移動
 cd -P /symlinked/path
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 1 | Too many arguments |
-| 2 | Directory not found, not a directory, or permission denied |
+| 0 | 成功 |
+| 1 | 引数が多すぎます |
+| 2 | ディレクトリが見つからない、ディレクトリではない、またはアクセス権限がありません |
 
 ---
 
 ## ls
 
-List directory contents.
+ディレクトリの内容を一覧表示します。
 
-### Synopsis
+### 書式
 
 ```bash
 ls [-a] [-l] [-h] [-r] [-R] [-S <sort>] [path...]
 ```
 
-### Description
+### 説明
 
-Lists information about files and directories. By default, lists the current directory contents.
+ファイルやディレクトリの情報を一覧表示します。デフォルトでは、現在のディレクトリの内容を表示します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-a` | `--all` | Do not ignore entries starting with `.` (hidden files) |
-| `-l` | `--long` | Use long listing format with details |
-| `-h` | `--human-readable` | Print sizes in human readable format (e.g., 1K, 234M) |
-| `-r` | `--reverse` | Reverse order while sorting |
-| `-R` | `--recursive` | List subdirectories recursively |
-| `-S` | `--sort` | Sort by: `name` (default), `size`, `time` |
+| `-a` | `--all` | `.` で始まるエントリ（隠しファイル）を無視しません |
+| `-l` | `--long` | 詳細を含む長いリスト形式を使用します |
+| `-h` | `--human-readable` | 読みやすい形式でサイズを表示します（例：1K, 234M） |
+| `-r` | `--reverse` | ソート順を逆にします |
+| `-R` | `--recursive` | サブディレクトリを再帰的に一覧表示します |
+| `-S` | `--sort` | ソート基準: `name` (デフォルト), `size`, `time` |
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `path` | File or directory to list. Multiple paths can be specified. |
+| `path` | 一覧表示するファイルまたはディレクトリ。複数のパスを指定できます。 |
 
-### Output Format
+### 出力形式
 
-**Normal format:**
+**通常形式:**
 ```
 file1.txt  file2.txt  folder/
 ```
 
-**Long format (`-l`):**
+**詳細形式 (`-l`):**
 ```
 -rw-rw-rw-  1      1234  2025-01-15 10:30  file.txt
 drwxrwxrwx  2         0  2025-01-15 09:00  folder/
 ```
 
-Fields: permissions, link count, size, date, name
+フィールド: 権限、リンク数、サイズ、日付、名前
 
-### Examples
+### 使用例
 
 ```bash
-# List current directory
+# 現在のディレクトリを表示
 ls
 
-# List with details
+# 詳細情報付きで表示
 ls -l
 
-# List all files including hidden
+# 隠しファイルを含めて表示
 ls -a
 
-# List with human-readable sizes
+# 読みやすいサイズで表示
 ls -lh
 
-# Sort by size (largest first)
+# サイズ順にソート（大きい順）
 ls -l -S size
 
-# Sort by modification time
+# 更新日時順にソート
 ls -l -S time
 
-# Reverse sort order
+# ソート順を逆にする
 ls -lr
 
-# List recursively
+# 再帰的に表示
 ls -R
 
-# List specific directory
+# 特定のディレクトリを表示
 ls /path/to/directory
 
-# List multiple paths
+# 複数のパスを表示
 ls file1.txt folder/
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 2 | File or directory not found, or permission denied |
+| 0 | 成功 |
+| 2 | ファイルまたはディレクトリが見つからないか、アクセス権限がありません |
 
 ---
 
 ## cat
 
-Concatenate and display file contents.
+ファイルの内容を連結して表示します。
 
-### Synopsis
+### 書式
 
 ```bash
 cat [file...]
 ```
 
-### Description
+### 説明
 
-Reads files sequentially and writes them to standard output. If no file is specified, reads from standard input.
+ファイルを順番に読み取り、標準出力に書き出します。ファイルが指定されていない場合は、標準入力から読み取ります。
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `file` | One or more files to display. If omitted, reads from stdin. |
+| `file` | 表示する1つ以上のファイル。省略した場合は標準入力から読み取ります。 |
 
-### Examples
+### 使用例
 
 ```bash
-# Display file contents
+# ファイルの内容を表示
 cat file.txt
 
-# Display multiple files
+# 複数のファイルを表示
 cat file1.txt file2.txt
 
-# Use in pipeline (pass through)
+# パイプラインで使用（パススルー）
 echo "Hello" | cat
 
-# Redirect to file
+# ファイルへリダイレクト
 cat source.txt > destination.txt
 
-# Append files
+# ファイルを連結
 cat header.txt body.txt footer.txt > complete.txt
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 2 | File not found or read error |
+| 0 | 成功 |
+| 2 | ファイルが見つからないか、読み取りエラーが発生しました |
 
 ---
 
 ## find
 
-Search for files in a directory hierarchy.
+ディレクトリ階層内でファイルを検索します。
 
-### Synopsis
+### 書式
 
 ```bash
 find [path...] [-n pattern] [-i pattern] [-t type] [-d depth] [--mindepth N]
 ```
 
-### Description
+### 説明
 
-Searches for files matching specified criteria within directory trees.
+ディレクトリツリー内で指定された条件に一致するファイルを検索します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-n` | `--name` | File name pattern (supports `*` and `?` wildcards) |
-| `-i` | `--iname` | Case-insensitive file name pattern |
-| `-t` | `--type` | File type: `f` (file), `d` (directory) |
-| `-d` | `--maxdepth` | Maximum search depth (-1 = unlimited, default) |
-| | `--mindepth` | Minimum search depth (default: 0) |
+| `-n` | `--name` | ファイル名パターン（`*` や `?` ワイルドカードをサポート） |
+| `-i` | `--iname` | 大文字小文字を区別しないファイル名パターン |
+| `-t` | `--type` | ファイルタイプ: `f` (ファイル), `d` (ディレクトリ) |
+| `-d` | `--maxdepth` | 最大検索深度 (-1 = 無制限, デフォルト) |
+| | `--mindepth` | 最小検索深度 (デフォルト: 0) |
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `path` | Starting directory for search. Defaults to current directory. |
+| `path` | 検索を開始するディレクトリ。デフォルトは現在のディレクトリです。 |
 
-### Wildcards
+### ワイルドカード
 
-| Pattern | Description |
+| パターン | 説明 |
 |---------|-------------|
-| `*` | Matches any sequence of characters |
-| `?` | Matches any single character |
+| `*` | 任意の文字シーケンスに一致します |
+| `?` | 任意の1文字に一致します |
 
-### Examples
+### 使用例
 
 ```bash
-# Find all files in current directory tree
+# 現在のディレクトリツリー内のすべてのファイルを検索
 find
 
-# Find by name pattern
+# 名前パターンで検索
 find -n "*.cs"
 find -n "Player*"
 
-# Case-insensitive search
+# 大文字小文字を区別せずに検索
 find -i "readme*"
 
-# Find only files
+# ファイルのみ検索
 find -t f
 
-# Find only directories
+# ディレクトリのみ検索
 find -t d
 
-# Limit search depth
+# 検索深度を制限
 find -d 2
 
-# Combine options
+# オプションの組み合わせ
 find /path/to/search -n "*.txt" -t f -d 3
 
-# Find in specific directory
+# 特定のディレクトリ内を検索
 find Assets/Scripts -n "*.cs"
 ```
 
-### Output
+### 出力
 
-Outputs matching paths relative to the search directory:
+検索ディレクトリからの相対パスを出力します。
 ```
 ./file.txt
 ./subfolder/another.txt
 ./subfolder/deep/file.txt
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success (even if no matches found) |
-| 2 | Starting path not found |
+| 0 | 成功（一致するものが見つからなくても成功となります） |
+| 2 | 開始パスが見つかりません |
 
 ---
 
 ## less
 
-View file contents page by page.
+ファイルの内容をページごとに表示します。
 
-### Synopsis
+### 書式
 
 ```bash
 less [-n lines] [-f line] [-N] [-S] [file]
 ```
 
-### Description
+### 説明
 
-Displays file contents with pagination support. In XTerminal's non-interactive environment, outputs a specified number of lines.
+ファイルの内容をページ分割して表示します。XTerminalの非インタラクティブな環境では、指定された行数を出力します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-n` | `--lines` | Number of lines to display (0 = all, default) |
-| `-f` | `--from-line` | Start from specified line number (1-based, default: 1) |
-| `-N` | `--line-numbers` | Show line numbers |
-| `-S` | `--chop-long-lines` | Truncate long lines at 80 characters |
+| `-n` | `--lines` | 表示する行数 (0 = すべて, デフォルト) |
+| `-f` | `--from-line` | 指定した行番号から開始 (1ベース, デフォルト: 1) |
+| `-N` | `--line-numbers` | 行番号を表示します |
+| `-S` | `--chop-long-lines` | 長い行を80文字で切り捨てます |
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `file` | File to view. Use `-` for stdin. If omitted, reads from stdin. |
+| `file` | 表示するファイル。標準入力の場合は `-` を使用します。省略した場合は標準入力から読み取ります。 |
 
-### Examples
+### 使用例
 
 ```bash
-# View entire file
+# ファイル全体を表示
 less file.txt
 
-# View first 20 lines
+# 最初の20行を表示
 less -n 20 file.txt
 
-# View lines 50-70
+# 50行目から70行目までを表示
 less -f 50 -n 20 file.txt
 
-# Show with line numbers
+# 行番号付きで表示
 less -N file.txt
 
-# Truncate long lines
+# 長い行を切り捨てて表示
 less -S logfile.txt
 
-# View from stdin
+# 標準入力から表示
 cat file.txt | less -n 10
 
-# Combine options
+# オプションの組み合わせ
 less -N -n 50 -f 100 largefile.txt
 ```
 
-### Output with `-n` option
+### `-n` オプション使用時の出力
 
 ```
 File: example.txt (lines 1-20 of 150)
@@ -393,49 +393,49 @@ Line 2 content
 (130 more lines)
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 2 | File not found, is a directory, or permission denied |
+| 0 | 成功 |
+| 2 | ファイルが見つからない、ディレクトリである、またはアクセス権限がありません |
 
 ---
 
 ## diff
 
-Compare files line by line.
+ファイルを1行ずつ比較します。
 
-### Synopsis
+### 書式
 
 ```bash
 diff [-u N] [-i] [-b] [-w] [-q] <file1> <file2>
 ```
 
-### Description
+### 説明
 
-Compares two files and displays the differences. Uses the LCS (Longest Common Subsequence) algorithm.
+2つのファイルを比較し、差分を表示します。LCS（最長共通部分列）アルゴリズムを使用します。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-u` | `--unified` | Output in unified format with N lines of context |
-| `-i` | `--ignore-case` | Ignore case differences in file contents |
-| `-b` | `--ignore-space` | Ignore changes in the amount of whitespace |
-| `-w` | `--ignore-all-space` | Ignore all whitespace |
-| `-q` | `--brief` | Report only whether files differ |
+| `-u` | `--unified` | ユニファイド形式で出力し、前後に N 行のコンテキストを含めます |
+| `-i` | `--ignore-case` | ファイル内容の大文字小文字の違いを無視します |
+| `-b` | `--ignore-space` | 空白の量の違いを無視します |
+| `-w` | `--ignore-all-space` | すべての空白を無視します |
+| `-q` | `--brief` | ファイルが異なるかどうかのみを報告します |
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `file1` | First file to compare. Use `-` for stdin. |
-| `file2` | Second file to compare. Use `-` for stdin. |
+| `file1` | 比較する1つ目のファイル。標準入力の場合は `-` を使用します。 |
+| `file2` | 比較する2つ目のファイル。標準入力の場合は `-` を使用します。 |
 
-### Output Formats
+### 出力形式
 
-**Normal format (default):**
+**通常形式 (デフォルト):**
 ```
 2c2
 < old line
@@ -447,44 +447,44 @@ Compares two files and displays the differences. Uses the LCS (Longest Common Su
 < deleted line
 ```
 
-**Unified format (`-u`):**
+**ユニファイド形式 (`-u`):**
 ```
 --- file1.txt
 +++ file2.txt
 @@ -1,5 +1,6 @@
- context line
--removed line
-+added line
- context line
+  context line
+ -removed line
+ +added line
+  context line
 ```
 
-### Examples
+### 使用例
 
 ```bash
-# Compare two files
+# 2つのファイルを比較
 diff file1.txt file2.txt
 
-# Unified format with 3 lines context
+# 前後3行のコンテキストを含むユニファイド形式
 diff -u 3 file1.txt file2.txt
 
-# Ignore case
+# 大文字小文字を無視
 diff -i file1.txt file2.txt
 
-# Ignore whitespace changes
+# 空白の違いを無視
 diff -w file1.txt file2.txt
 
-# Brief output
+# 簡略出力
 diff -q file1.txt file2.txt
-# Output: Files file1.txt and file2.txt differ
+# 出力: Files file1.txt and file2.txt differ
 
-# Compare with stdin
+# 標準入力と比較
 cat modified.txt | diff original.txt -
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Files are identical |
-| 1 | Files differ |
-| 2 | Error (file not found, etc.) |
+| 0 | ファイルは同一です |
+| 1 | ファイルが異なります |
+| 2 | エラー（ファイルが見つからないなど） |

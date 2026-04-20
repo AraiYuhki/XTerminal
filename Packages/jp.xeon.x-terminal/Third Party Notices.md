@@ -1,40 +1,40 @@
-# Third Party Notices
+# サードパーティ通知
 
-This package may use third-party libraries or assets. Below are the attributions for any third-party components.
+このパッケージは、サードパーティのライブラリやアセットを使用している場合があります。以下は各コンポーネントの属性情報です。
 
 ---
 
-## UniTask (Optional Dependency)
+## UniTask (オプションの依存関係)
 
-**Note:** UniTask is an optional dependency. XTerminal will work without it, but if you choose to install UniTask for enhanced async support, please note its attribution below.
+**注意:** UniTask はオプションの依存関係です。XTerminal は UniTask なしでも動作しますが、高度な非同期サポートのために UniTask をインストールする場合は、以下の属性情報に注意してください。
 
-**Project:** UniTask - Provides an efficient allocation free async/await integration for Unity
-**Author:** Cysharp, Inc.
-**License:** MIT License
+**プロジェクト:** UniTask - Unity 用の効率的なアロケーションフリーの async/await 統合を提供します
+**著者:** Cysharp, Inc.
+**ライセンス:** MIT License
 **URL:** https://github.com/Cysharp/UniTask
 
 ---
 
 ## PlemolJP Console Nerd Font
 
-Font file used: PlemolJPConsoleNF-Regular.ttf
+使用されているフォントファイル: PlemolJPConsoleNF-Regular.ttf
 
 **PlemolJP**
-**Author:** yuru7
-**License:** SIL Open Font License, Version 1.1
+**著者:** yuru7
+**ライセンス:** SIL Open Font License, Version 1.1
 **URL:** https://github.com/yuru7/PlemolJP
 
 **Nerd Fonts**
-**Author:** Nerd Fonts contributors
-**License:** MIT License
+**著者:** Nerd Fonts contributors
+**ライセンス:** MIT License
 **URL:** https://github.com/ryanoasis/nerd-fonts
 
 ---
 
-## No Other Third-Party Dependencies
+## その他のサードパーティ依存関係はありません
 
-XTerminal has no required third-party dependencies beyond Unity's standard packages. All core functionality is implemented using Unity's built-in systems.
+XTerminal には、Unity 標準パッケージ以外の必須のサードパーティ依存関係はありません。すべてのコア機能は、Unity の組み込みシステムを使用して実装されています。
 
 ---
 
-*Last updated: January 2025*
+*最終更新日: 2025年1月*

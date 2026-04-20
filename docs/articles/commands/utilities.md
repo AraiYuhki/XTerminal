@@ -1,35 +1,35 @@
-# Utilities
+# ユーティリティ
 
-General utility commands for help and history management.
+ヘルプや履歴管理のための一般的なユーティリティコマンドです。
 
 ## help
 
-Display help information for commands.
+コマンドのヘルプ情報を表示します。
 
-### Synopsis
+### 書式
 
 ```bash
 help [command]
 ```
 
-### Description
+### 説明
 
-Without arguments, displays a list of all available commands with brief descriptions. When a command name is provided, displays detailed help for that specific command including usage, options, and examples.
+引数がない場合は、利用可能なすべてのコマンドとその簡潔な説明の一覧を表示します。コマンド名が指定された場合は、そのコマンドの詳細なヘルプ（使用法、オプション、使用例など）を表示します。
 
-### Arguments
+### 引数
 
-| Argument | Description |
+| 引数 | 説明 |
 |----------|-------------|
-| `command` | Optional. Name of the command to get help for. |
+| `command` | オプション。ヘルプを表示するコマンドの名前。 |
 
-### Examples
+### 使用例
 
 ```bash
-# List all available commands
+# 利用可能なすべてのコマンドを一覧表示
 help
 ```
 
-**Output:**
+**出力例:**
 ```
 Available commands:
   cat        Concatenate and display file contents
@@ -53,11 +53,11 @@ Use 'help <command>' for detailed information.
 ```
 
 ```bash
-# Get help for specific command
+# 特定のコマンドのヘルプを表示
 help ls
 ```
 
-**Output:**
+**出力例:**
 ```
 ls - List directory contents
 
@@ -73,53 +73,53 @@ Options:
 ```
 
 ```bash
-# Get help for Unity commands
+# Unity コマンドのヘルプを表示
 help hierarchy
 help component
 help property
 ```
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 1 | Unknown command specified |
-| 2 | Registry not configured |
+| 0 | 成功 |
+| 1 | 不明なコマンドが指定されました |
+| 2 | レジストリが設定されていません |
 
 ---
 
 ## history
 
-Display or manage command history.
+コマンド履歴を表示または管理します。
 
-### Synopsis
+### 書式
 
 ```bash
 history [-c] [-d position] [-n count] [-r]
 ```
 
-### Description
+### 説明
 
-Displays the command history list with line numbers. Can also be used to clear history or delete specific entries.
+コマンド履歴を、行番号と共に一覧表示します。履歴のクリアや、特定のエントリの削除にも使用できます。
 
-### Options
+### オプション
 
-| Option | Long | Description |
+| オプション | ロング形式 | 説明 |
 |--------|------|-------------|
-| `-c` | `--clear` | Clear all history entries |
-| `-d` | `--delete` | Delete the history entry at the specified position (1-based) |
-| `-n` | `--number` | Display only the last N entries |
-| `-r` | `--reverse` | Display history in reverse order (newest first) |
+| `-c` | `--clear` | すべての履歴エントリを消去します |
+| `-d` | `--delete` | 指定された位置 (1ベース) の履歴エントリを削除します |
+| `-n` | `--number` | 最後の N 件のエントリのみを表示します |
+| `-r` | `--reverse` | 履歴を逆順（新しい順）で表示します |
 
-### Examples
+### 使用例
 
 ```bash
-# Display full history
+# 履歴全体を表示
 history
 ```
 
-**Output:**
+**出力例:**
 ```
     1  ls -la
     2  cd ~/Projects
@@ -130,11 +130,11 @@ history
 ```
 
 ```bash
-# Show last 5 commands
+# 最後の5件を表示
 history -n 5
 ```
 
-**Output:**
+**出力例:**
 ```
     2  cd ~/Projects
     3  hierarchy -r
@@ -144,11 +144,11 @@ history -n 5
 ```
 
 ```bash
-# Show history in reverse order
+# 履歴を逆順で表示
 history -r
 ```
 
-**Output:**
+**出力例:**
 ```
     6  property set /Player Rigidbody mass 10
     5  component add /Player Rigidbody
@@ -159,83 +159,83 @@ history -r
 ```
 
 ```bash
-# Delete specific entry
+# 特定のエントリを削除
 history -d 3
 
-# Clear all history
+# すべての履歴を消去
 history -c
 ```
 
-### History Format
+### 履歴のフォーマット
 
-Each history entry is displayed with:
-- **Line number** (1-based, right-aligned in 5 characters)
-- **Command** (the exact command as entered)
+各履歴エントリは以下のように表示されます：
+- **行番号** (1ベース、5文字分で右揃え)
+- **コマンド** (入力された通りのコマンド)
 
-### Notes
+### 注意事項
 
-- History is maintained per Terminal instance
-- History clearing and deletion require the Terminal to be configured with history callbacks
-- The current command being executed is typically not included in history until after execution
+- 履歴は Terminal インスタンスごとに保持されます。
+- 履歴の消去や削除には、Terminal に履歴コールバックが設定されている必要があります。
+- 現在実行中のコマンドは、通常、実行が完了するまで履歴には含まれません。
 
-### Exit Codes
+### 終了コード
 
-| Code | Description |
+| コード | 説明 |
 |------|-------------|
-| 0 | Success |
-| 2 | History operation not supported or position out of range |
+| 0 | 成功 |
+| 2 | 履歴操作がサポートされていないか、位置が範囲外です |
 
 ---
 
-## Practical Examples
+## 実用的な例
 
-### Reviewing Recent Work
+### 最近の作業の確認
 
 ```bash
-# See what commands you ran recently
+# 最近実行したコマンドを確認
 history -n 10
 
-# Find specific commands in history (combine with grep)
+# 履歴から特定のコマンドを探す (grep との組み合わせ)
 history | grep -p "component"
 ```
 
-### Cleaning Up History
+### 履歴の整理
 
 ```bash
-# Remove a mistaken command
+# 間違えて入力したコマンドを削除
 history -d 5
 
-# Start fresh
+# 履歴をリセット
 history -c
 ```
 
-### Getting Command Help
+### コマンドヘルプの活用
 
 ```bash
-# Explore available commands
+# 利用可能なコマンドを調べる
 help
 
-# Learn about a specific command
+# 特定のコマンドについて学ぶ
 help transform
 
-# Check Unity-specific commands
+# Unity 固有のコマンドを確認
 help hierarchy
 help go
 help component
 help property
 ```
 
-### Quick Reference
+### クイックリファレンス
 
 ```bash
-# Common help queries
-help ls          # File listing options
-help find        # File search options
-help grep        # Pattern matching syntax
-help diff        # File comparison options
-help hierarchy   # Scene hierarchy display
-help go          # GameObject operations
-help transform   # Transform manipulation
-help component   # Component management
-help property    # Property access via reflection
+# よく使われるヘルプの検索
+help ls          # ファイル一覧表示のオプション
+help find        # ファイル検索のオプション
+help grep        # パターンマッチングの構文
+help diff        # ファイル比較のオプション
+help hierarchy   # シーンヒエラルキーの表示
+help go          # GameObject 操作
+help transform   # Transform 操作
+help component   # コンポーネント管理
+help property    # リフレクションを介したプロパティアクセス
 ```
