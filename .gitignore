@@ -102,3 +102,6 @@ InitTestScene*.unity*
 /Dist/
 /*.zip
 /*.tgz
+
+# Claude Code local settings
+.claude/settings.local.json
