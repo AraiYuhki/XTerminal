@@ -1,7 +1,7 @@
 # XTerminal
 
 <p align="center">
-  <img src="../../Packages/jp.xeon.x-terminal/Documentation~/Images/icon.png" alt="XTerminal Logo" width="256" height="256">
+  <img src="../images/icon.png" alt="XTerminal Logo" width="256" height="256">
 </p>
 
 Unity向けのLinuxライクなCLI実行フレームワークです。

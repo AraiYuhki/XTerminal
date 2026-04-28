@@ -37,7 +37,9 @@ ensure_docfx() {
             echo "https://dotnet.microsoft.com/download からインストールしてください。"
             exit 1
         fi
-        dotnet tool install -g docfx
+        # Unity プロジェクトのルートには複数の .csproj があるため、
+        # 一時ディレクトリで実行して dotnet の自動プロジェクト検出を回避する
+        (cd /tmp && dotnet tool install -g docfx)
         echo "DocFX をインストールしました。"
     fi
 }

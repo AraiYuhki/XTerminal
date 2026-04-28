@@ -11,6 +11,8 @@ XTerminalは、カテゴリ別に整理された包括的な組み込みコマ�
 | [ユーティリティ](#utilities) | `help`, `history` | 一般的なユーティリティ |
 | [Unityコマンド](unity-commands.md) | `hierarchy`, `go`, `transform`, `component`, `property` | Unity固有の操作 |
 
+<a id="utilities"></a>
+
 ## ユーティリティ
 
 ### help
