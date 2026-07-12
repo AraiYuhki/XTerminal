@@ -98,7 +98,7 @@ namespace Xeon.XTerminal.Tests
             Assert.AreEqual(ExitCode.Success, exitCode);
             var output = stdout.ToString();
             Assert.IsTrue(output.Contains("TestMaterial"));
-            Assert.IsTrue(output.Contains($"#{material.GetInstanceID()}"));
+            Assert.IsTrue(output.Contains($"#{material.GetEntityIdCompat()}"));
         }
 
         // ASSET-012 一覧表示（型フィルター）
@@ -180,7 +180,7 @@ namespace Xeon.XTerminal.Tests
             AssetManager.Instance.Registry.Register(material, "test/key", "TestProvider");
 
             stdout = new StringBuilderTextWriter();
-            var specifier = $"#{material.GetInstanceID()}";
+            var specifier = $"#{material.GetEntityIdCompat()}";
             var exitCode = await terminal.ExecuteAsync($"asset info {specifier}", stdout, stderr);
 
             Assert.AreEqual(ExitCode.Success, exitCode);
@@ -249,7 +249,7 @@ namespace Xeon.XTerminal.Tests
             AssetManager.Instance.Registry.Register(material, "test/key", "TestProvider");
 
             stdout = new StringBuilderTextWriter();
-            var specifier = $"#{material.GetInstanceID()}";
+            var specifier = $"#{material.GetEntityIdCompat()}";
             var exitCode = await terminal.ExecuteAsync($"asset unload {specifier}", stdout, stderr);
 
             Assert.AreEqual(ExitCode.Success, exitCode);

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-12
+
+### Fixed
+
+- **Unity 6.5 (6000.5) Compatibility**
+  - Unity 6.5で`Object.GetInstanceID()`が廃止（コンパイルエラー化）されたことに対応
+  - `EntityIdCompat.GetEntityIdCompat()` 拡張メソッドを追加し、Unity 6.4以降は`GetEntityId()`、それ以前は`GetInstanceID()`を使用するように統一
+  - `EditorUtility.EntityIdToObject`をUnity 6.4以降では`EntityId.FromULong`経由で呼び出すように変更
+  - Unity 6000.0〜6000.5まで全バージョンでコンパイル可能（後方互換を維持）
+
+### Changed
+
+- **インスタンスIDの型を`int`から`long`に変更**
+  - Unity 6.5の`EntityId`は64bit値のため、ID保持型を`long`に拡張
+  - `LoadedAssetEntry.InstanceId`、`LoadedAssetRegistry.Unregister(long)`、`LoadedAssetRegistry.GetByInstanceId(long)`、`AssetDatabaseProvider.GetAssetPathFromInstanceId(long)`が対象
+  - `int`から`long`への暗黙変換により、既存の呼び出し側コードはソース互換
+
 ## [1.0.0] - 2025-02-04
 
 ### Added

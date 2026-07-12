@@ -173,7 +173,7 @@ namespace Xeon.XTerminal.UnityCommands
             var specifier = args[0];
 
             // インスタンスID指定
-            if (specifier.StartsWith("#") && int.TryParse(specifier.Substring(1), out int instanceId))
+            if (specifier.StartsWith("#") && long.TryParse(specifier.Substring(1), out long instanceId))
             {
                 var path = Provider.GetAssetPathFromInstanceId(instanceId);
                 if (string.IsNullOrEmpty(path))

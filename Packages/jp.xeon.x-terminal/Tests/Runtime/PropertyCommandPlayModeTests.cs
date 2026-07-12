@@ -278,7 +278,7 @@ namespace Xeon.XTerminal.Tests.Runtime
 
             yield return null;
 
-            var specifier = $"#{material.GetInstanceID()}";
+            var specifier = $"#{material.GetEntityIdCompat()}";
             var task = terminal.ExecuteAsync($"property set /PlayMode_PropMatId MeshRenderer material {specifier}", stdout, stderr);
             while (!task.IsCompleted) yield return null;
 
@@ -339,7 +339,7 @@ namespace Xeon.XTerminal.Tests.Runtime
 
             yield return null;
 
-            var specifier = $"#{rb.GetInstanceID()}";
+            var specifier = $"#{rb.GetEntityIdCompat()}";
             var task = terminal.ExecuteAsync($"property set /PlayMode_PropCompId HingeJoint connectedBody {specifier}", stdout, stderr);
             while (!task.IsCompleted) yield return null;
 
@@ -361,7 +361,7 @@ namespace Xeon.XTerminal.Tests.Runtime
             // LookAtConstraintのworldUpObjectを使用
             var lookAt = target.AddComponent<UnityEngine.Animations.LookAtConstraint>();
 
-            var specifier = $"#{sourceObj.transform.GetInstanceID()}";
+            var specifier = $"#{sourceObj.transform.GetEntityIdCompat()}";
             var task = terminal.ExecuteAsync($"property set /PlayMode_PropGoId LookAtConstraint worldUpObject {specifier}", stdout, stderr);
             while (!task.IsCompleted) yield return null;
 

@@ -151,14 +151,16 @@ namespace Xeon.XTerminal.Assets
         /// <summary>
         /// インスタンスIDからアセットパスを取得します
         /// </summary>
-        /// <param name="instanceId">インスタンスID</param>
+        /// <param name="instanceId">インスタンスID（Unity 6.5以降はEntityId由来の64bit値）</param>
         /// <returns>アセットパス</returns>
-        public string GetAssetPathFromInstanceId(int instanceId)
+        public string GetAssetPathFromInstanceId(long instanceId)
         {
-#if UNITY_6000_3_OR_NEWER
-            var obj = EditorUtility.EntityIdToObject(instanceId);
+#if UNITY_6000_4_OR_NEWER
+            var obj = EditorUtility.EntityIdToObject(EntityId.FromULong(unchecked((ulong)instanceId)));
+#elif UNITY_6000_3_OR_NEWER
+            var obj = EditorUtility.EntityIdToObject((int)instanceId);
 #else
-            var obj = EditorUtility.InstanceIDToObject(instanceId);
+            var obj = EditorUtility.InstanceIDToObject((int)instanceId);
 #endif
             return obj == null ? null : AssetDatabase.GetAssetPath(obj);
         }

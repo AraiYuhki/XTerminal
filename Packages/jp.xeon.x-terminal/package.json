@@ -1,6 +1,6 @@
 {
   "name": "jp.xeon.x-terminal",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "displayName": "XTerminal",
   "description": "Unity向けのLinuxライクなCLI実行フレームワークです。文字列ベースのコマンド、パイプライン、リダイレクト、拡張可能なカスタムコマンドをサポートします。",
   "unity": "6000.0",

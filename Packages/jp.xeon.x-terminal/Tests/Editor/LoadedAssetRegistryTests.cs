@@ -36,7 +36,7 @@ namespace Xeon.XTerminal.Tests
 
             Assert.IsNotNull(entry);
             Assert.AreEqual(material, entry.Asset);
-            Assert.AreEqual(material.GetInstanceID(), entry.InstanceId);
+            Assert.AreEqual(material.GetEntityIdCompat(), entry.InstanceId);
             Assert.AreEqual("TestMaterial", entry.Name);
             Assert.AreEqual("test/path", entry.Key);
             Assert.AreEqual("TestProvider", entry.ProviderName);
@@ -77,7 +77,7 @@ namespace Xeon.XTerminal.Tests
             material.name = "TestMaterial";
 
             registry.Register(material, "test/path", "TestProvider");
-            var entry = registry.GetByInstanceId(material.GetInstanceID());
+            var entry = registry.GetByInstanceId(material.GetEntityIdCompat());
 
             Assert.IsNotNull(entry);
             Assert.AreEqual(material, entry.Asset);
@@ -168,7 +168,7 @@ namespace Xeon.XTerminal.Tests
             material.name = "TestMaterial";
 
             registry.Register(material, "test/path", "TestProvider");
-            var specifier = $"#{material.GetInstanceID()}";
+            var specifier = $"#{material.GetEntityIdCompat()}";
             var result = registry.TryResolve(specifier, out var entry);
 
             Assert.IsTrue(result);
@@ -254,7 +254,7 @@ namespace Xeon.XTerminal.Tests
             material.name = "TestMaterial";
 
             registry.Register(material, "test/path", "TestProvider");
-            var result = registry.Unregister(material.GetInstanceID());
+            var result = registry.Unregister(material.GetEntityIdCompat());
 
             Assert.IsTrue(result);
             Assert.AreEqual(0, registry.Count);

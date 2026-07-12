@@ -90,7 +90,7 @@ namespace Xeon.XTerminal.Tests
             var texture = CreateAsset<Texture2D>("TestTexture");
             AssetManager.Instance.Registry.Register(texture, "test/path", "TestProvider");
 
-            var specifier = $"#{texture.GetInstanceID()}";
+            var specifier = $"#{texture.GetEntityIdCompat()}";
             var result = ValueConverter.Convert(specifier, typeof(Texture2D));
 
             Assert.IsNotNull(result);
@@ -133,7 +133,7 @@ namespace Xeon.XTerminal.Tests
             var mesh = CreateAsset<Mesh>("TestMesh");
             AssetManager.Instance.Registry.Register(mesh, "test/path", "TestProvider");
 
-            var specifier = $"#{mesh.GetInstanceID()}";
+            var specifier = $"#{mesh.GetEntityIdCompat()}";
             var result = ValueConverter.Convert(specifier, typeof(Mesh));
 
             Assert.IsNotNull(result);
@@ -193,7 +193,7 @@ namespace Xeon.XTerminal.Tests
         {
             var go = CreateAsset<GameObject>("TestGO");
 
-            var specifier = $"#{go.GetInstanceID()}";
+            var specifier = $"#{go.GetEntityIdCompat()}";
             var result = ValueConverter.Convert(specifier, typeof(GameObject));
 
             Assert.IsNotNull(result);
@@ -215,7 +215,7 @@ namespace Xeon.XTerminal.Tests
             var go = CreateAsset<GameObject>("TestGO");
             var rb = go.AddComponent<Rigidbody>();
 
-            var specifier = $"#{rb.GetInstanceID()}";
+            var specifier = $"#{rb.GetEntityIdCompat()}";
             var result = ValueConverter.Convert(specifier, typeof(Rigidbody));
 
             Assert.IsNotNull(result);

@@ -182,10 +182,10 @@ namespace Xeon.XTerminal
         /// <summary>
         /// インスタンスID形式（#12345）のパースを試みます
         /// </summary>
-        private static bool TryParseInstanceId(string value, out int instanceId)
+        private static bool TryParseInstanceId(string value, out long instanceId)
         {
             instanceId = 0;
-            return value.StartsWith("#") && int.TryParse(value.Substring(1), out instanceId);
+            return value.StartsWith("#") && long.TryParse(value.Substring(1), out instanceId);
         }
 
         private static Vector2 ParseVector2(string value)
@@ -377,7 +377,7 @@ namespace Xeon.XTerminal
             if (IsNullOrNone(value))
                 return null;
 
-            if (TryParseInstanceId(value, out int instanceId))
+            if (TryParseInstanceId(value, out long instanceId))
             {
                 var obj = FindObjectByInstanceId<GameObject>(instanceId);
                 if (obj == null)
@@ -399,7 +399,7 @@ namespace Xeon.XTerminal
             if (IsNullOrNone(value))
                 return null;
 
-            if (TryParseInstanceId(value, out int instanceId))
+            if (TryParseInstanceId(value, out long instanceId))
                 return ResolveComponentByInstanceId(instanceId, componentType, value);
 
             // パス/コンポーネント形式 (例: /Player:Rigidbody)
@@ -411,7 +411,7 @@ namespace Xeon.XTerminal
             return ResolveComponentByPath(value, componentType);
         }
 
-        private static Component ResolveComponentByInstanceId(int instanceId, Type componentType, string originalValue)
+        private static Component ResolveComponentByInstanceId(long instanceId, Type componentType, string originalValue)
         {
             var obj = FindObjectByInstanceId<Component>(instanceId);
             if (obj == null)
@@ -460,7 +460,7 @@ namespace Xeon.XTerminal
             if (IsNullOrNone(value))
                 return null;
 
-            if (TryParseInstanceId(value, out int instanceId))
+            if (TryParseInstanceId(value, out long instanceId))
                 return ResolveMaterialByInstanceId(instanceId, value);
 
             // パス/コンポーネント形式でRendererから取得
@@ -472,7 +472,7 @@ namespace Xeon.XTerminal
             return ResolveMaterialByName(value);
         }
 
-        private static Material ResolveMaterialByInstanceId(int instanceId, string originalValue)
+        private static Material ResolveMaterialByInstanceId(long instanceId, string originalValue)
         {
             // ロード済みアセットレジストリから検索
             var entry = AssetManager.Instance.Registry.GetByInstanceId(instanceId);
@@ -482,7 +482,7 @@ namespace Xeon.XTerminal
             // Resources.FindObjectsOfTypeAllから検索
             foreach (var mat in Resources.FindObjectsOfTypeAll<Material>())
             {
-                if (mat.GetInstanceID() == instanceId)
+                if (mat.GetEntityIdCompat() == instanceId)
                     return mat;
             }
 
@@ -646,14 +646,14 @@ namespace Xeon.XTerminal
         /// <typeparam name="T">検索対象の型（GameObjectまたはComponent）</typeparam>
         /// <param name="instanceId">検索するインスタンスID</param>
         /// <returns>見つかったオブジェクト、見つからない場合はnull</returns>
-        private static T FindObjectByInstanceId<T>(int instanceId) where T : UnityEngine.Object
+        private static T FindObjectByInstanceId<T>(long instanceId) where T : UnityEngine.Object
         {
             // GameObjectを検索
             if (typeof(T) == typeof(GameObject))
             {
                 foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
                 {
-                    if (go.GetInstanceID() == instanceId)
+                    if (go.GetEntityIdCompat() == instanceId)
                         return go as T;
                 }
                 return null;
@@ -664,7 +664,7 @@ namespace Xeon.XTerminal
             {
                 foreach (var comp in Resources.FindObjectsOfTypeAll<Component>())
                 {
-                    if (comp.GetInstanceID() == instanceId)
+                    if (comp.GetEntityIdCompat() == instanceId)
                         return comp as T;
                 }
                 return null;
@@ -684,13 +684,13 @@ namespace Xeon.XTerminal
             if (IsNullOrNone(value))
                 return null;
 
-            if (TryParseInstanceId(value, out int instanceId))
+            if (TryParseInstanceId(value, out long instanceId))
                 return ResolveAssetByInstanceId(instanceId, assetType, value);
 
             return ResolveAssetByName(value, assetType);
         }
 
-        private static UnityEngine.Object ResolveAssetByInstanceId(int instanceId, Type assetType, string originalValue)
+        private static UnityEngine.Object ResolveAssetByInstanceId(long instanceId, Type assetType, string originalValue)
         {
             // まずロード済みアセットレジストリから検索
             var entry = AssetManager.Instance.Registry.GetByInstanceId(instanceId);
@@ -700,7 +700,7 @@ namespace Xeon.XTerminal
             // Resources.FindObjectsOfTypeAllから検索
             foreach (var obj in Resources.FindObjectsOfTypeAll(assetType))
             {
-                if (obj.GetInstanceID() == instanceId)
+                if (obj.GetEntityIdCompat() == instanceId)
                     return obj;
             }
 
@@ -754,17 +754,17 @@ namespace Xeon.XTerminal
             if (IsNullOrNone(value))
                 return null;
 
-            if (TryParseInstanceId(value, out int instanceId))
+            if (TryParseInstanceId(value, out long instanceId))
                 return ResolveShaderByInstanceId(instanceId, value);
 
             return ResolveShaderByName(value);
         }
 
-        private static Shader ResolveShaderByInstanceId(int instanceId, string originalValue)
+        private static Shader ResolveShaderByInstanceId(long instanceId, string originalValue)
         {
             foreach (var shader in Resources.FindObjectsOfTypeAll<Shader>())
             {
-                if (shader.GetInstanceID() == instanceId)
+                if (shader.GetEntityIdCompat() == instanceId)
                     return shader;
             }
             throw new FormatException($"Shader not found with instance ID: {originalValue}");

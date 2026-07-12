@@ -13,9 +13,9 @@ namespace Xeon.XTerminal.Assets
         public UnityEngine.Object Asset { get; set; }
 
         /// <summary>
-        /// インスタンスID
+        /// インスタンスID（Unity 6.5以降はEntityId由来の64bit値）
         /// </summary>
-        public int InstanceId { get; set; }
+        public long InstanceId { get; set; }
 
         /// <summary>
         /// アセット名
