@@ -482,7 +482,7 @@ namespace Xeon.XTerminal
             // Resources.FindObjectsOfTypeAllから検索
             foreach (var mat in Resources.FindObjectsOfTypeAll<Material>())
             {
-                if (mat.GetInstanceID() == instanceId)
+                if (ObjectIdUtility.GetId(mat) == instanceId)
                     return mat;
             }
 
@@ -653,7 +653,7 @@ namespace Xeon.XTerminal
             {
                 foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
                 {
-                    if (go.GetInstanceID() == instanceId)
+                    if (ObjectIdUtility.GetId(go) == instanceId)
                         return go as T;
                 }
                 return null;
@@ -664,7 +664,7 @@ namespace Xeon.XTerminal
             {
                 foreach (var comp in Resources.FindObjectsOfTypeAll<Component>())
                 {
-                    if (comp.GetInstanceID() == instanceId)
+                    if (ObjectIdUtility.GetId(comp) == instanceId)
                         return comp as T;
                 }
                 return null;
@@ -700,7 +700,7 @@ namespace Xeon.XTerminal
             // Resources.FindObjectsOfTypeAllから検索
             foreach (var obj in Resources.FindObjectsOfTypeAll(assetType))
             {
-                if (obj.GetInstanceID() == instanceId)
+                if (ObjectIdUtility.GetId(obj) == instanceId)
                     return obj;
             }
 
@@ -764,7 +764,7 @@ namespace Xeon.XTerminal
         {
             foreach (var shader in Resources.FindObjectsOfTypeAll<Shader>())
             {
-                if (shader.GetInstanceID() == instanceId)
+                if (ObjectIdUtility.GetId(shader) == instanceId)
                     return shader;
             }
             throw new FormatException($"Shader not found with instance ID: {originalValue}");

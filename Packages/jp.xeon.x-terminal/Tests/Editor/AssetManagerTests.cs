@@ -129,7 +129,7 @@ namespace Xeon.XTerminal.Tests
             material.name = "TestMaterial";
 
             AssetManager.Instance.Registry.Register(material, "test/path", "TestProvider");
-            var specifier = $"#{material.GetInstanceID()}";
+            var specifier = $"#{ObjectIdUtility.GetId(material)}";
             var resolved = AssetManager.Instance.Resolve<Material>(specifier);
 
             Assert.IsNotNull(resolved);

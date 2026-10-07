@@ -249,7 +249,7 @@ namespace Xeon.XTerminal.UnityCommands
         private string BuildObjectLine(GameObject go, bool highlight = false)
         {
             string marker = highlight ? "* " : "";
-            string instanceId = ShowInstanceId ? $" #{go.GetInstanceID()}" : "";
+            string instanceId = ShowInstanceId ? $" #{ObjectIdUtility.GetId(go)}" : "";
 
             if (!LongFormat)
                 return $"{marker}{go.name}{instanceId}";

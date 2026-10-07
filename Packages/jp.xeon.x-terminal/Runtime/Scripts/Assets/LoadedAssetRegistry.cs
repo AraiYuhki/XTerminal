@@ -31,7 +31,7 @@ namespace Xeon.XTerminal.Assets
             if (asset == null)
                 return null;
 
-            var instanceId = asset.GetInstanceID();
+            var instanceId = ObjectIdUtility.GetId(asset);
 
             // 既に登録済みの場合は既存エントリを返す
             if (entriesByInstanceId.TryGetValue(instanceId, out var existing))
@@ -70,7 +70,7 @@ namespace Xeon.XTerminal.Assets
             if (asset == null)
                 return false;
 
-            return Unregister(asset.GetInstanceID());
+            return Unregister(ObjectIdUtility.GetId(asset));
         }
 
         /// <summary>
