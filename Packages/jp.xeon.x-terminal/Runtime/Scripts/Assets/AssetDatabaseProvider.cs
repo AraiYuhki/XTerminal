@@ -151,19 +151,32 @@ namespace Xeon.XTerminal.Assets
         /// <summary>
         /// インスタンスIDからアセットパスを取得します
         /// </summary>
-        /// <param name="instanceId">インスタンスID（Unity 6.5以降はEntityId由来の64bit値）</param>
+        /// <param name="instanceId">インスタンスID</param>
         /// <returns>アセットパス</returns>
-        public string GetAssetPathFromInstanceId(long instanceId)
+        public string GetAssetPathFromInstanceId(int instanceId)
         {
-#if UNITY_6000_4_OR_NEWER
-            var obj = EditorUtility.EntityIdToObject(EntityId.FromULong(unchecked((ulong)instanceId)));
+#if UNITY_6000_6_OR_NEWER
+            var obj = FindLoadedObjectById(instanceId);
 #elif UNITY_6000_3_OR_NEWER
-            var obj = EditorUtility.EntityIdToObject((int)instanceId);
+            var obj = EditorUtility.EntityIdToObject(instanceId);
 #else
-            var obj = EditorUtility.InstanceIDToObject((int)instanceId);
+            var obj = EditorUtility.InstanceIDToObject(instanceId);
 #endif
             return obj == null ? null : AssetDatabase.GetAssetPath(obj);
         }
+
+#if UNITY_6000_6_OR_NEWER
+        // Unity 6000.6以降はint型IDからEntityIdを復元できないため、ロード済みオブジェクトから検索する
+        private static UnityEngine.Object FindLoadedObjectById(int instanceId)
+        {
+            foreach (var obj in Resources.FindObjectsOfTypeAll<UnityEngine.Object>())
+            {
+                if (ObjectIdUtility.GetId(obj) == instanceId)
+                    return obj;
+            }
+            return null;
+        }
+#endif
 
         private string BuildSearchFilter(string pattern, Type assetType)
         {

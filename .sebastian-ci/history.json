@@ -1,0 +1,28 @@
+{
+  "d548cc1d0e12b671683dee4f94aa6401ebf90cb9": {
+    "executedAt": "2026-10-07T13:52:25.1071022+09:00",
+    "isSuccess": false,
+    "logDirectoryPath": "D:\\Projects\\UniTerminal\\.sebastian-ci\\logs\\d548cc1d0e12b671683dee4f94aa6401ebf90cb9",
+    "jobs": [
+      {
+        "jobId": "build",
+        "status": "Failed",
+        "durationSeconds": 321.9,
+        "tests": null
+      }
+    ]
+  },
+  "608ac7895d98898f7a059f0c6f6dfc9a72c4bd22": {
+    "executedAt": "2026-10-07T14:54:22.3165484+09:00",
+    "isSuccess": true,
+    "logDirectoryPath": "D:\\Projects\\UniTerminal\\.sebastian-ci\\logs\\608ac7895d98898f7a059f0c6f6dfc9a72c4bd22",
+    "jobs": [
+      {
+        "jobId": "build",
+        "status": "Success",
+        "durationSeconds": 682,
+        "tests": null
+      }
+    ]
+  }
+}

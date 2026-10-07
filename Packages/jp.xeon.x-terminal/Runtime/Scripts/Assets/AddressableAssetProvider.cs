@@ -16,7 +16,7 @@ namespace Xeon.XTerminal.Assets
     /// </summary>
     public class AddressableAssetProvider : IAssetProvider
     {
-        private readonly Dictionary<long, AsyncOperationHandle> handles = new();
+        private readonly Dictionary<int, AsyncOperationHandle> handles = new();
 
         /// <summary>
         /// プロバイダー名
@@ -43,7 +43,7 @@ namespace Xeon.XTerminal.Assets
             var asset = await handle.Task;
 
             if (handle.Status == AsyncOperationStatus.Succeeded && asset != null)
-                handles[asset.GetEntityIdCompat()] = handle;
+                handles[ObjectIdUtility.GetId(asset)] = handle;
 
             return asset;
         }
@@ -66,7 +66,7 @@ namespace Xeon.XTerminal.Assets
             {
                 if (assetType.IsAssignableFrom(asset.GetType()))
                 {
-                    handles[asset.GetEntityIdCompat()] = handle;
+                    handles[ObjectIdUtility.GetId(asset)] = handle;
                     return asset;
                 }
                 Addressables.Release(handle);
@@ -84,7 +84,7 @@ namespace Xeon.XTerminal.Assets
             if (asset == null)
                 return;
 
-            var instanceId = asset.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(asset);
             if (handles.TryGetValue(instanceId, out var handle))
             {
                 Addressables.Release(handle);

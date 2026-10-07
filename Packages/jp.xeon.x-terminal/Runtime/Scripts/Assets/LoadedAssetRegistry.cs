@@ -11,7 +11,7 @@ namespace Xeon.XTerminal.Assets
     /// </summary>
     public class LoadedAssetRegistry
     {
-        private readonly Dictionary<long, LoadedAssetEntry> entriesByInstanceId = new();
+        private readonly Dictionary<int, LoadedAssetEntry> entriesByInstanceId = new();
         private readonly Dictionary<string, List<LoadedAssetEntry>> entriesByName = new();
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Xeon.XTerminal.Assets
             if (asset == null)
                 return null;
 
-            var instanceId = asset.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(asset);
 
             // 既に登録済みの場合は既存エントリを返す
             if (entriesByInstanceId.TryGetValue(instanceId, out var existing))
@@ -70,7 +70,7 @@ namespace Xeon.XTerminal.Assets
             if (asset == null)
                 return false;
 
-            return Unregister(asset.GetEntityIdCompat());
+            return Unregister(ObjectIdUtility.GetId(asset));
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Xeon.XTerminal.Assets
         /// </summary>
         /// <param name="instanceId">インスタンスID</param>
         /// <returns>登録解除されたらtrue</returns>
-        public bool Unregister(long instanceId)
+        public bool Unregister(int instanceId)
         {
             if (!entriesByInstanceId.TryGetValue(instanceId, out var entry))
                 return false;
@@ -100,7 +100,7 @@ namespace Xeon.XTerminal.Assets
         /// </summary>
         /// <param name="instanceId">インスタンスID</param>
         /// <returns>アセットエントリ、見つからない場合はnull</returns>
-        public LoadedAssetEntry GetByInstanceId(long instanceId)
+        public LoadedAssetEntry GetByInstanceId(int instanceId)
         {
             entriesByInstanceId.TryGetValue(instanceId, out var entry);
             return entry;
@@ -152,7 +152,7 @@ namespace Xeon.XTerminal.Assets
                 return false;
 
             // インスタンスID指定 (#12345形式)
-            if (specifier.StartsWith("#") && long.TryParse(specifier.Substring(1), out long instanceId))
+            if (specifier.StartsWith("#") && int.TryParse(specifier.Substring(1), out int instanceId))
             {
                 entry = GetByInstanceId(instanceId);
                 return entry != null;

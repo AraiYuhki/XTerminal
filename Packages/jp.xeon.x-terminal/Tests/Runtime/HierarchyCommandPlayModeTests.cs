@@ -202,7 +202,7 @@ namespace Xeon.XTerminal.Tests.Runtime
         public IEnumerator Hierarchy_ShowInstanceId_DisplaysIds()
         {
             var testObj = CreateTestObject("PlayMode_InstanceId");
-            var instanceId = testObj.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(testObj);
 
             yield return null;
 
@@ -221,7 +221,7 @@ namespace Xeon.XTerminal.Tests.Runtime
         {
             var testObj = CreateTestObject("PlayMode_IdLong");
             testObj.AddComponent<BoxCollider>();
-            var instanceId = testObj.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(testObj);
 
             yield return null;
 
@@ -241,8 +241,8 @@ namespace Xeon.XTerminal.Tests.Runtime
         {
             var parent = CreateTestObject("PlayMode_IdParent");
             var child = CreateTestObject("PlayMode_IdChild", parent.transform);
-            var parentId = parent.GetEntityIdCompat();
-            var childId = child.GetEntityIdCompat();
+            var parentId = ObjectIdUtility.GetId(parent);
+            var childId = ObjectIdUtility.GetId(child);
 
             yield return null;
 
@@ -260,7 +260,7 @@ namespace Xeon.XTerminal.Tests.Runtime
         public IEnumerator Hierarchy_Default_DoesNotShowInstanceId()
         {
             var testObj = CreateTestObject("PlayMode_NoId");
-            var instanceId = testObj.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(testObj);
 
             yield return null;
 

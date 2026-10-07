@@ -118,7 +118,7 @@ namespace Xeon.XTerminal.Tests.Runtime
             Assert.AreEqual(ExitCode.Success, task.Result);
             var output = stdout.ToString();
             Assert.IsTrue(output.Contains("PlayMode_AssetMaterial"));
-            Assert.IsTrue(output.Contains($"#{material.GetEntityIdCompat()}"));
+            Assert.IsTrue(output.Contains($"#{ObjectIdUtility.GetId(material)}"));
         }
 
         [UnityTest]
@@ -209,7 +209,7 @@ namespace Xeon.XTerminal.Tests.Runtime
             yield return null;
 
             stdout = new StringBuilderTextWriter();
-            var specifier = $"#{material.GetEntityIdCompat()}";
+            var specifier = $"#{ObjectIdUtility.GetId(material)}";
             var task = terminal.ExecuteAsync($"asset info {specifier}", stdout, stderr);
             while (!task.IsCompleted) yield return null;
 
@@ -259,7 +259,7 @@ namespace Xeon.XTerminal.Tests.Runtime
             yield return null;
 
             stdout = new StringBuilderTextWriter();
-            var specifier = $"#{material.GetEntityIdCompat()}";
+            var specifier = $"#{ObjectIdUtility.GetId(material)}";
             var task = terminal.ExecuteAsync($"asset unload {specifier}", stdout, stderr);
             while (!task.IsCompleted) yield return null;
 

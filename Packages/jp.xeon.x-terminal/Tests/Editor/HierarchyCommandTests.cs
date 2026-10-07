@@ -448,7 +448,7 @@ namespace Xeon.XTerminal.Tests
         public async Task Hierarchy_ShowInstanceId_DisplaysIds()
         {
             var testObj = CreateTestObject("HierTest_InstanceId");
-            var instanceId = testObj.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(testObj);
 
             stdout = new StringBuilderTextWriter();
             var exitCode = await terminal.ExecuteAsync("hierarchy -i", stdout, stderr);
@@ -465,7 +465,7 @@ namespace Xeon.XTerminal.Tests
         {
             var testObj = CreateTestObject("HierTest_IdLong");
             testObj.AddComponent<BoxCollider>();
-            var instanceId = testObj.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(testObj);
 
             stdout = new StringBuilderTextWriter();
             var exitCode = await terminal.ExecuteAsync("hierarchy -i -l", stdout, stderr);
@@ -484,8 +484,8 @@ namespace Xeon.XTerminal.Tests
         {
             var parent = CreateTestObject("HierTest_IdParent");
             var child = CreateTestObject("HierTest_IdChild", parent.transform);
-            var parentId = parent.GetEntityIdCompat();
-            var childId = child.GetEntityIdCompat();
+            var parentId = ObjectIdUtility.GetId(parent);
+            var childId = ObjectIdUtility.GetId(child);
 
             stdout = new StringBuilderTextWriter();
             var exitCode = await terminal.ExecuteAsync("hierarchy -r -i", stdout, stderr);
@@ -502,7 +502,7 @@ namespace Xeon.XTerminal.Tests
         {
             var root = CreateTestObject("HierTest_IdPath");
             var child = CreateTestObject("HierTest_IdPathChild", root.transform);
-            var childId = child.GetEntityIdCompat();
+            var childId = ObjectIdUtility.GetId(child);
 
             stdout = new StringBuilderTextWriter();
             var exitCode = await terminal.ExecuteAsync("hierarchy -i /HierTest_IdPath", stdout, stderr);
@@ -518,7 +518,7 @@ namespace Xeon.XTerminal.Tests
         public async Task Hierarchy_Default_DoesNotShowInstanceId()
         {
             var testObj = CreateTestObject("HierTest_NoId");
-            var instanceId = testObj.GetEntityIdCompat();
+            var instanceId = ObjectIdUtility.GetId(testObj);
 
             stdout = new StringBuilderTextWriter();
             var exitCode = await terminal.ExecuteAsync("hierarchy", stdout, stderr);

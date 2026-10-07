@@ -184,7 +184,7 @@ namespace Xeon.XTerminal.WebGLSample
                 text.font = labelTemplate.font;
                 text.fontSharedMaterial = labelTemplate.fontSharedMaterial;
             }
-            text.enableWordWrapping = true;
+            text.textWrappingMode = TextWrappingModes.Normal;
             text.overflowMode = TextOverflowModes.Overflow;
             text.richText = true;
 
