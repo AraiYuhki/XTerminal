@@ -1,9 +1,12 @@
 ﻿<Solution>
-  <Project Path="asset-store-tools-editor.csproj" />
   <Project Path="jp.xeon.x-terminal.runtime.csproj" />
-  <Project Path="jp.xeon.x-terminal.tests.runtime.csproj" />
+  <Project Path="xeon.jp.x-terminal.hacking-game.csproj" />
   <Project Path="jp.xeon.x-terminal.tests.editor.csproj" />
+  <Project Path="jp.xeon.x-terminal.tests.runtime.csproj" />
   <Project Path="xeon.jp.x-terminal.sample.csproj" />
+  <Project Path="xeon.jp.x-terminal.webgl-sample.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="jp.xeon.x-terminal.editor.csproj" />
+  <Project Path="xeon.jp.x-terminal.hacking-game.editor.csproj" />
+  <Project Path="xeon.jp.x-terminal.webgl-sample.editor.csproj" />
 </Solution>
