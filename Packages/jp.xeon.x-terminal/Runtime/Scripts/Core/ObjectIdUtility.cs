@@ -20,7 +20,7 @@ namespace Xeon.XTerminal
             // 生存中のオブジェクト間で一意なため、従来のint型IDとして扱う
             return unchecked((int)EntityId.ToULong(obj.GetEntityId()));
 #else
-            return ObjectIdUtility.GetId(obj);
+            return obj.GetInstanceID();
 #endif
         }
     }
