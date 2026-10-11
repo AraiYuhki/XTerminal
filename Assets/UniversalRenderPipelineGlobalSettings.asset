@@ -71,6 +71,8 @@ MonoBehaviour:
       - rid: 6771625098261561345
       - rid: 6771625098261561346
       - rid: 6771625098261561347
+      - rid: -2
+      - rid: -2
     m_RuntimeSettings:
       m_List: []
   m_AssetVersion: 11
