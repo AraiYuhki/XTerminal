@@ -26,8 +26,10 @@ namespace XDebugger.Editor.Scripts
         public static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             // 対象となる.csファイルを抽出
-            var targets = importedAssets.Where(path => Path.GetExtension(path) == ".cs")
-                .Concat(movedAssets.Where(path => Path.GetExtension(path) == ".cs"));
+            // Packages/ 配下（PackageCache 内の不変パッケージ）は対象外。UTF-8 のファイルを Shift-JIS と誤判定して書き換え、
+            // com.unity.inputsystem 等をコンパイル不能にしてしまうため
+            var targets = importedAssets.Where(IsConvertTarget)
+                .Concat(movedAssets.Where(IsConvertTarget));
             foreach (var path in targets)
             {
                 var encoding = EncodeHelper.GetJpEncoding(path); // 文字コード判定
@@ -53,6 +55,16 @@ namespace XDebugger.Editor.Scripts
                 }
                 Debug.Log($"{path} is encoded {encoding.EncodingName} to UTF8");
             }
+        }
+
+        /// <summary>
+        /// 文字コード変換の対象となるファイルか判定します
+        /// </summary>
+        /// <param name="path">アセットパス</param>
+        /// <returns>Assets/ 配下の.csファイルならtrue</returns>
+        private static bool IsConvertTarget(string path)
+        {
+            return path.StartsWith("Assets/") && Path.GetExtension(path) == ".cs";
         }
     }
 }
