@@ -24,5 +24,18 @@
         "tests": null
       }
     ]
+  },
+  "0a76323a5feb819ca8dcd7fb57c6448ca1f00e60": {
+    "executedAt": "2026-10-18T12:44:11.0262558+09:00",
+    "isSuccess": true,
+    "logDirectoryPath": "D:\\Projects\\UniTerminal\\.sebastian-ci\\logs\\0a76323a5feb819ca8dcd7fb57c6448ca1f00e60",
+    "jobs": [
+      {
+        "jobId": "build",
+        "status": "Success",
+        "durationSeconds": 1656.7,
+        "tests": null
+      }
+    ]
   }
 }
